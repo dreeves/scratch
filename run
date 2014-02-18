@@ -1,1 +1,2 @@
+#!/bin/bash
 java -cp "$CLOJURE;$LWJGL;src;java/_.jar" $JAVA_LWJGL_NATIVE clojure.main -e "(use 'batteries) (use 'artificer) (main)" -r
