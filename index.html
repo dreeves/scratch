@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='utf-8'>
+		<title>what a disaster</title>
+		<style type='text/css'>
+			body {
+				font-family:Verdana, Arial, Helvetica, sans-serif;
+			}
+			textarea {
+				display: block;
+				resize: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div align='center'>
+			<span id='hello'></span>
+			<br>
+			<br>
+			<form name='f' id='f'>
+				<textarea rows='5' cols='50' name='original' id='original' style='width:468px;height:110px;'
+					onkeydown='zalgify_textarea()' onkeyup='zalgify_textarea()'></textarea>
+				<br>
+				<textarea rows='5' cols='50' name='zalgy' id='zalgy' style='width:468px;height:110px;'></textarea>
+			</form>
+		</div>
+		<script src='http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js'></script>
+		<script src='dep/jquery.zclip.js'></script>
+		<script src='main.js'></script>
+		<script>
+			$(document).ready(function(){
+				$('#zalgy').zclip({
+					path:'dep/ZeroClipboard.swf',
+					copy:function(){return $('#zalgy').val()}
+					})})
+		</script>
+		<script>document.title = zalgify(document.title)</script>
+		<script>document.getElementById('hello').innerText = zalgify('why, hello there')</script>
+	</body>
+</html>
