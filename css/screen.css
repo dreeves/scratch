@@ -1,0 +1,63 @@
+/* line 12, ../_sass/screen.scss */
+.aspect_ratio_locked_16_9 {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 56.25vw;
+  /* 100/56.25 = 1.778 */
+  max-height: 100vh;
+  max-width: 177.78vh;
+  /* 16/9 = 1.778 */
+  margin: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  /* vertical center */
+  left: 0;
+  right: 0;
+  /* horizontal center */
+}
+
+/* line 25, ../_sass/screen.scss */
+.bullet {
+  position: absolute;
+  transition: left 100s linear, top 100s linear;
+}
+
+/* line 29, ../_sass/screen.scss */
+.bullet_outer {
+  border: solid #f00;
+  border-radius: 100%;
+  height: 83%;
+  width: 83%;
+  position: absolute;
+  left: 0%;
+  top: 0%;
+}
+
+/* line 37, ../_sass/screen.scss */
+.bullet_inner {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0%;
+  top: 0%;
+  background-image: -webkit-gradient(radial, 50%, 0, 50%, 50, color-stop(20%, #e50000), color-stop(25%, #990000), color-stop(35%, #990000), color-stop(50%, rgba(153, 0, 0, 0)));
+  background-image: -webkit-radial-gradient(center, ellipse cover, #e50000 20%, #990000 25%, #990000 35%, rgba(153, 0, 0, 0) 50%);
+  background-image: -moz-radial-gradient(center, ellipse cover, #e50000 20%, #990000 25%, #990000 35%, rgba(153, 0, 0, 0) 50%);
+  background-image: -o-radial-gradient(center, ellipse cover, #e50000 20%, #990000 25%, #990000 35%, rgba(153, 0, 0, 0) 50%);
+  background-image: radial-gradient(center, ellipse cover, #e50000 20%, #990000 25%, #990000 35%, rgba(153, 0, 0, 0) 50%);
+  -webkit-animation: bullet_inner_pulsate 0.4s ease-out infinite;
+}
+
+@-webkit-keyframes bullet_inner_pulsate {
+  /* line 46, ../_sass/screen.scss */
+  from, to {
+    -webkit-transform: scale(0.7, 0.7);
+  }
+
+  /* line 47, ../_sass/screen.scss */
+  50% {
+    -webkit-transform: scale(1.1, 1.1);
+  }
+}

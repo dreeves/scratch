@@ -1,0 +1,48 @@
+@import "compass";
+
+@mixin size($h, $w) {
+	height: $h;
+	width: $w;
+}
+@mixin center($h, $w) {
+	margin-top: -($h / 2);
+	margin-left: -($w / 2);
+}
+
+.aspect_ratio_locked_16_9 {
+	margin:0;
+	padding:0;
+	width: 100vw; 
+	height: 56.25vw; /* 100/56.25 = 1.778 */
+	max-height: 100vh;
+	max-width: 177.78vh; /* 16/9 = 1.778 */
+	margin: auto;
+	position: absolute;
+	top:0;bottom:0; /* vertical center */
+	left:0;right:0; /* horizontal center */
+}
+
+.bullet {
+	position: absolute;
+	transition: left 100s linear, top 100s linear;
+}
+.bullet_outer {
+	border: solid #f00;
+	border-radius: 100%;
+	@include size(83%,83%);
+	position: absolute;
+	left: 0%;
+	top: 0%;
+}
+.bullet_inner {
+	@include size(100%,100%);
+	position: absolute;
+	left: 0%;
+	top: 0%;
+	@include background-image(radial-gradient(center, ellipse cover, rgba(229,0,0,1) 20%,rgba(153,0,0,1) 25%,rgba(153,0,0,1) 35%,rgba(153,0,0,0) 50%));
+	-webkit-animation: bullet_inner_pulsate 0.4s ease-out infinite;
+}
+@-webkit-keyframes bullet_inner_pulsate {
+	from,to {-webkit-transform: scale(0.7, 0.7);}
+	50%     {-webkit-transform: scale(1.1, 1.1);}
+}
