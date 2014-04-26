@@ -1,0 +1,10 @@
+(def clrs_2_1(l)
+	[for i in [1:l.len]
+		k := l[i]
+		[for j in [i:0:(- 1)] while (< k l[j])
+			l[i] = l[(- i 1)]]
+		l[(- j 1)] = k]
+	l)
+
+t := [for [:20] (rand)]
+(print "algorithm 2.1:" (str t) (clrs_2_1 t))

@@ -1,0 +1,72 @@
+skips the few instructions i don't plan to use in my next thing
+---- terminator instructions ----
+	return			CreateRetVoid()
+	return v		CreateRet(Value*)
+	goto b			CreateBr(BasicBlock*)
+	goto v? a : b	CreateCondBr(Value* BasicBlock* BasicBlock*)
+	switch {...}	CreateSwitch(Value* BasicBlock*-default unsigned-num_cases_hint)
+	case i: goto b	.addCase(ConstantInt* BasicBlock*)
+	try f(...)		CreateInvoke(Value*-callee BasicBlock*-normal BasicBlock*-catch (Value* | ArrayRef<Value*>)?)
+	rethrow			CreateResume(Value*)
+	unreachable		CreateUnreachable()
+---- arithmetic instructions ----
+-- +-*/%
+	a + b			CreateF?Add(Value* Value*)
+	a - b			CreateF?Sub(Value* Value*)
+	a * b			CreateF?Mul(Value* Value*)
+	a / b			Create[USF]Div(Value* Value*)
+	a % b			Create[USF]Rem(Value* Value*)
+	-a				CreateF?Neg(Value*) ; 0 - a
+-- bit ops
+	a << b			CreateShl(Value* (Value* | uint64_t))
+	a 0>> b			CreateLShr(Value* (Value* | uint64_t))
+	a ->> b			CreateAShr(Value* (Value* | uint64_t))
+	a & b			CreateAnd(Value* (Value* | uint64_t))
+	a | b			CreateOr(Value* (Value* | uint64_t))
+	a ^ b			CreateXor(Value* (Value* | uint64_t))
+	~a				CreateNot(Value*) ; -1 ^ a
+	bswap(i)		call: declare <ity> @llvm.bswap.i<n>(<ity>) ; swaps byte order: 0x11223344 -> 0x44332211
+	set_bits(i)		call: declare <ity> @llvm.ctpop.(i<n>|v<len>i<n>)(<ity>) ; counts set bits: 0b11010001 -> 4
+	leading0s(i)	call: declare <ity> @llvm.ctlz.(i<n>|v<len>i<n>)(<ity>) ; counts leading zeros: 0b10001::i8 -> 3
+	trailing0s(i)	call: declare <ity> @llvm.cttz.(i<n>|v<len>i<n>)(<ity>) ; counts trailing zeros: 0b100 -> 2
+-- cmp
+	; OU ordered/unordered US unsigned/signed GL greater/less TE than/than_or_equal EQ/NE equal/not_equal ip int_or_pointer
+	ipcmp-kind(a,b)	CreateICmp<KIND>(Value* Value*) | CreateICmp(CmpInst::Predicate Value* Value*)
+	; (EQ NE [US][GL][TE]) or 34 + bbb:[US][GL][ E]
+	fcmp-kind(a,b)	CreateFCmp<KIND>(Value* Value*) | CreateFCmp(CmpInst::Predicate Value* Value*)
+	; (ORD UNO [OU](EQ|NE) [OU][GL][TE]) or 0 + bbbb:[ U][ L][ G][ E]
+	p === null		CreateIsNull(Value*) ; p ICmpEQ null
+	p !== null		CreateIsNotNull(Value*) ; p ICmpNE null
+-- float math
+	pow(f,f)		call: <fty> llvm.pow.f<n>(<fty> <fty>)
+	pow(f,i)		call: <fty> llvm.powi.f<n>(<fty> i32)
+	sqrt(f)			call: <fty> llvm.sqrt.f<n>(<fty>) ; undef if negative
+	<math>(f)		call: <fty> llvm.(sin|cos|exp|exp2|log|log10|log2|fabs|floor|ceil|trunc|rint|nearbyint).f<n>(<fty>)
+---- casting instructions ----
+	(int_ty)	i	CreateIntCast(Value* Type* bool-is_signed)
+	(ptr_ty)	i	CreateIntToPtr(Value* Type*)
+	(float_ty)	i	Create[US]IToFP(Value* Type*)
+	((i|p)_ty)	ptr	CreatePointerCast(Value* Type*)
+	(float_ty)	f	CreateFPCast(Value* Type*)
+	(int_ty)	f	CreateFPTo[US]I(Value* Type*)
+---- aggregate instructions (for arrays and structs) ----
+	v[i][j]			CreateExtractValue(Value* ArrayRef<unsigned>)
+	v[i][j] = w		CreateInsertValue(Value* Value* ArrayRef<unsigned>)
+---- memory instructions ----
+	alloca(ty,len)	CreateAlloca(Type* Value*-len=1)
+	stacksave()		call: declare i8* @llvm.stacksave()
+	stackrestore(p)	call: declare void @llvm.stackrestore(i8* %ptr) ; pops all allocas since the stacksave . C uses it for scoped automatic variable sized arrays
+	x				CreateLoad(Value*-ptr)
+	x = v			CreateStore(Value*-v Value*-ptr)
+	memcpy(...)		; i8 is overloaded for any . <align> should be 0 or 1 if unknown
+					declare void @llvm.memcpy.p0i8.p0i8.i(32|64)(i8* <dest>, i8* <src>, i(32|64) <len>, i32 <align>, i1 <isvolatile>)
+	memmove(...)	; same as memcpy but allows the two memory locations to overlap
+					declare void @llvm.memmove.p0i8.p0i8.i(32|64)(i8* <dest>, i8* <src>, i(32|64) <len>, i32 <align>, i1 <isvolatile>)
+	memset(...)		; i8 is overloaded for any . fills <dest> with <val>
+					declare void @llvm.memset.p0i8.i(32|64)(i8* <dest>, i8 <val>, i(32|64) <len>, i32 <align>, i1 <isvolatile>)
+---- misc instructions ----
+	c? a : b		CreateSelect(Value*-c Value*-a Value*-b)
+	f(...)			CreateCall[2-5]?(Value*-callee (Value*{0-5} | ArrayRef<Value*>))
+	catches			CreateLandingPad(Type*-?ret? Value*-personality unsigned-num_clauses_hint)
+	catch ty e:		.addClause(Value*) ???
+	phi ty [...]...	CreatePHI(Type* unsigned-num_edges_hint)    .addIncoming(Value* BasicBlock*)

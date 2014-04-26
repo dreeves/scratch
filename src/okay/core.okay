@@ -1,0 +1,35 @@
+<lexer with string literals, symbols, and sexps>
+
+(def def(macro(n &r) (if (> (len r) 1) `(def n (fn ~@r)) `(def n ~@r))))
+
+(def print(&v) (__println (join " " v)))
+(def str(&v) (__str (join "" v)))
+
+(def redef(macro(n &r) `(do (:= ~n ~n) (def ~n ~@r))))
+
+(redef do(macro(&body) `(~do ~@(
+	(fn t
+		(([n ':= v &r]) (list `(~do (:= ~n ~v) ~@(t r))))
+		(([v &r]) (cons v (t r)))
+		(([]) [])
+		) body))))
+
+(def for(macro
+	; TODO: for while if
+	((n 'in c 'while t &r) .)
+	((n 'in c &r) `(loop [s ]))
+	((&r) `(for ~'_ in ~@r))
+	))
+
+; clrs !
+(def clrs_2_1(l)
+	[for i in [1:l.len]
+		k := l[i]
+		[for j in [i:0:(- 1)] while (< k l[j])
+			l[i] = l[(- i 1)]]
+		l[(- j 1)] = k]
+	l)
+
+t := [for [:20] (rand)]
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~; fully done ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~;
+(print "algorithm 2.1:" (str t) (clrs_2_1 t))

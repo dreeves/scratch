@@ -1,0 +1,53 @@
+list comprehension syntax
+
+[for <n> in <c> [while <t>] [if <t>]]
+
+F# [for x in collection do ... yield expr] !!
+
+!!
+JavaScript 1.7 has array comprehensions. The JavaScript engine of the popular Firefox browser from Mozilla Foundation---SpiderMonkey---supports them,[3] for example,
+js> [2*x for each (x in [0,1,2,3,4,5,6,7]) if (x*x<5)]
+[0, 2, 4]
+The sequence of integers can be obtained by prototyping the Number object,
+Number.prototype.__iterator__=function(){for (var i=0; i<this; i++) yield i}
+var s = [2*x for (x in 100) if (x*x<5)]
+Or introducing a range function,
+var range = function(start,end){for (var i=start; i<=end; i++) yield i}
+var s = [2*x for (x in range(0,100)) if (x*x<5)]
+
+Perl 6 provides more than one way to implement list comprehensions.
+my @s = ($_ * 2 if $_ ** 2 > 3 for ^100);
+Or, using gather:
+my @s = gather { for ^100 { take 2 * $_ if $_ ** 2 > 3 } };
+
+0..100 | Where {$_ * $_ -gt 3} | ForEach {$_ * 2}
+var s = from x in Enumerable.Range(0, 100) where x*x > 3 select x*2;
+
+The Python programming language has a corresponding syntax for expressing list comprehensions. The near-equivalent in Python to the example above is as follows:
+S = [2 * x for x in range(101) if x ** 2 > 3]
+List comprehensions were introduced in Python version 2.0.[4]
+A generator expression may be used in Python versions 2.4 and above[5] to achieve functional equivalence with S using a generator to iterate a (finite or infinite) sequence:
+from itertools import count
+S = (2 * x for x in count() if x ** 2 > 3)
+
+scala
+Using a for-expression:
+val s = for (x <- Stream.from(0) if x*x > 3) yield 2*x
+
+Version 3.x and 2.7 of the Python language introduces syntax for set comprehensions. Similar in form to list comprehensions, set comprehensions generate Python sets instead of lists.
+>>> s = {v for v in 'ABCDABCD' if v not in 'CB'}
+>>> print(s)
+{'A', 'D'}
+>>> type(s)
+<class 'set'>
+
+Version 3.x and 2.7 of the Python language introduced a new syntax for dictionary comprehensions, similar in form to list comprehensions but which generate Python dicts instead of lists.
+>>> s = {key: val for key, val in enumerate('ABCD') if val not in 'CB'}
+>>> s
+{0: 'A', 3: 'D'}
+
+Monad comprehension[edit]
+In Haskell, a monad comprehension is a generalization of the list comprehension to other monads in functional programming.
+
+do have zip function . else, list comprehensions are sadder
+tho in clojure map autozips, kinda?

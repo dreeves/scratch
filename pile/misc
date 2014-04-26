@@ -1,0 +1,10 @@
+misc
+
+why should any sort of return/goto/break/continue be conceptually different from throw?
+
+video game or simulation with _continuations_, omg ??
+
+time 0: program defines ambiguous, warning-worthy fn
+time 0.1: runtime adds "Warning: ambiguous fn defined" as an alert to the custom console-box
+time 0.4: program resolves ambiguity
+time 0.4+e: runtime removes alert
