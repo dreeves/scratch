@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-eval $mydir
-
-id=$TMP/`date +%s`.exe
-clang++ src/main.cpp -O1 -o $id
-$id $1
-rm $id
