@@ -1,0 +1,3 @@
+A shiny browser toy rpg, built to teach myself Javascript, especially the prototype system. Check out http://htmlpreview.github.io/?https://github.com/alice0meta/fnarpg/blob/master/index.html for a quick demo :) (arrows for movement; you're the swirly yellow guy; swirly red guys are bad for you; yellow shields are shieldsy)
+
+The code is pretty experimental; I'm not sure if trying to shove Haskell/Lisp concepts into Javascript is actually a *good idea*, but it is quite fun to play with.
