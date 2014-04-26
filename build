@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+eval $mydir
+
+clang++ src/main.cpp -O1 -o main.exe
