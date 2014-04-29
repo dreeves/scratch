@@ -51,7 +51,7 @@ function request(path,query,headers,f,base){
 			var t = ['---','fetched',pad_left(Math.round(r.length/1024)+'kb',' ',5),'---','from',host,'---']; var u = response.headers['x-ratelimit-remaining']; if (u) t.push('limit-remaining',u,'---'); print(t.join(' '))
 			f(JSON.parse(r),response) }) }).end()}
 
-function github(path,f){request(path,{},{'Authorization':auth.github,'User-Agent':user},f,'https://api.github.com')}
+function github(path,f){request(path,{},{'Authorization':'token '+auth.github,'User-Agent':user},f,'https://api.github.com')}
 function github_all_pages(path,f){var r = []; github(path,function λ(v,response){r = r.concat(v); var t = header_links(response.headers.link).next; if (t) github(t,λ); else f(r,response)})}
 function github_all_commits(f) {
 	github('/users/'+user+'/repos',function λ(v,response){

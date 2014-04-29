@@ -384,9 +384,9 @@ avgi(x,y) {return floor((x+y)/2)}
 	chord_f8(⌘	,LWin)				// → F8⌘ ⌘	// Win
 	chord_f8(⌘	,RWin)				// → F8⌘ ⌘	// Win
 	// simple text
-	chord_f8(␣	,Space)		// → F8␣ ␣		// Space
-	chord_f8(↹	,Tab)		// → F8↹ ↹		// Tab
-	chord_f8(⏎	,Enter)		// → F8⏎ ⏎		// Enter
+	chord_f8(␣	,Space)		// → F8␣ ␣	// Space
+	chord_f8(⇥	,Tab)		// → F8↹ ↹	// Tab
+	chord_f8(↩	,Enter)		// → F8⏎ ⏎	// Enter
 	chord_f8(⌦	,Delete)	// → F8⌦ ⌦	// Delete
 	chord_f8(⌫	,Backspace)	// → F8⌫ ⌫	// Backspace
 	// locks
