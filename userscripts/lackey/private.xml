@@ -1,7 +1,42 @@
 <?xml version="1.0"?>
 <root>
+	<!-- generic URL -->
+	<vkopenurldef>
+		<name>KeyCode::VK_OPEN_URL_WEB_keyremap4macbook</name>
+		<url>https://pqrs.org/macosx/keyremap4macbook/</url>
+	</vkopenurldef>
+
+	<!-- file path -->
+	<vkopenurldef>
+		<name>KeyCode::VK_OPEN_URL_APP_Calculator</name>
+		<url type="file">/Applications/Calculator.app</url>
+	</vkopenurldef>
+
+	<!-- shell commands -->
+	<vkopenurldef>
+		<name>KeyCode::VK_OPEN_URL_SHELL_hjfddieoieodcd</name>
+		<url type="shell">
+			<![CDATA[    /usr/bin/osascript -e 'tell app "System Events" to keystroke "bar⎋"'    ]]>
+		</url>
+	</vkopenurldef>
+	
 	<item>
-	<name>lackey</name>
-	<identifier>lackey</identifier>
+		<name>lackey</name>
+		<identifier>lackey</identifier>
+		<autogen>
+			__KeyToKey__
+			KeyCode::W, ModifierFlag::COMMAND_R,
+			KeyCode::VK_OPEN_URL_WEB_keyremap4macbook,
+		</autogen>
+		<autogen>
+			__KeyToKey__
+			KeyCode::C, ModifierFlag::COMMAND_R,
+			KeyCode::VK_OPEN_URL_APP_Calculator,
+		</autogen>
+		<autogen>
+			__KeyToKey__
+			KeyCode::D, ModifierFlag::COMMAND_R,
+			KeyCode::VK_OPEN_URL_SHELL_hjfddieoieodcd,
+		</autogen>
 	</item>
 </root>

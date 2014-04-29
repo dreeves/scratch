@@ -1,0 +1,373 @@
+//===---------------------------===// notes //===--------------------------===//
+	paint stuff has various uncertain things. anything we do *definitely* needs to be super extensible
+	kill sublime nag
+	sync up muting and pausing, and headphone removal if you can
+	improve run command
+
+navigate : delete
+	back char: ⌫, ^h
+	back word: ⌥⌫
+	back line: ⌘⌫
+	forward char: Fn⌫, ^d
+	forward word: Fn⌥⌫
+	forward line: Fn⌘⌫, ^k
+navigate : text cursor
+	back all: ⌘↑
+	back char: ←, ^b
+	back graphical line: ⌘←, ^a
+	back vertical: ↑, ^p
+	back word: ⌥←
+	forward all: ⌘↓
+	forward char: →, ^f
+	forward graphical line: ⌘→, ^e
+	forward vertical: ↓, ^n
+	forward word: ⌥→
+navigate : selection
+	all: ⌘a
+	back all: ⌘⇧↑
+	back char: ⇧←
+	back graphical line: ⌘⇧←
+	back logical line: ⇧⌥↑
+	back vertical: ⇧↑
+	back word: ⇧⌥←
+	forward all: ⌘⇧↓
+	forward char: ⇧→
+	forward graphical line: ⌘⇧→
+	forward logical line: ⇧⌥↓
+	forward vertical: ⇧↓
+	forward word: ⇧⌥→
+navigate : files
+	cd ..: ⌘↑
+	open/run: ⌘↓
+navigate : fields
+	next: ⇥
+	previous: ⇧⇥
+navigate : brightness
+	decrease: FnF1
+	increase: FnF2
+navigate : backlight brightness
+	decrease: FnF5
+	increase: FnF6
+navigate : tracks
+	previous: FnF7
+	next: FnF9
+	pause: FnF8
+navigate : volume
+	decrease: FnF11
+	increase: FnF12
+navigate : windows
+	previous alt-tab: ⌘⇧⇥
+	next alt-tab: ⌘⇥
+	previous tab/group: ^⇧⇥, ⌘⇧[, ⌘⌥←
+	next tab/group: ^⇥, ⌘⇧], ⌘⌥→
+	hide window: ⌘h
+	new tab: ⌘t
+	new window: middle-click dock, ⌘n, ⌘⇧n
+	up/down/left/right Space: 3-swipe up/down/left/right
+	open last file: ⌘⇧t
+navigate : escape
+	⎋
+	⌘w
+	⌘q
+navigate : menus (alt-style)
+	^F2
+navigate : history
+	back: ⌘[
+	forward: ⌘]
+navigate : tabulation level
+	increase: selection + ⇥
+	decrease: selection + ⇧⇥
+
+gmail : navigate : chat or compose
+	previous: ⌘,
+	next: ⌘.
+gmail : navigate : jump
+	inbox: g i
+	sent: g t
+	drafts: g d
+	all mail: g a
+	add cc: ⌘⇧c
+	add bcc: ⌘⇧b
+	alter from: ⌘⇧f
+gmail : navigate : conversations
+	previous: j
+	next: k
+	up: u
+	down: o, ↩
+gmail : navigate : messages
+	previous: p
+	next: n
+
+sublime : navigate : selection
+	expand to scope: ⌘⇧␣
+sublime : navigate : to brackets
+	^m
+sublime : navigate : to line
+	^g
+sublime : navigate : selection history
+	back: ^-
+	forward: ^⇧-
+sublime : navigate : find results
+	prev: ⌘⇧g, ⇧↩ if on panel
+	next: ⌘g, ↩ if on panel
+	select all: ⌥↩
+	replace next: ⌘⌥e
+	replace all: ^⌥↩ if on panel
+	prev in files: ⇧F4
+	next in files: F4
+sublime : navigate : tabs
+	go to nth tab: ⌘[1-9]
+	go to named tab: ⌘p
+
+format text
+	bold: ⌘b
+	italic: ⌘i
+	underline: ⌘u
+
+tab completion
+	⇥
+
+toggle app
+	Mission Control: FnF3
+	Launchpad: thumb+3 pinch, FnF4
+	Quick Look: ␣, ⌘y
+	Dictionary: ⌘^d
+	Desktop: thumb+3 unpinch
+	Dashboard: F12
+	SpeedCrunch: <want>
+	current music player: <want>
+	Terminal: <want, incl current-directory function>
+	developer console for current app
+		chrome: ⌘⌥i
+		sublime: ^`
+
+go to app
+	lyrics of currently playing song: <want>
+	google search: <want>
+
+chrome : add to bookmarks
+	⌘d
+
+chrome : go to app : bookmark manager
+	⌘⌥b
+
+"get info" "get details" "properties"
+	⌘i
+
+TOGGLE CAPSLOCK
+	<none>
+
+hard power off
+	hold down ⌽ for 5s
+
+shutdown dialog
+	hold down ⌽ for 1.5s
+
+screenshot
+	all: ⌘⇧3
+	selected: ⌘⇧4
+	window: ⌘⇧4 ␣
+	default is: to file on desktop
+	adding ^ is: to clipboard
+clipboard
+	copy: ⌘c
+	cut: ⌘x
+	paste: ⌘v
+	paste as plain text: ⌘⇧v
+	paste style: ⌘⌥v
+
+new object
+	⌘n
+	<most> = new window
+	spotify = new playlist
+	githubmac = new repo
+new folder
+	finder, spotify: ⌘⇧n
+new folder from selection
+	finder: ⌘^n
+new file
+	finder: ⌘⌥n
+open terminal in this folder
+	finder: ⌘⌥⇧n
+
+undo/redo
+	undo: ⌘z
+	redo: ⌘⇧z
+
+focus address bar
+	⌘l
+
+find
+	⌘f
+
+zoom
+	in: ⌘+, trackpad pinch
+	out: ⌘-, trackpad unpinch
+	100%: ⌘0
+
+fullscreen
+	chrome: ⌘⇧f
+	sublime: ⌘^f
+
+answer dialog or form
+	don't save: ⌘⌫, ⌘d
+	default action: ↩
+	selected button: ␣
+	cancel: ⎋
+
+file-move
+	copy: ⌥ & drag, drag to other volume
+	move: ⌘ & drag, drag to same volume
+	make alias: ⌘⌥ & drag
+	delete:	⌘⌫
+
+open
+	⌘o
+
+print
+	⌘p
+
+settings
+	⌘,
+
+save
+	vanilla: ⌘s
+	save as: ⌘⇧s
+	save all: ⌘⌥s
+
+reload
+	⌘r
+
+toggle dock hiding
+	⌘⌥d
+
+search computer
+	toggle spotlight: ⌘␣
+	spotlight window: ⌥⌘␣
+
+gmail : action
+	send: ⌘↩
+	compose: c
+	search: /
+	more actions: .
+	move to: v
+	label as: l
+	open help: ?
+	archive: e
+	mute: m
+	delete: #
+	reply: r
+	reply all: a
+	forward: f
+	archive conversation and go
+		previous: }
+		next: {
+	undo action: z
+	mark unread from message: _
+
+sublime : toggle record macro
+	^q
+sublime : run macro
+	^⇧q
+sublime : insert line
+	before: ⌘⇧↩
+	after: ⌘↩
+sublime : execute command
+	⌘⇧p
+find
+	⌘f
+sublime : find in files
+	⌘⇧f
+sublime : move line
+	up: ⌘⌥↑
+	down: ⌘⌥↓
+sublime : toggle comment
+	line: ⌘/
+	block: ⌘⌥/
+sublime : duplicate
+	⌘d
+sublime : build
+	F7, ⌘b
+	run: ⌘⇧b
+sublime : change text case
+	upper: ⌘k ⌘u
+	lower: ⌘k ⌘l
+sublime : delete line
+	^⇧k
+sublime : fold
+	none: ⌘k ⌘0, ⌘k ⌘j
+	level [1-9]: ⌘k ⌘[1-9]
+sublime : toggle mode : overwrite
+	⌘⌥o
+
+output characters
+--------- Fn homoiconic --------
+| ⎋ F1F2F3F4F5F6F7F8F9F0FaFb ⌽ |
+| ` 1 2 3 4 5 6 7 8 9 0 - = ⌫  |
+|  ⇥ q w e r t y u i o p [ ] \ |
+|  ⇪ a s d f g h j k l ; '  ↩  |
+|  L⇧ z x c v b n m , . /  R⇧  |
+| FnL^L⌥L⌘    ␣    R⌘R⌥← ↑ ↓ → |
+--------------------------------
+---------- osx_keycode ---------
+| 357A78637660616264656D676F7F |
+| 321213141517161A1C191D1B1833 |
+| 300C0D0E0F111020221F23211E2A |
+|  39000102030504262825292724  |
+|  38 060708090B2D2E2B2F2C 3C  |
+| 3F3B3A37   31   373D7B7E7D7C |
+--------------------------------
+------------ native ------------  --------------- ⇧ --------------
+| ` 1 2 3 4 5 6 7 8 9 0 - =    |  | ~ ! @ # $ % ^ & * ( ) _ +    |
+|    q w e r t y u i o p [ ] \ |  |    Q W E R T Y U I O P { } | |
+|    a s d f g h j k l ; '     |  |    A S D F G H J K L : "     |
+|     z x c v b n m , . /      |  |     Z X C V B N M < > ?      |
+--------------------------------  --------------------------------
+----------- `,; greek ----------  --------------- ⇧ --------------
+|                              |  |                              |
+|        ε ρ τ υ θ ι ω π       |  |        Ε Ρ Τ Υ Θ Ι Ω Π       |
+|    α σ δ φ γ η ξ κ λ         |  |    Α Σ Δ Φ Γ Η Ξ Κ Λ         |
+|     ζ χ ψ   β ν μ            |  |     Ζ Χ Ψ   Β Ν Μ            |
+--------------------------------  --------------------------------
+---------- ] subscript ---------
+|   ₀ ₁ ₂ ₃ ₄ ₅ ₆ ₇ ₈ ₉ ₋ ₊    |
+|        ₑ ᵣ ₜ   ᵤ ᵢ ₒ ₚ       |
+|    ₐ ₛ       ₕ ⱼ ₖ ₗ         |
+|       ₓ   ᵥ   ₙ ₘ            |
+--------------------------------
+--------- [ superscript --------  --------------- ⇧ --------------
+|   ¹ ² ³ ⁴ ⁵ ⁶ ⁷ ⁸ ⁹ ⁰ ⁻ ⁺    |  |                              |
+|      ʷ ᵉ ʳ ᵗ ʸ ᵘ ⁱ ᵒ ᵖ       |  |      ᵂ ᴱ ᴿ ᵀ   ᵁ ᴵ ᴼ ᴾ       |
+|    ᵃ ˢ ᵈ ᶠ ᵍ ʰ ʲ ᵏ ˡ         |  |    ᴬ ᴮ ᴰ   ᴳ ᴴ ᴶ ᴷ ᴸ         |
+|     ᶻ ˣ ᶜ ᵛ ⁿ ᵇ ᵐ            |  |           ⱽ   ᴺ ᴹ            |
+--------------------------------  --------------------------------
+----------- ⌥ symbols ----------  --------------- ⇧ --------------
+|                              |  |                              |
+|       ∃         ×     −      |  |       ∄                      |
+|    ℚ   ∈ ℝ   ✓   ∞   ℙ ‹ ›   |  |        ∉             ∏       |
+|    ∀ ∑   ⌊ ⌈ ℍ       ‘ ’     |  |    ¬∀    ⌋ ⌉         “ ”     |
+|     ℤ   ℂ     ℕ   ⊂ ⊃ ÷      |  |                   ⊆ ⊇        |
+|                      ← ↑ ↓ → |  |                              |
+--------------------------------  --------------------------------
+// meh ∴±∓′″‴∘≡≢⊕
+// native
+// \x09 : ⇥, ⇧⇥
+// \x0a : ↩, ⇧↩, ^o
+// \x20 : ␣
+// 2-chords
+≈ : `=
+≉ : `/
+‽ : 1/
+≠ : =/
+… : .;
+≤ : =,
+≥ : =.
+← : -,
+→ : -.
+¬ : `1
+₋₁ : -1
+↔ : ,.
+// homoiconicity
+L☝  : F8 L☝
+M☝  : F8 M☝
+R☝  : F8 R☝
