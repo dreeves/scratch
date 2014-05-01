@@ -14,7 +14,18 @@ export PS1='$(pwd)>'
 command_not_found_handle() {
 	if [ -f "$1.sh" ]; then "$1.sh" ${@:2}
 	elif [ -d "$1" ]; then local t=`pwd`; cd "$1"; "run" ${@:2}; cd "$t"
-	elif [ "$1" = "$" ]; then "run" ${@:2}
+	elif [ "$1" = "$" ]; then
+		if   [ -f "run"           ]; then "run"           ${@:2}
+		elif [ -f "run.sh"        ]; then "run.sh"        ${@:2}
+		elif [ -f "run.js"        ]; then "run.js"        ${@:2}
+		elif [ -f "main"          ]; then "main"          ${@:2}
+		elif [ -f "main.sh"       ]; then "main.sh"       ${@:2}
+		elif [ -f "main.js"       ]; then "main.js"       ${@:2}
+		elif [ -f "${PWD##*/}"    ]; then "${PWD##*/}"    ${@:2}
+		elif [ -f "${PWD##*/}.sh" ]; then "${PWD##*/}.sh" ${@:2}
+		elif [ -f "${PWD##*/}.js" ]; then "${PWD##*/}.js" ${@:2}
+		else echo "-bash: $1: command not found"
+		fi
 	else echo "-bash: $1: command not found"
 	fi
-}
+	}
