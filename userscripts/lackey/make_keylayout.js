@@ -3,10 +3,10 @@
 var builder = require('xmlbuilder')
 var fs = require('fs')
 
+var print = console.log.bind(console)
 var range = function(l){var r = []; for (var i=0;i<l;i++) r.push(i); return r}
 var seq = function(v){return typeof v === 'string'? v.split('') : v instanceof Array? v : Object.keys(v).map(function(k){return [k,v[k]]})}
 var hex = function(v,l){var r = v.toString(16); while (r.length < l) r = '0'+r; return r}
-var print = console.log.bind(console)
 
 var id = -18672//(-10000 + -Math.floor(Math.random()*10000))
 
