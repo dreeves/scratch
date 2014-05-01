@@ -1,0 +1,10 @@
+[
+	//seems to do nothing in osx
+	//{"class": "label_control", "font.size": 14},
+
+	//were always commented out
+    //{"class": "tabset_control", "tab_height": 45},
+    //{"class": "tab_label", "font.size":14},
+
+	null
+]

@@ -1,0 +1,33 @@
+{
+	"auto_complete": false,
+	"auto_complete_commit_on_tab": true,
+	"caret_extra_bottom": 0,
+	"caret_extra_top": 0,
+	"caret_extra_width": 0,
+	"caret_style": "phase",
+	"close_windows_when_empty": true,
+	"color_scheme": "Packages/User/Monalice.tmTheme",
+	"default_line_ending": "unix",
+	"enable_tab_scrolling": false,
+	"fade_fold_buttons": false,
+	"font_size": 14,
+	"highlight_line": true,
+	"ignored_packages":
+	[
+		"Vintage"
+	],
+	"indent_guide_options":
+	[
+		"draw_active"
+	],
+	"line_numbers": true,
+	"margin": 0,
+	"match_brackets": false,
+	"open_files_in_new_window": false,
+	"scroll_speed": 2.0,
+	"show_full_path": true,
+	"show_tab_close_buttons": true,
+	"find_selected_text": true,
+	"word_separators": "./\\()\"'-:,.;<>~!@#$%^&*|+=[]{}‹›`~?≤≥≠←¬₀₁₂₃₄₅₆₇₈₉₋ᵥₖₘᵢ",
+	"word_wrap": true
+}

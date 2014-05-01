@@ -1,0 +1,29 @@
+[
+	{ "keys": ["super+k", "super+k"], "command": "run_macro_file", "args": {"file": "res://Packages/Default/Delete Line.sublime-macro"} },
+
+	{ "keys": ["super+left"], "command": "move_to", "args": {"to": "hardbol"} },
+	{ "keys": ["super+right"], "command": "move_to", "args": {"to": "hardeol"} },
+
+	{ "keys": ["super+d"], "command": "duplicate_line" }, // overwrites find_under_expand
+	{ "keys": ["super+shift+d"], "command": "find_under_expand" },
+
+	{ "keys": ["super+t"], "command": "new_file" }, // overwrites { "keys": ["ctrl+t"], "command": "transpose" },
+	{ "keys": ["super+n"], "command": "new_window" }, // overwrites { "keys": ["ctrl+n"], "command": "new_file" },
+
+    { "keys": ["ctrl+tab"], "command": "next_view" },
+    { "keys": ["ctrl+shift+tab"], "command": "prev_view" },
+
+	{ "keys": ["alt+a"], "command": "replace_all", "args": {"close_panel": true}, "context": [{"key": "panel", "operand": "replace"}, {"key": "panel_has_focus"}]},
+    // overwrites { "keys": ["alt+a"], "command": "toggle_preserve_case", "context": [{ "key": "setting.is_widget", "operator": "equal", "operand": true }]},
+    { "keys": ["alt+r"], "command": "replace_next" },
+    // overwrites { "keys": ["alt+r"], "command": "toggle_regex", "context": [{ "key": "setting.is_widget", "operator": "equal", "operand": true }]},
+
+	{ "keys": ["super+alt+up"], "command": "swap_line_up" },
+	{ "keys": ["super+alt+down"], "command": "swap_line_down" },
+
+	{ "keys": ["super+shift+minus"], "command": "divider" },
+
+	{ "keys": ["super+f"], "command": "show_panel", "args": {"panel": "replace", "reverse": false} },
+
+	null
+]
