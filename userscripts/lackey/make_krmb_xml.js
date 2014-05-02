@@ -12,11 +12,16 @@ var hex = function(v,l){var r = v.toString(16); while (r.length < l) r = '0'+r; 
 
 //===----------------------------===// own //===---------------------------===//
 
+//! right command
+
 var read_lines = function(fl){return (fs.readFileSync(fl)+'').split('\n')}
 
 /*var shells = []
 var autogens = []
 
+function keycode(v){return ({})[v]}
+function KeyCode(v){return v.match(/\d/)? 'KEY_'+v : v.match(/[a-z]/)? v.toUpperCase() : 'RawValue::0x'+keycode(v).toString(16)}
+function kc_hex(v){return hex(v.charCodeAt(0),4).split('').map(function(v){return 'KeyCode::'+KeyCode(v)+',ModifierFlag::OPTION_L,'}).join('')}
 function shell(v){var id = (Math.random()*Math.pow(2,50)).toString(36); shells.push([id,v]); return id}
 function chord(keys,out){
 	keys = seq(keys)
@@ -42,7 +47,9 @@ var xml = builder.create({root: {
 			'#list': autogens.map(function(v){return {autogen:v}})
 		}
 	}})
-	.end({pretty:true})*/
+	.end({pretty:true})
+
+print(xml)*/
 
 function parse_lackey(lackey){
 	var chords = []

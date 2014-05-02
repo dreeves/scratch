@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-eval $mydir
+#eval $mydir
 
 #chrome="$USERPROFILE/AppData/Local/Google/Chrome/User Data" #windows
 chrome=~/"Library/Application Support/Google/Chrome" #osx
