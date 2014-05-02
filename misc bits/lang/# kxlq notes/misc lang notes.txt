@@ -1,0 +1,91 @@
+definitions:
+	host_code: the environment that our environment is hosted in . for example, vrelta's host_code was java, and clojure's host_code can be java, .net, or javascript
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ conclusions from Go vs Algol ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+package or ns statement should not be mixed up with import stuff (idea: scan next few lines for import stuff; incorporate them in ns thing to optimize if such optimization is needed)
+potential need for optional separator like ; or indent/dedent
+	alternatively, do blocks. but this all is kinda to get rid of do blocks...
+<inline_let> needs a local-var = or := or maybe <- or something form to replace let
+	last until the end of the current do-oid? (or maybe actually the end of the current fn-oid or maybe recur-able-oid?)
+		ability to do `f(_0 := new Label()); g(_0)` is probably important
+	in algol, = is for immutable things and := is for mutable things. just saying.
+	multi-return is pretty and nice, but it's just lists w/o [] delimiters, so... eh
+if-else is nice; the various do-if and (if . (do .) (do .)) things are so cluttery
+	link:7153
+	algol does if-then-else-fi! trash the then, but the fi is _interesting_ (also: do ... od, case .. esac)
+	well tbf (if ...) works as well as if ... fi
+<7153> in clojure, parens evaluated are function-application or macro-expansion. You can do (do ...) to get a c-style {} block, but that gets tedious
+	algol has the ; separator, which can (not really) be used to create {}blocks postfix-style - maybe do this not not really?
+	ofc there's just {}, which is nice, but we want that for map syntax (and disambig with commas is probably bad)
+	and then there's indentation (tho that mixes weirdly with clojure ideas)
+?: is really, really nice syntax. Couldn't that just be implemented as a postfix macro? I think you don't even need infix for infix macros.
+for statement: loved, reviled, holy, or demonic? But people want it, and perhaps they might even be right.
+	in algol, do .. od is the infinite loop, and all the loop constructs are just prefixes for it
+	there's `for i` `from 0` `to 10` `by 1` `while condition`
+	they _might_ have to be in that order, but meh
+	i mean, slicing is kinda sorta better, maybe? idk...
+sometimes, you just want to goto.
+clojure wins in switch/case/cond/condp, tho there are some fiddly bits to fix
+	fallthrough is no, but goto case is prolly good
+article highlights issue:
+	in algol, func definition is always roughly `proc name = (params) returntype: (body);` whereas Go has different syntax depending on whether it's inside a fn decl or not: `func name(params) {}` vs `name := func(params) {};`
+	clojurewise, this is defn vs let/letfn
+	we could abolish let and go the javascript route, but <s>I'm not feeling it</s> i may or may not be feeling it
+	and with .inline_let we can have nice lets just randomly in the ns
+		...this could be bad; might it majorly reduce monkeypatchability?
+clojure polymorphism kinda sucks, partly because it's weird and stuff. ick.
+modification to an lvalue or somesuch. += etc in some langs. Clojure has swap! for atoms. I really, really want syntax to make this convenient that's more general than swap! and is ideally a bit better.
+	this includes like `v = fn(); v.string = v.string.toUpperCase()` -> `fn().string ??? .toUpperCase()` or SOMETHING
+we know that clojure's one-pass-ness is important Just Because... but forward decls are REALLY annoying. We built the #> syntax for manually doing that, but srsly there are better solutions
+	possibly also think about making certain circular file/ns dependencies work
+clojure kinda has ctors, in that host_code has ctors. But it all sucks so much T-T
+cleanup:
+	C++ has RAII - versatile and excellent. Actually, it has general overarching versatile resource management. Resource lifetime management. Something.
+	jvm has GC - super fast, but fails on resources that are not memory
+	Go has defer - `fn(){var fd = open("foo"); defer close(fd); ...}` ... it's just manual RAII T-T
+	C# and java have using - `fn(){using (var fd = open("foo")) {...}}` ... it's just sugar for manual RAII T-T
+	lombok has @Cleanup - basically, annotate a local var with it and its object will be cleaned up. See http://projectlombok.org/features/Cleanup.html
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ specifically from rainboom ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compile-time func overloading; rand-nth is silly! (see: str-replace merge-vs-union etc)
+	ohey, this might be related to the Expression Problem (Can you do it without modifying any existing code? Can you do it without breaking identity? Can you be sure you're safe from name clashes? And, most important, can you do it without creating an even bigger problem in the future?) except probably not
+<opt-args> optional params ; fixing this would prolly mean reimplementing a bit of fn ; http://www.clodoc.org/doc/clojure.core/maybe-destructured
+(only-probably) auto-coercion sometimes, esp when calling host_code methods, notably double->long
+	you wanted obj->bool coercion once, but it seems less relevant now
+(only-probably) /it/ i would love a standard pronoun: it's so not functional, but i think it makes sense to our brainstuffs
+<no-eval> can't you do without using eval for stuff like (eval `(declare ~sym))?
+<needs_haskell> "(partial apply assoc-v)" is SO UGLY
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ specifically from loki ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+mixins are cool; find out about those
+the whole thing that is safenull - it makes certain things so much easier
+	there was a note about wanting a list?[idx] safenull thing
+another infix operator: groovy-style .. ; the difficulty is really token parsing
+more operators: spread operator. It's basically just sugar for map. list*.x()
+lombok has cool stuff; possibly adapt it
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ notes that I didn't clean up yet ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+clojure: integer hashing vs = is annoying-weird
+clojure: use vs. require vs. import vs. load vs. ... is stupid
+clojure: `every?` and `some` are confusingly named
+clojure: metadata exists, but it doesn't work on most types :(
++'5' === 5
+`a +? b == (a && b? a + b : null)`
+	in other words, (def +? (null-safe +))
+new modifier: shared. if a class is in scope, then its members with mod:shared are in scope too. But the only good use I know of this for is to be implied by ext...
+maybe the update ops (`+=`, `*=`, etc) should be left-associative like most ops? (`=` would still be right-associative)
+sugar for _value types_?? hey, it could be pretty useful!
+i have always wished there was some good way of doing units, like `16 newtons` or `6 meters` (could not super-smart primitive wrappers do the trick?)
+ahha! `class vrelta.lang.Util;`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ random wishes that aren't that important ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+why must we have different false and nil? ...okay, there are reasons, but ARGH
+i want the word "clique" to be a meaningful macro or smth
+so like where you do (do (let t ...) (def ...) (def ...))? It might feel nice to be able to automatically get rid of t after the defs somehow
+	[2014-02-19 no... just use more meaningful indentation]
+better host_code inter-op:
+	what about inferring higher-level constructs from things like javac-made java class files?
+		* properties
+		* default field values
+	`object initializers` from c#: (id:164)
+		long:	person := new Person(); person.firstName = 'Resede'; person.lastName = 'Zero'; person.age = 76;
+		c#:	person := new Person{firstName = 'Resede', lastName = 'Zero', age = 76};
+		java:	person := new Person().setFirstName('Resede').setLastName('Zero').setAge(76);
+		in c#, this is distinct from anon class syntax because you have to use the default ctor
+		but it looks like just a sort of autogenerated keyword-based ctor call (would the c# way be more efficient, though?)
+check out [ruby sql shell objective-c lua actionscript erlang ocaml] and maybe if you're bored [php D]

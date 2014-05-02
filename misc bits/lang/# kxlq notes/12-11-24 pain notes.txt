@@ -1,0 +1,135 @@
+(defn parse_S_OTHER [rdr]
+{
+	(loop [ch (_read1 rdr)
+	{
+		{
+			sb (StringBuilder.)]
+		}
+		(if ((static (smi"+-*/%&|=<>!?:@~#")) ch)
+		{
+			(dl (. sb append (char ch)) (recur (_read1 rdr) sb))
+			NEWLINE
+			(dl
+			{
+				(_unread1 rdr ch)
+				NEWLINE
+				r <- (str sb)
+				NEWLINE
+				(if (= r "") nil (ksymbol r)))
+			}
+			)
+		}
+		))
+	}
+}
+
+"Before the first line of the file is read, a single zero is pushed on the stack; this will never be popped off again."
+
+currently, stuff is done with { } instead of IN DE, but maybe it really should be IN DE? because then you can gobble up DE IN.
+	but... that is phail with
+		def f():
+				return [
+			]
+	it is `def f(): IN IN return [ DE ] DE`
+	but... don't we want list literals to be able to contain dentated structures??? like
+	x = [
+		fn this[rdr ch]:
+			loop ch ch, r StringBuilder():
+				r.append(ch)
+				ch = read1(rdr)
+				if reader_macro(ch) == this:
+					recur(ch r)
+				else: unread1(ch); ksymbol(str(r))
+(defn _t [] (fn this [rdr ch] (dl
+  (loop [ch ch r (StringBuilder.)] (dl
+    (. r append (char ch))
+    ch <- (read1 rdr)
+    (if (is (reader_macro ch) this)
+      (recur ch r)
+      (dl (unread1 ch) (ksymbol (str r)))))))))
+(rmdef [:default] (_t))
+(rmdef "+-*/%&|=<>!?:@~" (_t))
+(rmdef "'`^.()[]{}" [rdr ch] (ksymbol (str (char ch))))
+	]
+	um
+	maybe dentation symbols need to have meaning significantly later?
+
+oh
+no
+...
+i think i'm being converted
+AAAAAAAAAAA
+what
+what is it that we even want?
+why the hell do we kxlq???
+
+(defn parse_S_OTHER [rdr]
+IN
+	(loop [ch (_read1 rdr)
+	IN
+		IN
+			sb (StringBuilder.)]
+		DE
+		(if ((static (smi"+-*/%&|=<>!?:@~#")) ch)
+		IN
+			(dl (. sb append (char ch)) (recur (_read1 rdr) sb))
+			NL
+			(dl
+			IN
+				(_unread1 rdr ch)
+				NL
+				r <- (str sb)
+				NL
+				(if (= r "") nil (ksymbol r)))
+			DE
+			)
+		DE
+		))
+	DE
+DE
+
+{
+	(defn parse_S_OTHER [rdr]
+	{
+		(loop [ch (_read1 rdr)
+		{
+			sb (StringBuilder.)]
+		}
+		{
+			(if ((static (smi"+-*/%&|=<>!?:@~#")) ch)
+			{
+				(dl (. sb append (char ch)) (recur (_read1 rdr) sb))
+			}
+			{
+				(dl
+				{
+					(_unread1 rdr ch)
+				}
+				{
+					r <- (str sb)
+				}
+				{
+					(if (= r "") nil (ksymbol r)))
+				}
+			}
+			{
+				)
+			}
+		}
+		{
+			))
+		}
+	}
+}
+
+(defn parse_S_OTHER [rdr]
+  (loop [ch (_read1 rdr)
+         sb (StringBuilder.)]
+    (if ((static (smi"+-*/%&|=<>!?:@~#")) ch)
+      (dl (. sb append (char ch)) (recur (_read1 rdr) sb))
+      (dl
+        (_unread1 rdr ch)
+        r <- (str sb)
+        (if (= r "") nil (ksymbol r)))
+      )
+    ))

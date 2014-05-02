@@ -1,0 +1,33 @@
+; syntax: `name(args) = blah` == `name = fn(args) blah`
+; fn syntax unknown, was `args -> body` now is `fn(args) body`
+
+slurpi = fn(f) javax.imageio.ImageIO.read(java.net.URL(f))
+spiti = fn(f bi) javax.imageio.ImageIO.write(bi "png" file(f))
+is_grey = fn(c) c.r == c.g == c.b
+merge_weather_images = fn(imgs) (
+  greys  = imgs * * (||is_grey   0x00000000)
+  colors = imgs * * (||!&is_grey 0x00000000)
+  avg(greys) + avg(colors))
+image = fn(method imgs) (
+  GRID_VERTICAL = new object()
+  GRID_HORIZONTAL = new object()
+  )
+
+PMCD = new fn() (
+    this.TEMPERATURE =     "100000000000000000000000000000000000000000000000000000000"
+    this.FEELS_LIKE = [    "001000000000000000000000000000000000000000000000000000000"
+                           "000100000000000000000000000000000000000000000000000000000" ]
+    this.PRECIPITATION = [ "000000000100000000000000000000000000000000000000000000000"
+                           "000000000010000000000000000000000000000000000000000000000"
+                           "000000000001000000000000000000000000000000000000000000000"
+                           "000000000000100000000000000000000000000000000000000000000" ]
+    )
+
+weather_img = fn(ahour ^PMCD. pcmd) slurpi(str("http://forecast.weather.gov/wtf/meteograms/Plotter.php?lat=43.08544&lon=-77.67506&wfo=BUF&zcode=NYZ003&gset=20&gdiff=10&unit=0&tinfo=EY5&ahour="ahour"&pcmd="pcmd"&lg=en&indu=1!1!1&dd=0&bw=0&hrspan=48&pqpfhr=6&psnwhr=6"))
+
+build_chart = fn() new image(.GRID_VERTICAL [
+  new image(.GRID_HORIZONTAL [for [0 48] merge_weather_images([weather_img(it .TEMPERATURE)]+[for pmcd in .FEELS_LIKE weather_img(it pmcd)])])
+  new image(.GRID_HORIZONTAL [for [0 48] merge_weather_images([for pmcd in .PRECIPITATION weather_img(it pmcd)])])
+  ])
+
+spiti("test.png" build_chart())

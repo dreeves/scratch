@@ -1,0 +1,24 @@
+void main(String[] args) {
+	results := new int[11];
+	for i, f : new File('.').%listAll().>List<File>: if f.getName().endsWith('.html') {
+		System.out.print(i+"\r");
+		lines := f.%readAllLines().>List<String>;
+		int idx;
+		for j, v : lines: if v.indexOf('START OF CLASS DATA') != -1 {idx = j + 5; break}
+		if idx == 0: continue;
+		line := lines[idx];
+		if line.indexOf('&lt;') != -1 {
+			sub := line[line.indexOf('&lt;') + 4 : line.indexOf('&gt;')];
+			int cnt = 1; for c : sub.toCharArray(): if c == ',': cnt++;
+			results[cnt]++;
+		} else results[0]++;
+	}
+	println();
+	for i, v : results: println('result at', i+':', v);
+}
+
+// preferred form as of 2014-02-19 . oh, wait, i forgot that listAll probably searches subdirectories
+// for html files in current directory, output a dictionary of how many of them have how many commas inside a html-encoded /<.*>/ in a specific location . before each file, output the number of files scanned so far
+print(frequencies(for zip((for file('.') if %.name≈/\.html$/) 0…) {
+	print(%2 "\r")
+	/,/.matches((/&lt;(.*)&gt;/.matches((for with_rest(open(%).lines()) if %≈/START OF CLASS DATA/ break %2₅)||'')||[0 ''])₁).length-1}))

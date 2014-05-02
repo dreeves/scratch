@@ -1,0 +1,175 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+;;;;; top
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+special forms:
+  official: def if do quote var recur throw try monitor-enter monitor-exit
+  unofficial: loop* let* letfn* fn* . set! clojure.core/import* deftype* case* new reify*
+  technically: catch finally &
+  ?sorta?: ns
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+;;;;; main
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+pythonoid subscripting:
+  get
+  first next rest second last butlast take drop take-last drop-last nthnext nthrest
+  subvec subs
+misc collection factorys: list list* vector vec hash-map hash-set sorted-map sorted-map-by sorted-set sorted-set-by set array-map
+op-oids:
+  ; all that aren't 1ary take many args
+  ; versions with a trailing ' do support arbitrary precision (and the corresponding ones without do not)
+  = slow but nice for numbers and collections
+  == only for numbers!
+  < > <= >=
+  inc inc'
+  dec dec'
+  + +'
+  - -'
+  * *'
+  /
+  bit-(not and or xor and-not clear set flip test shift-left shift-right)
+swap!-oids: swap! vary-meta alter-meta! alter-var-root
+misc util: test with-precision resultset-seq clojure-version
+  gensym find-keyword
+  unchecked-(inc dec negate add subtract multiply)[-int] unchecked-(divide remainer)-int
+  with-out-str with-in-str
+  max-key min-key
+  bases supers
+misc map stuff: contains? dissoc disj find select-keys
+multimethod: defmulti defmethod remove-all-methods remove-method prefer-method methods get-method prefers
+binding: binding bound-fn bound-fn*
+  with-bindings* with-bindings
+ref/agent/atom/var/stuffs:
+  agent send send-off restart-agent
+  ref atom commute alter ref-set ref-history-count ref-min-history ref-max-history ensure sync dosync io!
+  await await1 await-for
+  bound? thread-bound?
+simple comps:
+  nil?: is nil
+  false?: is false
+  true?: is true
+  zero?: = 0
+  not=: not & =
+  complement(f): not & f
+  remove(f coll): filter (not & f) coll
+  not-any?: not & some
+  not-every?: not & every?
+misc sad:
+  identical?: clojure.lang.Util/identical
+  symbol
+  and or: macros! not functions at all! of course, it's because of the short-circuiting
+  max min: only for numbers!
+  pos? neg?
+  constantly(v): (fn [& args] v)
+  identity(v): v
+  locking: same as java-synchronized
+  sequence every? some
+  declare
+  comparator
+  dorun doall
+  doseq dotimes
+  import
+  into-array
+  class: v?.getClass()
+  type
+  num int long float double short byte char boolean unchecked-byte unchecked-short unchecked-char unchecked-int unchecked-long unchecked-float unchecked-double bigint biginteger bigdec
+  read read-line read-string
+  with-open
+  ex-info ex-data
+  defn-
+  subseq rsubseq
+  not-empty
+  get-in assoc-in update-in
+  keep keep-indexed
+  every-pred some-fn
+weird macros: when when-not if-not .. -> ->> if-let when-let doto when-first for amap areduce condp letfn case
+transient: transient persistent! conj! assoc! dissoc! pop! disj!
+print: print-method print-dup pr newline flush prn print println pr-str prn-str print-str println-str format printf
+arrays: alength aclone aget aset aset-int aset-long aset-boolean aset-float aset-double aset-short aset-byte aset-char make-array to-array-2d float-array boolean-array byte-array char-array short-array double-array object-array int-array long-array booleans bytes chars shorts floats ints doubles longs
+namespace: ns find-ns create-ns remove-ns all-ns the-ns ns-name ns-map ns-unmap ns-publics ns-imports ns-interns refer ns-refers alias ns-aliases ns-unalias ns-resolve resolve refer-clojure require use loaded-libs load compile intern
+regex: re-pattern re-matcher re-groups re-seq re-matches re-find
+not understood: seque process-annotation with-loading-context with-redefs-fn with-redefs default-data-readers *data-readers*
+"Creates a hierarchy object for use with derive, isa? etc. {:parents {} :descendants {} :ancestors {}}":
+  derive underive make-hierarchy isa? parents ancestors descendants
+special: gen-class
+futures: future-call future future-cancel future-cancelled?
+promise: promise deliver
+: iterator-seq tree-seq file-seq xml-seq enumeration-seq
+: cons let loop fn conj seq lazy-seq assoc meta defn to-array defmacro not str cond keyword apply concat delay force compare count nth reverse quot rem mod rationalize even? odd? peek pop rseq comp juxt partial dotimes map mapcat filter take-while drop-while cycle split-at split-with repeat iterate range merge merge-with zipmap line-seq sort sort-by partition eval memfn time macroexpand-1 macroexpand create-struct defstruct struct-map struct accessor load-reader load-string take-nth interleave with-local-vars destructure lazy-cat assert rand rand-int rand-nth special-symbol? distinct replace repeatedly hash interpose definline empty distinct? defonce empty? *1 *2 *3 *e trampoline while memoize fnil reduce reduce-kv into mapv filterv slurp spit pmap pcalls pvalues flatten group-by partition-by frequencies reductions partition-all shuffle map-indexed name
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+;;;;; simple
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+java aliases:
+  instance? java.lang.Class/isInstance
+  set-validator! clojure.lang.IRef/setValidator
+  get-validator clojure.lang.IRef/getValidator
+  set-error-handler! clojure.lang.Agent/setErrorHandler
+  error-handler clojure.lang.Agent/getErrorHandler
+  set-error-mode! clojure.lang.Agent/setErrorMode
+  error-mode clojure.lang.Agent/getErrorMode
+  reset! clojure.lang.Atom/reset
+  reset-meta! clojure.lang.IReference/resetMeta
+  numerator clojure.lang.Ratio/numerator
+  denominator clojure.lang.Ratio/denominator
+  var-get clojure.lang.Var/get
+  var-set clojure.lang.Var/set
+  push-thread-bindings clojure.lang.Var/pushThreadBindings
+  pop-thread-bindings clojure.lang.Var/popThreadBindings
+  get-thread-bindings clojure.lang.Var/getThreadBindings
+  release-pending-sends clojure.lang.Agent/releasePendingSends
+  add-watch clojure.lang.IRef/addWatch
+  remove-watch clojure.lang.IRef/removeWatch
+  agent-error clojure.lang.Agent/getError
+  shutdown-agents clojure.lang.Agent/shutdown
+  compare-and-set! clojure.lang.Atom/compareAndSet
+  with-meta clojure.lang.IObj/withMeta
+  cast java.lang.Class/cast
+  key java.util.Map$Entry/getKey
+  val java.util.Map$Entry/getValue
+  keys clojure.lang.RT/keys
+  vals clojure.lang.RT/vals
+  find-var clojure.lang.Var/find
+  future-done? java.util.concurrent.Future/isDone
+  realized? clojure.lang.IPending/isRealized
+  namespace clojure.lang.Named/getNamespace
+  ---
+  deref 1: clojure.lang.IDeref/deref 3: clojure.lang.IBlockingDeref/deref
+isa:
+  seq? clojure.lang.ISeq
+  char? java.lang.Character
+  string? java.lang.String
+  map? clojure.lang.IPersistentMap
+  vector? clojure.lang.IPersistentVector
+  symbol? clojure.lang.Symbol
+  keyword? clojure.lang.Keyword
+  delay? clojure.lang.Delay
+  number? java.lang.Number
+  ratio? clojure.lang.Ratio
+  decimal? java.lang.BigDecimal
+  var? clojure.lang.Var
+  class? java.lang.Class
+  coll? clojure.lang.IPersistentCollection
+  list? clojure.lang.IPersistentList
+  set? clojure.lang.IPersistentSet
+  ifn? clojure.lang.IFn
+  fn? clojure.lang.Fn
+  associative? clojure.lang.Associative
+  sequential? clojure.lang.Sequential
+  sorted? clojure.lang.Sorted
+  counted? clojure.lang.Counted
+  reversible? clojure.lang.Reversible
+  future? java.util.concurrent.Future
+  ---
+  float? java.lang.Double or java.lang.Float
+  integer? java.lang.Integer or java.lang.Long or clojure.lang.BigInt or java.lang.BigInteger or java.lang.Short or java.lang.Byte
+  rational? integer? or ratio? or decimal?

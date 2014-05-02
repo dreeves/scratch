@@ -1,0 +1,14 @@
+jargon:
+	sscmp: sufficiently-smart-compiled . means that the code is a deliberate performance hack
+	rdr: reader
+	cu16: UTF-16 code unit
+	ch: unicode code point
+
+voxy&atcmit had these in a universal-imports section:
+	import java.util.*;
+	import static java.lang.Math.*;
+	import static java.lang.Double.isNaN;
+	import java.util.concurrent.atomic.*;
+	import java.lang.reflect.*;
+
+java can do classloader-tied lazyloading awesomely with "static class <name> {static <type> $; static {...}}"

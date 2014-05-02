@@ -1,0 +1,32 @@
+simple todo:
+	copy python-style print sometime: print([object, ...], *, sep=' ', end='\n', file=sys.stdout)
+
+these plan-ideas are plan-ideas that exist:
+	should indexers try to guess for alien-code with say get and set methods? or something?
+	object.member syntax is a nice implied-namespace mechanism, but can we imply the namespace in `new BufferedImage(<a superclass of BufferedImage>.TYPE_INT_ARGB)` ?
+
+notes to keep in mind:
+	:keywords (aka always-interned strings) are the best enum, and :keywords are useful for kwargs, but they *need* better typo/wrongness detection (for the sake of fail-fast)
+
+2014-02-19 took entries from above down into the following sections:
+
+no longer important:
+	simple todo:
+		a proper assert macro that basically prints the code on failure or smth
+	these plan-ideas are plan-ideas that exist:
+		consider implementing dentation symbols -> XXDENT tokens through a system similar to your "foundation macros"?
+	Things I Should Really Learn More About:
+		OH MY GOSH LAZINESS IS SO PROFOUND
+		http://picolisp.com/
+		V8
+	notes to keep in mind:
+		(extension methods) in javaoids, methods added to a namespace from outside of the namespace are dispatched statically instead of dynamically . this is stupid
+		even if we realize kxlq, it might not be usable by many people: http://thedailywtf.com/Articles/Programming-Sucks!-Or-At-Least,-It-Ought-To-.aspx
+
+are wrong:
+	these plan-ideas are plan-ideas that exist:
+		assignment to an undeclared var is a controversial issue: just make it a warning? that means you won't declare your vars with assignment, but the program will still run if you do
+		can have other styles . could have one with public/protected/private and just translate that to name/_name/__name
+	notes to keep in mind:
+		clojure.set/intersection SHOULD implicitly require clojure.set (counterpoint: can be nasty (counterpoint: srsly?))
+			[2014-02-19 actually, clojure.set should just be automatically required.]
