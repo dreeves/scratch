@@ -2,7 +2,6 @@ projects that never went anywhere
 
 not yet fully combed for useful ideas / code:
 	artificer
-	cute-gen
 	fnarpg
 	hydrocarboner
 	life
@@ -10,10 +9,16 @@ not yet fully combed for useful ideas / code:
 	such-zalgo
 	sure
 	trance
+	fimfiction scraper
 
 fully combed for useful ideas / code:
 	ansi-console
 	clrs
+	cute-gen
+	mirror-space
+	HATETRIS OMEGA
+	image merge
+	simple profiler
 
 
 
@@ -21,3 +26,4 @@ fully combed for useful ideas / code:
 
 notes on the tidy-code goal:
 	set up backups
+		figure out where all the files that need to be backed up are

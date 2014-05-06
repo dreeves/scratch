@@ -1,0 +1,1 @@
+Mostly empty project; plans are for a syncing android notepad app.

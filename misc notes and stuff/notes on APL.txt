@@ -1,0 +1,46 @@
+fn / sequence : reduce
+look at J?
+
+
+
+<> ≤≥ =≠ +−×÷ !
+a ⋆ b : pow(a,b)
+
+− v : -v
+× v : signum
+⌈ v : ceil
+⌊ v : floor
+∣ v : abs
+
+⍳ b : 1..b+1
+⍎ v : exec
+⍕ v : to_string
+
+
+n ↑ l : n≥0? take : take-last
+n ↓ l : n≥0? drop : drop-last
+
+
+\	Expansion	A\B	Insert zeros (or blanks) in B corresponding to zeros in A	U+005C
+/	Compression	A/B	Select elements in B corresponding to ones in A	U+002F
+
+
+  ? y : rand(1,y+1)
+x ? y : "deal": a distinct integers selected as rand(1,y+1)
+
+
+a ∣ b : mod(b,a)
+a ⌈ b : max
+a ⌊ b : min
+a ⍳ b : the index of b in a
+
+
+
+
+Name	Symbol	Example	Meaning (of example)	Unicode codepoint sequence
+Reduce (last axis)	/	+/B	Sum across B	U+002F
+Reduce (first axis)	⌿	+⌿B	Sum down B	U+233F
+Scan (last axis)	\	+\B	Running sum across B	U+005C
+Scan (first axis)	⍀	+⍀B	Running sum down B	U+2340
+Inner product	.	A+.×B	Matrix product of A and B	U+002E
+Outer product	∘.	A∘.×B	Outer product of A and B	U+2218, U+002E
