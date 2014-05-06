@@ -1,3 +1,0 @@
-javac -classpath C:\takns\src\com\mojang\takns\*
-
-javac *.java ai\*.java gui\buttons\*.java gui\states\*.java gui\*.java intro\*.java particles\*.java sound\*.java sprites\*.java synth\*.java terrain\*.java units\buildings\*.java units\monsters\*.java units\vehicles\*.java units\*.java
