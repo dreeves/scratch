@@ -1,24 +1,26 @@
 projects that never went anywhere
 
-not yet fully combed for useful ideas / code:
-	artificer
-	fnarpg
-	hydrocarboner
-	life
-	stopwatch
-	such-zalgo
-	sure
-	trance
-	fimfiction scraper
-
-fully combed for useful ideas / code:
+contents:
 	ansi-console
+	artificer            [not yet fully combed for useful ideas / code]
+	asplode
+	befunge              [not yet fully combed for useful ideas / code]
 	clrs
 	cute-gen
-	mirror-space
+	fimfiction scraper   [not yet fully combed for useful ideas / code]
+	fnarpg               [not yet fully combed for useful ideas / code]
 	HATETRIS OMEGA
+	hydrocarboner        [not yet fully combed for useful ideas / code]
 	image merge
+	life                 [not yet fully combed for useful ideas / code]
+	mirror-space
+	runesmith            [not yet fully combed for useful ideas / code]
 	simple profiler
+	stopwatch            [not yet fully combed for useful ideas / code]
+	such-zalgo           [not yet fully combed for useful ideas / code]
+	sure                 [not yet fully combed for useful ideas / code]
+	takns                [not yet fully combed for useful ideas / code]
+	trance               [not yet fully combed for useful ideas / code]
 
 
 
