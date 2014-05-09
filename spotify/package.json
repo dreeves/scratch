@@ -1,6 +1,7 @@
 {
 	"dependencies": {
 		"node-gyp": "*",
-		"node-spotify": "*"
+		"node-spotify": "*",
+		"underscore": "*"
 	}
 }
