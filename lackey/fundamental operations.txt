@@ -3,6 +3,7 @@
 	kill sublime nag
 	sync up muting and pausing, and headphone removal if you can
 	improve run command
+	lots of these command exclusively use either right-modifiers or left-modifiers. you maybe should write down which ones.
 
 navigate : delete
 	back char: ⌫, ^h
