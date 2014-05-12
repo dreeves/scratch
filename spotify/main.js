@@ -14,6 +14,7 @@ var err_print = function(f){return function(){try{f()} catch (e) {console.log('e
 sync(err_print(function(){
 
 // http://gizmodo.com/you-can-download-any-spotify-song-as-an-mp3-with-this-c-494493386 ??
+// deprecate group_by and see if underscore handles any other such things
 
 var print = console.log.bind(console)
 Array.prototype.group_by = function(f){var r = {}; this.map(function(v){var t; (r[t=f(v)]=r[t]||[]).push(v)}); return r}
@@ -21,6 +22,7 @@ var seq = function(v){return typeof v === 'string'? v.split('') : v instanceof A
 Array.prototype.m_concat = function(){return Array.prototype.concat.apply([],this)}
 var object = function(v){return v.reduce(function(r,v){r[v[0]] = v[1]; return r},{})}
 var C = function(v){return function(){return v}}
+var err = function(v){throw Error(v)}
 
 var args = minimist(process.argv.slice(2))
 
@@ -42,6 +44,8 @@ var playlists_ = function(){
 	l.filter(function(v){return v.name!=='-'}).map(function(v){if (v.isLoaded) out.push(v); else if (v.name==='tags') out = r_t; else out = r_p})
 	playlists = C(r_p)
 	tags = C(r_t)
+	var t = seq(_.groupBy(playlists().concat(tags()),'name')).map(function(v){return v[1].length===1? undefined : v[1].map(function(v){return v.name})}).filter(function(v){return v}).m_concat()
+	if (t.length > 0) err('oh no! duplicate playlists! '+t)
 	print('playlists loaded!',timer()) }
 var playlists = function(){playlists_(); return playlists()}
 var tags = function(){playlists_(); return tags()}
