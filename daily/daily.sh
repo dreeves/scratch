@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+source ~/.bashrc
 #eval $mydir
 
 #chrome="$USERPROFILE/AppData/Local/Google/Chrome/User Data" #windows

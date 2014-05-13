@@ -1,5 +1,5 @@
 export PATH="/usr/local/bin:$PATH:."
-#export PATH="$PATH:$HOME/.rvm/bin"; [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # load RVM
+export PATH="$PATH:$HOME/.rvm/bin"; [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # load RVM
 
 pause() { read -p 'Press [Enter] to continue . . .'; }; export -f pause
 export mydir='cd $(dirname "${BASH_SOURCE[0]}")'
