@@ -7,6 +7,7 @@ contents:
 	befunge              [not yet fully combed for useful ideas / code]
 	clrs
 	cute-gen
+	elastic
 	fimfiction scraper   [not yet fully combed for useful ideas / code]
 	fnarpg               [not yet fully combed for useful ideas / code]
 	HATETRIS OMEGA
@@ -22,10 +23,6 @@ contents:
 	takns                [not yet fully combed for useful ideas / code]
 	trance               [not yet fully combed for useful ideas / code]
 
-
-
-
-
 notes on the tidy-code goal:
-	set up backups
-		figure out where all the files that need to be backed up are
+	figure out where *all* the files that need to be backed up are
+	if there's a nice api to time machine's current list-of-things-to-be-backed-up that would be excellent

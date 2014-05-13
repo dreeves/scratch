@@ -89,7 +89,7 @@ var save_history = function(){
 			v.playlists = v.playlists.map(function(v){return v.name})
 			})
 		return JSON.stringify(tracks,null,'\t')}
-	fs.writeFileSync(F('~/ali/history/spotify/'+m().toISOString()+'.json'),stringify_tracks(tracks()))
+	fs.writeFileSync(F('~/ali/history/auto/spotify/'+m().toISOString()+'.json'),stringify_tracks(tracks()))
 	print('history saved!',timer()) }
 
 //===----------------===// call function based on args //===---------------===//

@@ -5,6 +5,7 @@ pause() { read -p 'Press [Enter] to continue . . .'; }; export -f pause
 export mydir='cd $(dirname "${BASH_SOURCE[0]}")'
 #slash_fwd()  { echo $(echo "$1" | sed 's/\\/\//g'); }; export -f slash_fwd
 #slash_back() { echo $(echo "$1" | sed 's/\//\\/g'); }; export -f slash_back
+date_i() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }; export -f date_i
 f() { open .; }
 x() { exit; }
 sb() { "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" $@; }

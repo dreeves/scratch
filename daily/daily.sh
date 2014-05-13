@@ -4,7 +4,8 @@
 #chrome="$USERPROFILE/AppData/Local/Google/Chrome/User Data" #windows
 chrome=~/"Library/Application Support/Google/Chrome" #osx
 
-cp "$chrome/Default/Bookmarks" ~/"ali/history/bookmarks/`date \"+%Y-%m-%d %H.%M\"`"
+cp "$chrome/Default/Bookmarks" ~/ali/history/auto/bookmarks/$(date_i).json
+cp ~/Library/Spelling/LocalDictionary ~/ali/history/auto/dictionary/$(date_i).txt
 
 cd ~/ali; git add -A .; git commit -m "automated"
 
