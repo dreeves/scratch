@@ -64,13 +64,14 @@ var main = function(){
 	var tr = tracks()
 
 	tr = seq(_.groupBy(tr,function(v){return v.artists[0].name===''? v.name : v.artists[0].name+' @ '+v.name}))
-		.map(function(v){return v[1].length===1? [[v[0],v[1][0]]] : seq(_.groupBy(v[1],function(v){return v.artists[0].name+' @ '+v.album.name+' @ '+v.name}))}).m_concat()
+		.map(function(v){return v[1].length===1? [[v[0],v[1][0]]] : seq(_.indexBy(v[1],function(v){return v.artists[0].name+' @ '+v.album.name+' @ '+v.name}))}).m_concat()
 
 	// okay . we've generated an unique name for all tracks. what next?
-	// .tags seems to be broken! see: tr[v].tags &&
 
-	tr = object(tr)
-	Object.keys(tr).map(function(v,i){if (tr[v].tags && tr[v].tags.length > 0) print(v,tr[v].playlists,tr[v].tags)})
+/*	tr = object(tr)
+	Object.keys(tr).map(function(v,i){
+		if (tr[v].tags.length > 0) print(v,tr[v].playlists,tr[v].tags)
+	})*/
 	}
 
 var save_history = function(){
@@ -83,7 +84,6 @@ var save_history = function(){
 			delete(v.album.isLoaded)
 			delete(v.duration)
 			v.artists.map(function(v){delete(v.isLoaded)})
-			v.playlists = _.pluck(v.playlists,'name')
 			})
 		return JSON.stringify(tracks,null,'\t')}
 	fs.writeFileSync(F('~/ali/history/auto/spotify/'+m().toISOString()+'.json'),stringify_tracks(tracks()))
