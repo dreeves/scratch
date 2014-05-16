@@ -26,3 +26,4 @@ contents:
 notes on the tidy-code goal:
 	figure out where *all* the files that need to be backed up are
 	if there's a nice api to time machine's current list-of-things-to-be-backed-up that would be excellent
+	it's tmutil

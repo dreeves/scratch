@@ -34,8 +34,7 @@ var poll = function(f,cb){(function λ(){if (f()) cb(); else setTimeout(λ,50)})
 var login = function(){
 	spotify.login(auth.username, auth.password, false, false)
 	spotify.ready.sync()
-	login = C()
-	print('spotify ready!',timer()) }
+	login = C(); print('spotify ready!',timer()) }
 var playlists_ = function(){
 	login()
 	var l = spotify.playlistContainer.getPlaylists()
@@ -44,49 +43,46 @@ var playlists_ = function(){
 	l.filter(function(v){return v.name!=='-'}).map(function(v){if (v.isLoaded) out.push(v); else if (v.name==='tags') out = r_t; else out = r_p})
 	playlists = C(r_p)
 	tags = C(r_t)
-	var t = seq(_.groupBy(playlists().concat(tags()),'name')).map(function(v){return v[1].length===1? undefined : _.pluck(v[1],'name')}).filter(function(v){return v}).m_concat()
-	if (t.length > 0) err('oh no! duplicate playlists! '+t)
+	var t; if ((t=seq(_.groupBy(playlists().concat(tags()),'name')).map(function(v){return v[1].length===1? undefined : _.pluck(v[1],'name')}).filter(function(v){return v}).m_concat()).length > 0) err('oh no! duplicate playlists! '+t)
 	print('playlists loaded!',timer()) }
 var playlists = function(){playlists_(); return playlists()}
 var tags = function(){playlists_(); return tags()}
 var tracks = function(){
-	var r = []
-	playlists().map(function(l){l.getTracks().map(function(v){(v.playlists=v.playlists||[]).push(l.name); r.push(v)})})
-	tags(     ).map(function(l){l.getTracks().map(function(v){(v.tags     =v.tags     ||[]).push(l.name); r.push(v)})})
-	r.map(function(v){v.playlists=v.playlists||[]; v.tags=v.tags||[]})
+	var r = [playlists().map(function(v){return v.getTracks()}).m_concat(),tags().map(function(v){return v.getTracks()}).m_concat()].m_concat()
 	poll.sync(null,function(){return r.every(function(v){return v.isLoaded})})
-	r = seq(_.groupBy(r,'link')).map(function(v){v[1][0].playlists = _.uniq(_.pluck(v[1],'playlists').m_concat()); v[1][0].tags = _.uniq(_.pluck(v[1],'tags').m_concat()); return v[1][0]})
-	tracks = C(r)
-	print('tracks loaded!',timer())
-	return r}
-
-var main = function(){
-	var tr = tracks()
-
-	tr = seq(_.groupBy(tr,function(v){return v.artists[0].name===''? v.name : v.artists[0].name+' @ '+v.name}))
-		.map(function(v){return v[1].length===1? [[v[0],v[1][0]]] : seq(_.indexBy(v[1],function(v){return v.artists[0].name+' @ '+v.album.name+' @ '+v.name}))}).m_concat()
-
-	// okay . we've generated an unique name for all tracks. what next?
-
-/*	tr = object(tr)
-	Object.keys(tr).map(function(v,i){
-		if (tr[v].tags.length > 0) print(v,tr[v].playlists,tr[v].tags)
-	})*/
-	}
-
-var save_history = function(){
-	var stringify_tracks = function(tracks){
-		tracks = JSON.parse(JSON.stringify(tracks))
+	tracks = C(r); print('tracks loaded!',timer()); return r}
+var tracks_nice = function(){
+	var set_playlists = function(tracks){
+		tracks.map(function(v){v.playlists=v.playlists||[]; v.tags=v.tags||[]})
+		var t = _.indexBy(tracks,'link')
+		playlists().map(function(l){l.getTracks().map(function(v){if (_.indexOf(t[v.link].playlists,l.name)===-1) t[v.link].playlists.push(l.name)})})
+		tags(     ).map(function(l){l.getTracks().map(function(v){if (_.indexOf(t[v.link].tags     ,l.name)===-1) t[v.link].tags     .push(l.name)})})
+		}
+	var set_unique_names = function(tracks){
+		seq(_.groupBy(tracks,function(v){return v.artists[0].name===''? v.name : v.artists[0].name+' → '+v.name})).map(function(v){
+			if (v[1].length===1) v[1][0].unique_name = v[0]
+			else v[1].map(function(v){v.unique_name = v.artists[0].name+' → '+v.album.name+' → '+v.name})
+			}) }
+	var delete_boring = function(tracks){
 		tracks.map(function(v){
 			delete(v.isLoaded)
-			delete(v.popularity)
 			delete(v.starred)
 			delete(v.album.isLoaded)
-			delete(v.duration)
 			v.artists.map(function(v){delete(v.isLoaded)})
-			})
-		return JSON.stringify(tracks,null,'\t')}
-	fs.writeFileSync(F('~/ali/history/auto/spotify/'+m().toISOString()+'.json'),stringify_tracks(tracks()))
+			}) }
+	var r = JSON.parse(JSON.stringify(tracks()))
+	set_playlists(r)
+	set_unique_names(r)
+	delete_boring(r)
+	tracks_nice = C(r); print('tracks niceified!',timer()); return r}
+
+var main = function(){
+	var tr = tracks_nice()
+	print(tr.slice(0,10))
+	// okay . we've generated an unique name for all tracks. what next?
+	}
+var save_history = function(){
+	fs.writeFileSync(F('~/ali/history/auto/spotify/'+m().toISOString()+'.json'),JSON.stringify(tracks_nice(),null,'\t'))
 	print('history saved!',timer()) }
 
 //===----------------===// call function based on args //===---------------===//
