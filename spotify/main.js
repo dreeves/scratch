@@ -27,9 +27,9 @@ var args = minimist(process.argv.slice(2))
 var auth = JSON.parse(fs.readFileSync(F('~/.spotiman/auth.json')))
 
 var timer = function λ(){var t = Date.now()/1000; var r = t - λ.now; λ.now = t; return Math.round(r*100)/100+'s'}; timer()
-//var sleep = function(time){(function(cb){setTimeout(cb,time*1000)}).sync()}
-//var poll = function(f){while (!f()) sleep(0.05)}
 var poll = function(f,cb){(function λ(){if (f()) cb(); else setTimeout(λ,50)})()}
+
+//!! might be losing playlist tags !!
 
 var login = function(){
 	spotify.login(auth.username, auth.password, false, false)
@@ -67,6 +67,7 @@ var tracks_nice = function(){
 		tracks.map(function(v){
 			delete(v.isLoaded)
 			delete(v.starred)
+			delete(v.popularity)
 			delete(v.album.isLoaded)
 			v.artists.map(function(v){delete(v.isLoaded)})
 			}) }
@@ -102,12 +103,12 @@ process.exit()
 /*
 track: name [tag]
 tag:
-	α:artist
-	ρ:album
-	τ:track
-	λ:length
-	π:playlist-not-in-tags
-	playlist-in-tags
+α:artist
+ρ:album
+τ:track
+λ:length
+[π:playlist]
+[tag]
 */
 
 }))
