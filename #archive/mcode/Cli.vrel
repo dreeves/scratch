@@ -1,0 +1,12 @@
+void main(array<String> args) {
+	System.exec('@echo off                                                                                  ');
+	System.exec('java -cp "vrelta.jar;lib/*" vrelta.comp.Vreltac -cp "lib/*" -src src -bin bin -conwidth 120');
+	System.exec('if %ERRORLEVEL% geq 1 goto end                                                             ');
+	System.exec('cd bin                                                                                     ');
+	System.exec('jar -cf ../next.jar vrelta                                                                 ');
+	System.exec('cd ..                                                                                      ');
+	System.exec('call swap.bat                                                                              ');
+	System.exec(':end                                                                                       ');
+	System.exec('rmdir /S /Q bin                                                                            ');
+	System.exec('pause                                                                                      ');
+}

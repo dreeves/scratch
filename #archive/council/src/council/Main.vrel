@@ -1,0 +1,96 @@
+import council.wtk.*
+void main(String[] args) {
+	glt := new GLThread(new GLWindow());
+	GLThread.inst = glt;
+	glt.window.make();
+	//glt.window.add(new Text("hoya, werld!").moveTo(.5, .2).anchor(.5, .5).show());
+	println("=)");
+}
+
+/*snippet: seeds a PRNG with this machine's MAC address
+ipRand := new Random();
+import java.net.{InetAddress, UnknownHostException}
+InetAddress[] iaa;
+try {iaa = InetAddress.getAllByName(InetAddress.getLocalHost().getHostName());}
+catch UnknownHostException {iaa = new InetAddress[0];}
+if iaa.length == 0 {
+	Log.warn("couldn't find MAC address");
+} else {
+	long seed;
+	for byte b : iaa[0].getAddress(): seed = (seed << 2) | abs((int)b);
+	ipRand.setSeed(seed);
+}*/
+
+/*snippet: uses the clipboard, basic-style
+import java.awt.datatransfer.{Clipboard, DataFlavor, StringSelection, UnsupportedFlavorException}
+import java.awt.Toolkit
+clipboard := Toolkit.getDefaultToolkit().getSystemClipboard();
+String getClipboardText() {
+	try return String(clipboard.getContents(null).getTransferData(DataFlavor.stringFlavor));
+	catch IllegalStateException | UnsupportedFlavorException | IOException: return "";
+}
+bool setClipboardText(String s) {
+	try {ss := new StringSelection(s); clipboard.setContents(ss, ss); return true}
+	catch IllegalStateException: return false;
+}*/
+
+/*snippet: makes random names
+char[] consonants = (S.repeat("b", 4) + S.repeat("c", 7) + S.repeat("d", 7) + S.repeat("f", 3) + S.repeat("g", 8) + S.repeat("h", 13) +
+		S.repeat("k", 35) + S.repeat("l", 12) + S.repeat("m", 16) + S.repeat("n", 1) + S.repeat("p", 7) + S.repeat("r", 23) + S.repeat("s", 17) +
+		S.repeat("t", 10) + S.repeat("z", 22)).toCharArray();
+char[] vowels = (S.repeat("a", 40) + S.repeat("e", 27) + S.repeat("i", 35) + S.repeat("o", 20) + S.repeat("u", 13)).toCharArray();
+String genName(Random rand) {
+	pattern := ["cvcvc", "cvcvc", "cvccv", "vcvvc", "cvccvc", "cvcc", "vcvc"][rand.nextInt(7)];
+	ret := pattern.toCharArray();
+	for i to ret.length: switch ret[i] {
+		case 'c': ret[i] = rand.randElem(consonants)
+		case 'v': ret[i] = rand.randElem(vowels)
+	}
+	return new String(ret)
+}*/
+
+/*snippet: sets the OS interrupt period to 1ms for the duration of this JVM (wait, what about applets? is it jvm-dur for applets?)
+t := new Thread("Thread-InterruptPeriodSetter") {void run() {loop S.sleep(Long.MAX_VALUE);}};
+t.setDaemon(true);
+t.start();*/
+
+/*snippet: useful!
+namespace Timer {
+	final List<Long> stack = [];
+	void go() {stack.add(S.mTime())}
+	void stop(String msg) {println("info:", msg, "took", S.mTime() - stack.remove(stack.size() - 1) + "ms")}
+}*/
+
+/*val kb = new KeyboardFsm();
+kb.dispatch(Event.NULL);
+loop {
+	pln("Signal<-");
+	char c = new java.util.Scanner(System.in).next().charAt(0);
+	val ev = new Event.Key(Character.toLowerCase(c));
+	switch (c) {
+		case '^': ev.signal = KeyboardFsm.SHIFT_DEPRESSED_SIG; break;
+		case '6': ev.signal = KeyboardFsm.SHIFT_RELEASED_SIG; break;
+		case '.': return;
+		default: ev.signal = KeyboardFsm.ANY_KEY_SIG; break;
+	}
+	kb.dispatch(ev);
+}
+NEW FILE State.java
+abstract class State {
+	abstract void dispatch(EventFsm me, Event ev);
+}
+
+NEW FILE EventFsm.java
+class EventFsm {
+	State state;
+	void dispatch(Event ev) {state.dispatch(this, ev);}
+}
+
+NEW FILE Event.java
+class Event {
+	const Event NULL = new Event();
+		
+	static class Click extends Event {
+		int x, y;
+	}
+}*/

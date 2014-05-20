@@ -1,0 +1,29 @@
+import static org.lwjgl.opengl.GL11.*;
+
+void glTranslate(real x, real y) {glTranslated(x, y, 0);}
+void glTranslate(real x, real y, real z) {glTranslated(x, y, z);}
+//void glTranslate(Tup3 t) {glTranslated(t.x(), t.y(), t.z());} //is glTranslatef or glTranslated better?
+void glRotate(real angle, real x, real y, real z) {glRotatef((float)angle, (float)x, (float)y, (float)z);}
+void glRotX(real angle) {glRotatef((float)angle, 1, 0, 0);}
+void glRotY(real angle) {glRotatef((float)angle, 0, 1, 0);}
+void glRotZ(real angle) {glRotatef((float)angle, 0, 0, 1);}
+void glScale(real x, real y, real z) {glScaled(x, y, z);}
+
+void glColor(float r, float g, float b) {glColor4f(r, g, b, 1);}
+void glColor(float r, float g, float b, float a) {glColor4f(r, g, b, a);}
+//void glColor(Color col) {glColor4f(col.r, col.g, col.b, col.a);}
+//void glWhite() {glColor(Color.WHITE);}
+void glVertex(real x, real y) {glVertex3d(x, y, 0);}
+void glVertex(real x, real y, real z) {glVertex3d(x, y, z);}
+//void glVertex(Tup3 t) {glVertex3d(t.x(), t.y(), t.z());} //again, is glVertex3f or glVertex3d better?
+void glTexCoord(float u, float v) {glTexCoord2f(u, v);}
+//void glTexCoord(TexCoord tc) {glTexCoord2f(tc.u, tc.v);}
+
+void glOrtho(int X, int Y) {
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	glOrtho(0, X, Y, 0, -1000, 1000);
+	glMatrixMode(GL_MODELVIEW);
+}
+void gl3D() {glMatrixMode(GL_PROJECTION); glPopMatrix(); glMatrixMode(GL_MODELVIEW)}

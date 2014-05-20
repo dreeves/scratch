@@ -1,0 +1,94 @@
+import org.lwjgl.opengl.{Display, GLContext}
+import org.lwjgl.LWJGLException
+import org.lwjgl.util.glu.Project
+
+import static org.lwjgl.opengl.GL11.*
+import static council.MyGL.*
+import council.wtk.*
+
+GLThread inst;
+void tryPM() {
+	if inst.pmRequested: synchronized (inst.pmLock) {if inst.pmRequested {
+		Display.processMessages();
+		inst.pmRequested = false;
+		inst.pmLock.notifyAll();
+	}}
+}
+
+class isa Thread {
+	priv /*volatile*/ bool shouldQuit, pmRequested;
+	priv final Object pmLock = new Object();
+	final GLWindow window;
+	
+	ctor(GLWindow window) {super("T-GL"); this.window = window}
+	
+	void run() {
+		try {window.setDisplayParent(); Display.create();}
+		catch LWJGLException: throw rt(e);
+		new Thread("T-Logic") {void run() {
+				time := nTime();
+				cathy := new Cathy();
+				loop {
+					cathy.tick();
+					requestPM();
+					time += 10_000_000;
+					now := nTime();
+					if time < now - 15_000_000: time = now - 15_000_000;
+					if now + 1_000_000 < time: sleepQuietly((time - now) / 1_000_000);
+					waitForPM();
+				}
+			}}.start();
+		glInit();
+		while !shouldQuit {
+			Display.update(false);
+			GLThread.tryPM();
+			if shouldResize: glResize();
+			glClear(GL_COLOR_BUFFER_BIT + /*bwOR*/ GL_DEPTH_BUFFER_BIT);
+			window.draw();
+		}
+		Display.destroy();
+	}
+	
+	void quit() {shouldQuit = true}
+	
+	void requestPM() {pmRequested = true}
+	void waitForPM() {
+		if pmRequested: synchronized (pmLock) {
+			while pmRequested {
+				try pmLock.wait();
+				catch InterruptedException:;
+			}
+		}
+	}
+	
+	priv /*volatile*/ boolean shouldResize = true;
+	void resize() {shouldResize = true}
+	priv void glResize() {
+		shouldResize = false;
+		X := window.X; Y := window.Y;
+		if Y > 2*X: Y = X*4/2;//up to 2.5; val of 2 is just for testing
+		glViewport(0, 0, X, Y);//!should this be (0, Y, X, Y)?
+		gl3D();
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		zNear := .1f;//near clipping distance
+		zFar := 4000f;//far clipping distance
+		yFov := 85f;//field-of-view angle in the y direction
+		Project.gluPerspective(yFov, 1f*X/Y, zNear, zFar);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glOrtho(X, Y);
+	}
+	
+	priv void glInit() {
+		//if (!GLContext.getCapabilities().GL_ARB_vertex_buffer_object) M.fatalError(null);
+		glEnable(GL_BLEND);
+		glEnable(GL_ALPHA_TEST);
+		glEnable(GL_TEXTURE_2D);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);//standard transparency blending function
+		glAlphaFunc(GL_GREATER, 0);
+		glFogi(GL_FOG_MODE, GL_EXP2);
+		glOrtho(window.X, window.Y);
+		//glClearColor(1, .5f, .5f, 1); //rgba
+	}
+}

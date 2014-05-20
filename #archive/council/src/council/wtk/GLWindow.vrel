@@ -1,0 +1,91 @@
+import java.awt.{Canvas, Frame, Panel, BorderLayout, Toolkit, Dimension}
+import java.awt.event.{WindowAdapter, WindowEvent, ComponentAdapter, ComponentEvent}
+import org.lwjgl.opengl.Display
+import org.lwjgl.LWJGLException
+import council.*
+
+/*
+log from the eldar:
+we doing gui tk framework
+Widget is superclass
+widgets (ws) have a mom and kids
+you can make custom subclassed widgets with customized subdraw and regen methods
+but, better:
+widget auto-draws its kids.
+widgets auto-regen based on parameters and such
+it's a modern gui tk framewerk!
+need:
+	GLWindow is just a window (GLThread is kinda *higher* than GLWindow + finish making GLWindow widgety)
+---
+	a positioning system for a widget to size itself based on its children's sizes and stuff
+	need not be as advanced as Swing
+	ways for the widgets to auto-regen - like, for say a String-display widget it could take a Ref<String> and check said String each time it regens
+	or maybe just be told to setText(). that *would* be more efficient
+*/
+
+class isa Widget {
+	priv final Frame frame = new Frame("Project Vrelta");
+	priv final Panel dpHolder = new Panel();
+	priv final Canvas displayParent;
+		void setDisplayParent() throws LWJGLException {Display.setParent(displayParent)}
+		
+	ctor() {
+		frame.addWindowListener(new WindowAdapter() {
+				//"Handle request to shutdown. @param ev event giving details of closing."
+				void windowClosing(WindowEvent ev) {frame.remove(displayParent); System.exit(0)}
+			});
+		frame.addComponentListener(new ComponentAdapter() {
+				void componentResized(ComponentEvent ev) {
+					ins := frame.getInsets();
+					X = frame.getWidth() - ins.right - ins.left;
+					Y = frame.getHeight() - ins.top - ins.bottom;
+					GLThread.inst.resize();
+				}
+			});
+		frame.add(dpHolder);
+		displayParent = new Canvas() {
+					//Once the Canvas is created its add notify method will call this method to start the LWJGL Display and game loop in another thread.
+				void addNotify() {super.addNotify(); GLThread.inst.start()}
+				void removeNotify() {
+					//Tell game loop to stop running, after which the LWJGL Display will be destoryed. The main thread will wait for the Display.destroy() to complete
+					GLThread.inst.quit();
+					try GLThread.inst.join(); catch InterruptedException: throw rt(e);
+					super.removeNotify();
+				}
+			};
+		dpHolder.setLayout(new BorderLayout());
+		dpHolder.add(displayParent);
+		X = 300; Y = 200;
+	}
+	
+//	void setTitle(String title) {frame.setTitle(title);}
+
+	void make() {
+		displayParent.setSize(dpHolder.getWidth(), dpHolder.getHeight());
+		displayParent.setFocusable(true);
+		displayParent.requestFocusInWindow();
+		displayParent.setIgnoreRepaint(true);
+		dpHolder.setVisible(true);
+		frame.validate();
+		frame.setVisible(true);
+		//set size and position
+			ins := frame.getInsets();
+			screen := Toolkit.getDefaultToolkit().getScreenSize();
+			frame.setLocation((screen.width - ins.right - ins.left - X)/2, (screen.height - ins.top - ins.bottom - Y)/2);
+			frame.setSize(ins.right + X + ins.left, ins.top + Y + ins.bottom);
+		this.show();
+	}
+//}
+//============================================================// Widget //============================================================//{
+	/*GLWindow draw() {
+	
+	return this}*/
+	
+	shy void subdraw() {
+		
+	}
+	
+	shy void regen() {
+		
+	}
+}

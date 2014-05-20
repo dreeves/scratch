@@ -1,0 +1,12 @@
+import council.wtk.*
+import org.lwjgl.input.Keyboard
+
+class {
+	int ijk;
+		
+	void tick() {
+		if ++ijk % 1000 == 0: println("ijk/100:", ijk/100);
+		
+		//for (char ch = KeyIn.next(); ch != 0; ch = KeyIn.next()) printit(ch);
+	}
+}

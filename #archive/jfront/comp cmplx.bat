@@ -1,0 +1,2 @@
+javac Complex.java
+pause

@@ -1,0 +1,186 @@
+import static teacher.Main.cf;
+
+class {
+	byte[] arr = new byte[16];
+	int len;
+
+	void put (int i) {if len >= arr.length  : arr = arr.%copy(len * 2);                               arr[len++] = (byte)i}
+	void put2(int i) {if len >= arr.length-1: arr = arr.%copy(len * 2); arr[len++] = (byte)(i/0x100); arr[len++] = (byte)i}
+
+	byte[] toArray() {return len == arr.length? arr : arr.%copy(len)}
+}
+
+!static:
+//00 - 00: nop
+void nop() {put(0x00)} //[does nothing]
+//01 - 14: Xconst_Y, [bs]ipush, ldc
+void aconst_null() {put(0x01)}                                                                                   //→ null
+void iconst_m1() {put(0x02)}                                                                                     //→ -1I
+void iconst_0 () {put(0x03)} void lconst_0() {put(0x09)} void fconst_0() {put(0x0b)} void dconst_0() {put(0x0e)} //→ 0[ILFD]
+void iconst_1 () {put(0x04)} void lconst_1() {put(0x0a)} void fconst_1() {put(0x0c)} void dconst_1() {put(0x0f)} //→ 1[ILFD]
+void iconst_2 () {put(0x05)}                             void fconst_2() {put(0x0d)}                             //→ 2[IF]
+void iconst_3 () {put(0x06)}                                                                                     //→ 3I
+void iconst_4 () {put(0x07)}                                                                                     //→ 4I
+void iconst_5 () {put(0x08)}                                                                                     //→ 5I
+void bipush(int i)   {put(0x10); put (i)  } //byte						→ value	| pushes a byte onto the stack as an integer value
+void sipush(int i)   {put(0x11); put2(i)  } //byte1, byte2				→ value	| pushes a short onto the stack
+void ldc   (int idx) {put(0x12); put (idx)} //index						→ value	| pushes a constant #index from a constant pool (String, int or float) onto the stack
+void ldc_w (int idx) {put(0x13); put2(idx)} //indexbyte1, indexbyte2	→ value	| pushes a constant #index from a constant pool (String, int or float) onto the stack
+void ldc2_w(int idx) {put(0x14); put2(idx)} //indexbyte1, indexbyte2	→ value	| pushes a constant #index from a constant pool (double or long) onto the stack
+//15 - 2d & 36 - 4e: X(load|store)
+//Xload (N) //1: index			  → value		loads an X value from a local variable #N
+//Xstore(N)	//1: index		value →				store an X value   in a local variable #N
+void iload(int idx) {put(0x15); put(idx)} void istore(int idx) {put(0x36); put(idx)}
+void lload(int idx) {put(0x16); put(idx)} void lstore(int idx) {put(0x37); put(idx)}
+void fload(int idx) {put(0x17); put(idx)} void fstore(int idx) {put(0x38); put(idx)}
+void dload(int idx) {put(0x18); put(idx)} void dstore(int idx) {put(0x39); put(idx)}
+void aload(int idx) {put(0x19); put(idx)} void astore(int idx) {put(0x3a); put(idx)}
+void  aload_0() {put(0x2a)} void  aload_1() {put(0x2b)} void  aload_2() {put(0x2c)} void  aload_3() {put(0x2d)}
+void  iload_0() {put(0x1a)} void  iload_1() {put(0x1b)} void  iload_2() {put(0x1c)} void  iload_3() {put(0x1d)}
+void  fload_0() {put(0x22)} void  fload_1() {put(0x23)} void  fload_2() {put(0x24)} void  fload_3() {put(0x25)}
+void  lload_0() {put(0x1e)} void  lload_1() {put(0x1f)} void  lload_2() {put(0x20)} void  lload_3() {put(0x21)}
+void  dload_0() {put(0x26)} void  dload_1() {put(0x27)} void  dload_2() {put(0x28)} void  dload_3() {put(0x29)}
+void astore_0() {put(0x4b)} void astore_1() {put(0x4c)} void astore_2() {put(0x4d)} void astore_3() {put(0x4e)}
+void istore_0() {put(0x3b)} void istore_1() {put(0x3c)} void istore_2() {put(0x3d)} void istore_3() {put(0x3e)}
+void fstore_0() {put(0x43)} void fstore_1() {put(0x44)} void fstore_2() {put(0x45)} void fstore_3() {put(0x46)}
+void lstore_0() {put(0x3f)} void lstore_1() {put(0x40)} void lstore_2() {put(0x41)} void lstore_3() {put(0x42)}
+void dstore_0() {put(0x47)} void dstore_1() {put(0x48)} void dstore_2() {put(0x49)} void dstore_3() {put(0x4a)}
+//2e - 35 & 4f - 56: Xa(load|store)
+void iaload () {put(0x2e)} void iastore() {put(0x4f)} //arrayref, index → value	: loads | arrayref, index, value → : store | from/to an array an int
+void laload () {put(0x2f)} void lastore() {put(0x50)} //arrayref, index → value	: loads | arrayref, index, value → : store | from/to an array a long
+void faload () {put(0x30)} void fastore() {put(0x51)} //arrayref, index → value	: loads | arrayref, index, value → : store | from/to an array a float
+void daload () {put(0x31)} void dastore() {put(0x52)} //arrayref, index → value	: loads | arrayref, index, value → : store | from/to an array a double
+void aaload () {put(0x32)} void aastore() {put(0x53)} //arrayref, index → value	: loads | arrayref, index, value → : store | from/to an array a ref
+void baload () {put(0x33)} void bastore() {put(0x54)} //arrayref, index → value	: loads | arrayref, index, value → : store | from/to an array a byte or Boolean
+void caload () {put(0x34)} void castore() {put(0x55)} //arrayref, index → value	: loads | arrayref, index, value → : store | from/to an array a char
+void saload () {put(0x35)} void sastore() {put(0x56)} //arrayref, index → value	: loads | arrayref, index, value → : store | from/to an array a short
+//57 - 5f: pop, dup, swap. keep in mind that doubles and longs take up two words
+void pop () {put(0x57)} //word →				discards the top word on the stack
+void pop2() {put(0x58)} //{word2, word1} →		discards the top two words on the stack
+void dup    () {put(0x59)} //word → word, word																	duplicates the word on top of the stack
+void dup_x1 () {put(0x5a)} //word2, word1 → word1, word2, word1													insert dup top at two in from the top
+void dup_x2 () {put(0x5b)} //word3, word2, word1 → word1, word3, word2, word1									insert dup top at three in from the top
+void dup2   () {put(0x5c)} //{word2, word1} → {word2, word1}, {word2, word1}									dup top two stack words
+void dup2_x1() {put(0x5d)} //word3, {word2, word1} → {word2, word1}, word3, {word2, word1}						insert dup top two below 3rd word
+void dup2_x2() {put(0x5e)} //{word4, word3}, {word2, word1} → {word2, word1}, {word4, word3}, {word2, word1}	insert dup top two below 4th word
+void swap() {put(0x5f)} //word2, word1 → word1, word2		swaps two top words (both must not be double or long)
+//60 - 84: arith, iinc. keep in mind that here we're using values, not words
+void iadd() {put(0x60)} void ladd() {put(0x61)} void fadd() {put(0x62)} void dadd() {put(0x63)} //value1, value2 → result		add two X's
+void isub() {put(0x64)} void lsub() {put(0x65)} void fsub() {put(0x66)} void dsub() {put(0x67)} //value1, value2 → result		sub two X's
+void imul() {put(0x68)} void lmul() {put(0x69)} void fmul() {put(0x6a)} void dmul() {put(0x6b)} //value1, value2 → result		mul two X's
+void idiv() {put(0x6c)} void ldiv() {put(0x6d)} void fdiv() {put(0x6e)} void ddiv() {put(0x6f)} //value1, value2 → result		div two X's
+void irem() {put(0x70)} void lrem() {put(0x71)} void frem() {put(0x72)} void drem() {put(0x73)} //value1, value2 → result		rem two X's
+void ineg() {put(0x74)} void lneg() {put(0x75)} void fneg() {put(0x76)} void dneg() {put(0x77)} //value          → result		negate an X
+void ishl () {put(0x78)} void lshl () {put(0x79)} //value1, value2 → result		bs-left-shift     value1 by value2 (value2 always isa int)
+void ishr () {put(0x7a)} void lshr () {put(0x7b)} //value1, value2 → result		bs-right-shift    value1 by value2 (value2 always isa int)
+void iushr() {put(0x7c)} void lushr() {put(0x7d)} //value1, value2 → result		bs-us-right-shift value1 by value2 (value2 always isa int)
+void iand () {put(0x7e)} void land () {put(0x7f)} //value1, value2 → result		bs-and            value1 by value2 (value2 always isa int)
+void ior  () {put(0x80)} void lor  () {put(0x81)} //value1, value2 → result		bs-or             value1 by value2 (value2 always isa int)
+void ixor () {put(0x82)} void lxor () {put(0x83)} //value1, value2 → result		bs-xor            value1 by value2 (value2 always isa int)
+void iinc(int idx, int _const) {put(0x84); put(idx); put(_const)} //2: index, const | → | increment local variable #index by signed byte const
+//85 - 93: X2Y
+//value → result	converts [(int, long, float, double) -> (int, long, float, double)] or [int -> (byte, char, short)]
+                       void i2l() {put(0x85)} void i2f() {put(0x86)} void i2d() {put(0x87)}
+void l2i() {put(0x88)}                        void l2f() {put(0x89)} void l2d() {put(0x8a)}
+void f2i() {put(0x8b)} void f2l() {put(0x8c)}                        void f2d() {put(0x8d)}
+void d2i() {put(0x8e)} void d2l() {put(0x8f)} void d2f() {put(0x90)}
+void i2b() {put(0x91)} void i2c() {put(0x92)} void i2s() {put(0x93)}
+//94 - 98: Xcmp
+void lcmp () {put(0x94)} //value1, value2 → result		value1 > value2? 1i : value1 == value2? 0i : -1i
+void fcmpl() {put(0x95)} //value1, value2 → result		value1 > value2? 1i : value1 == value2? 0i : value1 < value2? -1i : /*NaN*/ -1i
+void fcmpg() {put(0x96)} //value1, value2 → result		value1 > value2? 1i : value1 == value2? 0i : value1 < value2? -1i : /*NaN*/ 1i
+void dcmpl() {put(0x97)} //value1, value2 → result		value1 > value2? 1i : value1 == value2? 0i : value1 < value2? -1i : /*NaN*/ -1i
+void dcmpg() {put(0x98)} //value1, value2 → result		value1 > value2? 1i : value1 == value2? 0i : value1 < value2? -1i : /*NaN*/ 1i
+//99 - a6: if<op>, if_icomp<op>, if_acomp<op>
+void ifeq(int branchoff) {put(0x99); put2(branchoff)}		//2: u2^branchoffset | value →          | if value = 0      , branch to instruction at branchoffset
+void ifne(int branchoff) {put(0x9a); put2(branchoff)}		//2: u2^branchoffset | value →          | if value ≠ 0      , branch to instruction at branchoffset
+void iflt(int branchoff) {put(0x9b); put2(branchoff)}		//2: u2^branchoffset | value →          | if value < 0      , branch to instruction at branchoffset
+void ifge(int branchoff) {put(0x9c); put2(branchoff)}		//2: u2^branchoffset | value →          | if value ≤ 0      , branch to instruction at branchoffset
+void ifgt(int branchoff) {put(0x9d); put2(branchoff)}		//2: u2^branchoffset | value →          | if value > 0      , branch to instruction at branchoffset
+void ifle(int branchoff) {put(0x9e); put2(branchoff)}		//2: u2^branchoffset | value →          | if value ≥ 0      , branch to instruction at branchoffset
+void if_icmpeq(int branchoff) {put(0x9f); put2(branchoff)}	//2: u2^branchoffset | value1, value2 → | if value1 = value2, branch to instruction at branchoffset
+void if_icmpne(int branchoff) {put(0xa0); put2(branchoff)}	//2: u2^branchoffset | value1, value2 → | if value1 ≠ value2, branch to instruction at branchoffset
+void if_icmplt(int branchoff) {put(0xa1); put2(branchoff)}	//2: u2^branchoffset | value1, value2 → | if value1 < value2, branch to instruction at branchoffset
+void if_icmpge(int branchoff) {put(0xa2); put2(branchoff)}	//2: u2^branchoffset | value1, value2 → | if value1 ≥ value2, branch to instruction at branchoffset
+void if_icmpgt(int branchoff) {put(0xa3); put2(branchoff)}	//2: u2^branchoffset | value1, value2 → | if value1 > value2, branch to instruction at branchoffset
+void if_icmple(int branchoff) {put(0xa4); put2(branchoff)}	//2: u2^branchoffset | value1, value2 → | if value1 ≤ value2, branch to instruction at branchoffset
+void if_acmpeq(int branchoff) {put(0xa5); put2(branchoff)}	//2: u2^branchoffset | value1, value2 → | if value1 = value2, branch to instruction at branchoffset
+void if_acmpne(int branchoff) {put(0xa6); put2(branchoff)}	//2: u2^branchoffset | value1, value2 → | if value1 = value2, branch to instruction at branchoffset
+//a7 - ab: ???
+/*goto		a7	2: branchbyte1, branchbyte2	[no change]	goes to another instruction at branchoffset (signed short constructed from unsigned bytes branchbyte1 << 8 + branchbyte2)
+jsr		a8	2: branchbyte1, branchbyte2	→ address	jump to subroutine at branchoffset (signed short constructed from unsigned bytes branchbyte1 << 8 + branchbyte2) and place the return address on the stack
+ret		a9	1: index	[No change]	continue execution from address taken from a local variable #index (the asymmetry with jsr is intentional)
+tableswitch	aa	4+: [0-3 bytes padding], defaultbyte1, defaultbyte2, defaultbyte3, defaultbyte4, lowbyte1, lowbyte2, lowbyte3, lowbyte4, highbyte1, highbyte2, highbyte3, highbyte4, jump offsets...	index →	continue execution from an address in the table at offset index
+lookupswitch	ab	4+: <0-3 bytes padding>, defaultbyte1, defaultbyte2, defaultbyte3, defaultbyte4, npairs1, npairs2, npairs3, npairs4, match-offset pairs...	key →	a target address is looked up from a table using a key and execution continues from the instruction at that address
+void () {put(0xa7)}
+void () {put(0xa8)}
+void () {put(0xa9)}
+void () {put(0xaa)}
+void () {put(0xab)}*/
+//ac - b1: Xreturn
+void ireturn() {put(0xac)} //value     → [empty]	from a method, return an int
+void lreturn() {put(0xad)} //value     → [empty]	from a method, return a long
+void freturn() {put(0xae)} //value     → [empty]	from a method, return a float
+void dreturn() {put(0xaf)} //value     → [empty]	from a method, return a double
+void areturn() {put(0xb0)} //objectref → [empty]	from a method, return a reference
+void _return() {put(0xb1)} //          → [empty]	from a method, return void 
+//b2 - b5: (get|put)(static|field). note: 'where the field is a CONST_Fieldref in the constant pool'
+void getstatic(int idx) {put(0xb2); put2(idx)} //2: u2^idx | → value			| gets a static field value of a class
+void putstatic(int idx) {put(0xb3); put2(idx)} //2: u2^idx | value →			| set static field to value in a class
+void getfield (int idx) {put(0xb4); put2(idx)} //2: u2^idx | objectref → value	| gets a field value of an object objectref
+void putfield (int idx) {put(0xb5); put2(idx)} //2: u2^idx | objectref, value →	| set field to value in an object objectref
+void getstatic(String clazz, String name, String desc) {getstatic(cf.cp.fieldref(clazz, name, desc))} //convenience
+void putstatic(String clazz, String name, String desc) {putstatic(cf.cp.fieldref(clazz, name, desc))} //convenience
+void getfield (String clazz, String name, String desc) {getfield (cf.cp.fieldref(clazz, name, desc))} //convenience
+void putfield (String clazz, String name, String desc) {putfield (cf.cp.fieldref(clazz, name, desc))} //convenience
+//b6 - b9: invoke(virtual|special|static|interface). note: 'where the method is a CONST_Methodref (or CONSTANT_InterfaceMethodref if invokeinterface) in the constant pool'
+void invokevirtual  (int idx) {put(0xb6); put2(idx)} //2: u2^idx           | objectref, [arg1, arg2, ...] → | invoke virtual method on object objectref
+void invokespecial  (int idx) {put(0xb7); put2(idx)} //2: u2^idx           | objectref, [arg1, arg2, ...] → | invoke instance method on object objectref
+void invokestatic   (int idx) {put(0xb8); put2(idx)} //2: u2^idx           |            [arg1, arg2, ...] → | invoke a static method
+                                 // invokeinterface: //4: u2^idx, count, 0 | objectref, [arg1, arg2, ...] → | invokes an interface method on object objectref
+void invokeinterface(int idx, int count) {put(0xb9); put2(idx); put(count); put(0)}
+void invokevirtual  (String clazz, String name, String desc) {invokevirtual  (cf.cp.     methodref(clazz, name, desc))} //convenience
+void invokespecial  (String clazz, String name, String desc) {invokespecial  (cf.cp.     methodref(clazz, name, desc))} //convenience
+void invokestatic   (String clazz, String name, String desc) {invokestatic   (cf.cp.     methodref(clazz, name, desc))} //convenience
+//void invokeinterface(String clazz, String name, String desc) {invokeinterface(cf.cp.ifaceMethodref(clazz, name, desc))} //convenience
+//ba - bd: xxxunusedxxx, new, a?newarray
+void xxxunusedxxx() {put(0xba)} //this opcode is reserved "for historical reasons"
+void      _new(int idx)   {put(0xbb); put2(idx  )} //2: u2^idx		→ objectref			creates new object of type idx~CONST_Class
+void  newarray(int atype) {put(0xbc); put (atype)} //1: atype		count → arrayref	creates new array with count elements of primitive type identified by atype
+void anewarray(int idx)   {put(0xbd); put2(idx  )} //2: u2^idx		count → arrayref	creates a new array of refs of length count and component type idx~CONST_Class
+void      _new(String clazz) {     _new(cf.cp.clazz(clazz))} //convenience
+void anewarray(String clazz) {anewarray(cf.cp.clazz(clazz))} //convenience
+void newarray_bool  () {newarray( 4)} //convenience
+void newarray_char  () {newarray( 5)} //convenience
+void newarray_float () {newarray( 6)} //convenience
+void newarray_double() {newarray( 7)} //convenience
+void newarray_byte  () {newarray( 8)} //convenience
+void newarray_short () {newarray( 9)} //convenience
+void newarray_int   () {newarray(10)} //convenience
+void newarray_long  () {newarray(11)} //convenience
+//be - c9: ???
+void arraylength() {put(0xbe)} //arrayref → length		gets the length of an array
+void athrow() {put(0xbf)} //objectref → [empty], objectref		throws an error or exception (notice that the stack is cleared, leaving only a ref to the Throwable)
+/*checkcast	c0	2: indexbyte1, indexbyte2	objectref → objectref	checks whether an objectref is of a certain type, the class reference of which is in the constant pool at index (indexbyte1 << 8 + indexbyte2)
+instanceof	c1	2: indexbyte1, indexbyte2	objectref → result	determines if an object objectref is of a given type, identified by class reference index in constant pool (indexbyte1 << 8 + indexbyte2)
+monitorenter	c2		objectref →	enter monitor for object ("grab the lock" - start of synchronized() section)
+monitorexit	c3		objectref →	exit monitor for object ("release the lock" - end of synchronized() section)
+wide		c4	3/5: opcode, indexbyte1, indexbyte2
+or
+iinc, indexbyte1, indexbyte2, countbyte1, countbyte2	[same as for corresponding instructions]	execute opcode, where opcode is either iload, fload, aload, lload, dload, istore, fstore, astore, lstore, dstore, or ret, but assume the index is 16 bit; or execute iinc, where the index is 16 bits and the constant to increment by is a signed 16 bit short
+multianewarray	c5	3: indexbyte1, indexbyte2, dimensions	count1, [count2,...] → arrayref	create a new array of dimensions dimensions with elements of type identified by class reference in constant pool index (indexbyte1 << 8 + indexbyte2); the sizes of each dimension is identified by count1, [count2, etc.]
+ifnull		c6	2: branchbyte1, branchbyte2	value →	if value is null, branch to instruction at branchoffset (signed short constructed from unsigned bytes branchbyte1 << 8 + branchbyte2)
+ifnonnull	c7	2: branchbyte1, branchbyte2	value →	if value is not null, branch to instruction at branchoffset (signed short constructed from unsigned bytes branchbyte1 << 8 + branchbyte2)
+goto_w		c8	4: branchbyte1, branchbyte2, branchbyte3, branchbyte4	[no change]	goes to another instruction at branchoffset (signed int constructed from unsigned bytes branchbyte1 << 24 + branchbyte2 << 16 + branchbyte3 << 8 + branchbyte4)
+jsr_w		c9	4: branchbyte1, branchbyte2, branchbyte3, branchbyte4	→ address	jump to subroutine at branchoffset (signed int constructed from unsigned bytes branchbyte1 << 24 + branchbyte2 << 16 + branchbyte3 << 8 + branchbyte4) and place the return address on the stack
+void () {put(0xc0)}
+void () {put(0xc1)}
+void () {put(0xc2)}
+void () {put(0xc3)}
+void () {put(0xc4)}
+void () {put(0xc5)}
+void () {put(0xc6)}
+void () {put(0xc7)}
+void () {put(0xc8)}
+void () {put(0xc9)}*/
+//ca - ff: do not appear in class files

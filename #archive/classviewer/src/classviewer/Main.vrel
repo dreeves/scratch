@@ -1,0 +1,151 @@
+import java.awt.{BorderLayout, Desktop, Container, Dimension, FlowLayout, Font, Frame}
+import java.awt.event.{ActionEvent, ActionListener, KeyEvent, MouseAdapter, MouseEvent}
+import java.net.URI
+import java.util.{jar.JarFile, logging.Level, logging.Logger, zip.ZipEntry}
+import javax.swing.*
+import javax.swing.{filechooser.FileNameExtensionFilter, tree.DefaultMutableTreeNode}
+import org.freeinternals.classfile.ui.{JSplitPaneClassFile, JTreeNodeZipFile, JTreeZipFile, Tool}
+import org.freeinternals.common.ui.{JPanelForTree, JFrameTool}
+import org.freeinternals.common.ref.JLabelHyperLink
+
+JFrame main;
+JTreeZipFile zftree;
+JPanelForTree zftreeContainer;
+JSplitPaneClassFile cfPane;
+
+String HACK_a;
+void main(String[] args) {
+    try UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+	catch Exception: throw rt(e);
+	HACK_a = args.length > 0? args[0] : null;
+	SwingUtilities.invokeLater(new Runnable() {void run() {
+			main = new JFrame();
+			main.setTitle("Java Class Viewer");
+			main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+			JFrameTool.centerJFrame(main);
+			createMenu();
+			main.setVisible(true);
+			
+			//if HACK_a != null: openFile(new File(HACK_a));
+       }});
+}
+
+void createMenu() {
+	menuBar := new JMenuBar();
+	main.setJMenuBar(menuBar);
+
+	// File
+	menuFile := new JMenu("File");
+	menuFile.setMnemonic(KeyEvent.VK_F);
+	menuBar.add(menuFile);
+
+	// File --> Open
+	menuItem_FileOpen := new JMenuItem("Open...");
+	menuItem_FileOpen.setMnemonic(KeyEvent.VK_O);
+	menuItem_FileOpen.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
+	menuItem_FileOpen.addActionListener(new ActionListener() {
+		oride void actionPerformed(ActionEvent e) {
+			chooser := new JFileChooser();
+			chooser.addChoosableFileFilter(new FileNameExtensionFilter("Class File", "class"));
+			chooser.addChoosableFileFilter(new FileNameExtensionFilter("Jar File", "jar"));
+			if chooser.showOpenDialog(main) === JFileChooser.APPROVE_OPTION: openFile(chooser.getSelectedFile());
+		}
+	});
+	menuFile.add(menuItem_FileOpen);
+	
+	//menuFile.addSeparator();
+	// File --> Recent Files
+	//menu_FileRecentFile := new JMenu("Recent Files");
+	//menu_FileRecentFile.setMnemonic(KeyEvent.VK_R);
+	//menuFile.add(menu_FileRecentFile);
+	//menuFile.addSeparator();
+
+	// File --> Exit
+	exitMI := new JMenuItem("Exit");
+	exitMI.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0));
+	exitMI.addActionListener(new ActionListener() {
+		oride void actionPerformed(ActionEvent e) {System.exit(0)}
+	});
+	menuFile.add(exitMI);
+}
+void openFile(File file) {
+	clearContent();
+	if file.getName().endsWith(".jar") {
+		try {
+			zftree = new JTreeZipFile(new JarFile(file, false, JarFile.OPEN_READ));
+			zftree.addMouseListener(new MouseAdapter() {
+				oride void mousePressed(MouseEvent ev) {
+					if ev.getClickCount() == 2 && zftree.getRowForLocation(ev.getX(), ev.getY()) != -1 {
+						tp := zftree.getPathForLocation(ev.getX(), ev.getY());
+						node := (#DefaultMutableTreeNode)zftree.getLastSelectedPathComponent();
+						objLast := tp.getLastPathComponent();
+						if node != null && node.isLeaf() && objLast != null && objLast.toString().endsWith(".class") && tp.getPath().length >= 2 {
+							userObj := node.getUserObject();
+							if userObj isa JTreeNodeZipFile {
+								ze := ((#JTreeNodeZipFile)userObj).getNodeObject();
+								if ze == null: JFrameTool.showMessage(main, "Node Object [zip entry] is emtpy.", JOptionPane.WARNING_MESSAGE);
+								else showClassWindow(ze);
+							}
+						}
+					}
+				}
+			});
+			zftreeContainer = new JPanelForTree(zftree);
+			main.add(zftreeContainer, BorderLayout.CENTER);
+			resizeForContent();
+		} catch IOException {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+			JFrameTool.showMessage(main, e.toString(), JOptionPane.ERROR_MESSAGE);
+		}			
+	} elif file.getName().endsWith(".class") {
+		cfPane = new JSplitPaneClassFile(Tool.readClassFile(file));//!looks like we may need to write our own impl for this
+		main.add(cfPane, BorderLayout.CENTER);
+
+		resizeForContent();			
+	} else JFrameTool.showMessage(main, String.format("Un-supported file type. Please select a '.jar' or '.class' file. \nFile: %s", file.getPath()),
+			JOptionPane.WARNING_MESSAGE);
+}
+void resizeForContent() {
+	main.setSize(main.getWidth() + 2, main.getHeight());
+	main.setSize(main.getWidth() - 2, main.getHeight());
+}
+void clearContent() {
+	if zftreeContainer != null {main.remove(zftreeContainer); main.validate()}
+	if cfPane != null {main.remove(cfPane); main.validate()}
+	zftreeContainer = null;
+	zftree = null;
+	cfPane = null;
+}
+byte[] HACK_b; String HACK_s;
+void showClassWindow(ZipEntry ze) {
+	byte[] b;
+	try b = Tool.readClassFile(zftree.getZipFile(), ze);
+	catch IOException {
+		Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+		JFrameTool.showMessage(main, String.format("Read the class file failed.\n%s", e.getMessage()), JOptionPane.ERROR_MESSAGE);
+		return;
+	}
+
+	sbTitle := zftree.getZipFile().getName() + " - " + ze.getName();
+
+	HACK_b = b; HACK_s = sbTitle;
+	SwingUtilities.invokeLater(new Runnable() {void run() {
+			//JFrameClassFile
+			jf := new JFrame();
+			jf.setTitle(HACK_s);
+			jf.setSize(990, 691);
+			jf.setLayout(new BorderLayout());
+			jf.add(new JSplitPaneClassFile(HACK_b), BorderLayout.CENTER);
+			jf.setVisible(true);
+		}});
+}
+
+/*MANIFEST.MF:
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.7.1
+Created-By: 10.0-b23 (Sun Microsystems Inc.)
+Main-Class: org.freeinternals.javaclassviewer.Main
+Class-Path: lib/jCFL-2.0.161.jar
+X-COMMENT: Main-Class will be added automatically by build
+

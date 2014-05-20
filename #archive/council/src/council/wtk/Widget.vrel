@@ -1,0 +1,141 @@
+import static org.lwjgl.opengl.GL11.*
+import static council.MyGL.*
+
+class {
+	int X, Y; //only change these in regen()
+	priv int pixelx, pixely;
+	priv real relx, rely;
+	priv real anchorx, anchory;
+	priv real scalex = 1, scaley = 1;
+	
+	priv Widget mom;
+	priv List<Widget> kids;
+	bool isVisible;
+	priv bool isDirty = true;
+	
+	final void add(Widget w) {if kids == null: kids = []; kids.add(w); w.mom = this}
+	
+	final shy void dirty() {isDirty = true;}
+	
+	final void draw() {
+		if !isVisible: return;
+		superregen();
+		glPushMatrix();
+			glTranslate(gX(), gY());
+			glScale(scalex, scaley, 0);
+			subdraw();
+			if kids != null: for (w : kids) w.draw();
+		glPopMatrix();
+	}
+	shy void subdraw() {}
+	
+	final priv void superregen() {if isDirty {isDirty = false; regen()}}
+	shy void regen() {}
+	
+	final shy int gX() {return pixelx + (int)((relx == 0? 0 : relx * mom.X) - X * anchorx * scalex);}
+	final shy int gY() {return pixely + (int)((rely == 0? 0 : rely * mom.Y) - Y * anchory * scaley);}
+
+	void show() {isVisible = true}
+	void hide() {isVisible = false}
+	give void moveTo(real relx, real rely) {}
+	give void moveTo(real relx, real rely, int pixelx, int pixely) {}
+	give void anchor(real anchorx, real anchory) {}
+	void center() {anchor(.5, .5)}
+}
+
+
+
+
+
+
+
+/*
+
+
+import ukuku.client.Render;
+
+abstract class Widget extends Cont
+{
+	shy boolean[][] mouseDetect;
+	boolean isVisible = true;
+	priv boolean isDirty = true;
+		final shy void dirty() {isDirty = true;}
+		
+	final Widget draw() {
+		if (!isVisible) return this;
+		regen();
+		GL.pushMatrix();
+			GL.translate(gX(), gY());
+			subdraw();
+		GL.popMatrix();
+		return this
+	}
+	abstract shy void subdraw();
+	
+	final shy void regen() {
+		if (!isDirty) return;
+		subregen();
+		isDirty = false;
+	}
+	abstract shy void subregen();
+
+
+	boolean isClick() {return Mice.lmbClick() && mouseOver();}
+	boolean mouseOver() {
+		int x = Mice.x - gX(), y = Mice.y - gY();
+		if (mom != null) {x -= mom.gX(); y -= mom.gY();}
+		return (x >= 0 && x < X && y >= 0 && y < Y)? (mouseDetect == null? true : mouseDetect[x][y]) : false;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+class Sprite extends Cont
+{
+	priv final Texture tex;
+	priv final float tOffXn, tOffYn, tOffXp, tOffYp;
+	priv real scaleX = 1, scaleY = 1;
+	
+	Sprite(Image img) {this(new Texture(img));}
+	Sprite(Image img, float _tOffXn, float _tOffYn, float _tOffXp, float _tOffYp) {this(new Texture(img), _tOffXn, _tOffYn, _tOffXp, _tOffYp);}
+	static Sprite ofPx(Image img, int tOffX, int tOffY, int tOffW, int tOffH) {return ofPx(new Texture(img), tOffX, tOffY, tOffW, tOffH);}
+	
+	Sprite(Texture _tex) {tex = _tex; tOffXn = tOffYn = 0; tOffXp = tOffYp = 1; X = tex.X; Y = tex.Y;}
+	Sprite(Texture _tex, float _tOffXn, float _tOffYn, float _tOffXp, float _tOffYp)
+		{tex = _tex; tOffXn = _tOffXn; tOffYn = _tOffYn; tOffXp = _tOffXp; tOffYp = _tOffYp;
+				X = Math.round(tex.X * (tOffXp - tOffXn)); Y = Math.round(tex.Y * (tOffYp - tOffYn));}
+	static Sprite ofPx(Texture _tex, int tOffX, int tOffY, int tOffW, int tOffH)
+		{return new Sprite(_tex, (float)tOffX / _tex.X, (float)tOffY / _tex.Y, (float)(tOffX + tOffW) / _tex.X, (float)(tOffY + tOffH) / _tex.Y);}
+	
+	Sprite draw() {
+		tex.bind();
+		GL.pushMatrix();
+			GL.translate(loc.gX(mom == null? M.X : mom.X, (int)(X * scaleX)), loc.gY(mom == null? M.Y : mom.Y, (int)(Y * scaleY)));
+			GL.begin(GL.QUADS);
+				GL.texCoord(tOffXn, tOffYn); GL.vertex(0         , Y * scaleY);
+				GL.texCoord(tOffXp, tOffYn); GL.vertex(X * scaleX, Y * scaleY);
+				GL.texCoord(tOffXp, tOffYp); GL.vertex(X * scaleX, 0         );
+				GL.texCoord(tOffXn, tOffYp); GL.vertex(0         , 0         );
+			GL.end();
+		GL.popMatrix();
+		return this
+	}
+	
+	Sprite scale(real x, real y) {scaleX = x; scaleY = y; return this}
+	Sprite scale(real xy) {scaleX = scaleY = xy; return this}
+//============================================================// fluency //============================================================//
+	Sprite sMom(Cont c) {super.sMom(c); return this}
+	Sprite moveTo(real dx, real dy) {super.moveTo(dx, dy); return this}
+	Sprite moveTo(real dx, real dy, int ix, int iy) {super.moveTo(dx, dy, ix, iy); return this}
+	Sprite anchor(real x, real y) {super.anchor(x, y); return this}
+	Sprite center() {super.center(); return this}
+}

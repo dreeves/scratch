@@ -1,0 +1,18 @@
+void main(String[] args) {
+	results := new int[11];
+	for i, f : new File('.').%listAll().>List<File>: if f.getName().endsWith('.html') {
+		System.out.print(i+"\r");
+		lines := f.%readAllLines().>List<String>;
+		int idx;
+		for j, v : lines: if v.indexOf('START OF CLASS DATA') != -1 {idx = j + 5; break}
+		if idx == 0: continue;
+		line := lines[idx];
+		if line.indexOf('&lt;') != -1 {
+			sub := line[line.indexOf('&lt;') + 4 : line.indexOf('&gt;')];
+			int cnt = 1; for c : sub.toCharArray(): if c == ',': cnt++;
+			results[cnt]++;
+		} else results[0]++;
+	}
+	println();
+	for i, v : results: println('result at', i+':', v);
+}
