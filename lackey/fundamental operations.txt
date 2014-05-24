@@ -1,61 +1,60 @@
 //===---------------------------===// notes //===--------------------------===//
-	paint stuff has various uncertain things. anything we do *definitely* needs to be super extensible
-	kill sublime nag
-	sync up muting and pausing, and headphone removal if you can
+	anything we do *definitely* needs to be super extensible
+	kill sublime nag?
 	improve run command
 	lots of these command exclusively use either right-modifiers or left-modifiers. you maybe should write down which ones.
 
 navigate : delete
-	back char: ⌫, ^h
-	back word: ⌥⌫
-	back line: ⌘⌫
-	forward char: Fn⌫, ^d
-	forward word: Fn⌥⌫
-	forward line: Fn⌘⌫, ^k
+	back char: ⌫
+	back word: R⌥⌫
+	back line: R⌘⌫
+	forward char: Fn⌫
+	forward word: FnR⌥⌫
+	forward line: FnR⌘⌫
 navigate : text cursor
-	back all: ⌘↑
-	back char: ←, ^b
-	back graphical line: ⌘←, ^a
-	back vertical: ↑, ^p
-	back word: ⌥←
-	forward all: ⌘↓
-	forward char: →, ^f
-	forward graphical line: ⌘→, ^e
-	forward vertical: ↓, ^n
-	forward word: ⌥→
+	back all: R⌘↑
+	back char: ←
+	back graphical line: R⌘←
+	back vertical: ↑
+	back word: R⌥←
+	forward all: R⌘↓
+	forward char: →
+	forward graphical line: R⌘→
+	forward vertical: ↓
+	forward word: R⌥→
 navigate : selection
-	all: ⌘a
-	back all: ⌘⇧↑
-	back char: ⇧←
-	back graphical line: ⌘⇧←
-	back logical line: ⇧⌥↑
-	back vertical: ⇧↑
-	back word: ⇧⌥←
-	forward all: ⌘⇧↓
-	forward char: ⇧→
-	forward graphical line: ⌘⇧→
-	forward logical line: ⇧⌥↓
-	forward vertical: ⇧↓
-	forward word: ⇧⌥→
+	all: L⌘a
+	back all: R⌘R⇧↑
+	back char: R⇧←
+	back graphical line: R⌘R⇧←
+	back logical line: R⇧R⌥↑
+	back vertical: R⇧↑
+	back word: R⇧R⌥←
+	forward all: R⌘R⇧↓
+	forward char: R⇧→
+	forward graphical line: R⌘R⇧→
+	forward logical line: R⇧R⌥↓
+	forward vertical: R⇧↓
+	forward word: R⇧R⌥→
 navigate : files
-	cd ..: ⌘↑
-	open/run: ⌘↓
+	cd ..: R⌘↑
+	open/run: R⌘↓
 navigate : fields
 	next: ⇥
 	previous: ⇧⇥
 navigate : brightness
-	decrease: FnF1
-	increase: FnF2
+	decrease: F1
+	increase: F2
 navigate : backlight brightness
-	decrease: FnF5
-	increase: FnF6
+	decrease: F5
+	increase: F6
 navigate : tracks
-	previous: FnF7
-	next: FnF9
-	pause: FnF8
+	previous: F7
+	next: F9
+	pause: F8
 navigate : volume
-	decrease: FnF11
-	increase: FnF12
+	decrease: F11
+	increase: F12
 navigate : windows
 	previous alt-tab: ⌘⇧⇥
 	next alt-tab: ⌘⇥
@@ -71,7 +70,7 @@ navigate : escape
 	⌘w
 	⌘q
 navigate : menus (alt-style)
-	^F2
+	^FnF2
 navigate : history
 	back: ⌘[
 	forward: ⌘]
@@ -114,8 +113,8 @@ sublime : navigate : find results
 	select all: ⌥↩
 	replace next: ⌘⌥e
 	replace all: ^⌥↩ if on panel
-	prev in files: ⇧F4
-	next in files: F4
+	prev in files: ⇧FnF4
+	next in files: FnF4
 sublime : navigate : tabs
 	go to nth tab: ⌘[1-9]
 	go to named tab: ⌘p
@@ -129,12 +128,12 @@ tab completion
 	⇥
 
 toggle app
-	Mission Control: FnF3
-	Launchpad: thumb+3 pinch, FnF4
+	Mission Control: F3
+	Launchpad: thumb+3 pinch, F4
 	Quick Look: ␣, ⌘y
 	Dictionary: ⌘^d
 	Desktop: thumb+3 unpinch
-	Dashboard: F12
+	Dashboard: FnF12
 	SpeedCrunch: <want>
 	current music player: <want>
 	Terminal: <want, incl current-directory function>
@@ -288,7 +287,7 @@ sublime : toggle comment
 sublime : duplicate
 	⌘d
 sublime : build
-	F7, ⌘b
+	FnF7, ⌘b
 	run: ⌘⇧b
 sublime : change text case
 	upper: ⌘k ⌘u
