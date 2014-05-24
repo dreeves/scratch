@@ -1,0 +1,162 @@
+// 2014-05-23
+
+// units are css units
+tab_raster ← '1px'
+indent_minimum ← '4em'
+tab_minimum ← '1px'
+tab_padding ← '0.5em'
+
+// whenever the document is altered, call stretchTabstops
+
+// todo: needs optimising - a lot of this should be cached if possible
+void stretchTabstops(StyledDocument doc)
+{
+	Element section = doc.getDefaultRootElement()
+
+	int maxTabstops = 32 // todo: magic number hardcoded
+	int lineCount = section.getElementCount()
+	ETLine lines[] = new ETLine[lineCount]
+	ETTabstop grid[][] = new ETTabstop[lineCount][maxTabstops]
+
+	// initialise array
+	for (int l = 0; l < lineCount; l++) // for each line
+	{
+		lines[l] = new ETLine()
+		for (int t = 0; t < maxTabstops; t++) // for each column
+		{
+			grid[l][t] = new ETTabstop()
+		}
+	}
+
+	// get width of text in cells
+	for (int l = 0; l < lineCount; l++) // for each line
+	{
+		Element line = section.getElement(l)
+		int lineStart = line.getStartOffset()
+		int lineEnd = line.getEndOffset()
+		lines[l].startPos = lineStart
+		lines[l].endPos = lineEnd
+		try
+		{
+			String lineText = doc.getText(lineStart, lineEnd - lineStart)
+			int textWidthInTab = 0
+			int currentTabNum = 0
+			int lineLength = lineText.length()
+			for (int c = 0; c < lineLength; c++) // for each char in current line
+			{
+				char currentChar = lineText.charAt(c)
+				if (currentChar == '\n')
+				{
+					grid[l][currentTabNum].endsInTab = false
+					grid[l][currentTabNum].endPos = lineStart + c
+					textWidthInTab = 0
+				}
+				else if (currentChar == '\t')
+				{
+					grid[l][currentTabNum].endsInTab = true
+					grid[l][currentTabNum].endPos = lineStart + c
+					grid[l][currentTabNum].textWidthPix = calcTabWidth(textWidthInTab,?)
+					currentTabNum++
+					grid[l][currentTabNum].startPos = lineStart + c + 1
+					lines[l].numTabs++
+					textWidthInTab = 0
+				}
+				else
+				{
+					textWidthInTab += magic.charWidth(currentChar)
+				}
+			}
+		}
+		catch (BadLocationException ex)
+		{
+		}
+	}
+
+	// find columns blocks and stretch to fit the widest cell
+	for (int t = 0; t < maxTabstops; t++) // for each column
+	{
+		// all tabstops in column block point to same number
+		theWidestWidthPix ← {v:0} // reference
+		int maxWidth = 0
+		for (int l = 0; l < lineCount; l++) // for each line
+		{
+			if (grid[l][t].endsInTab)
+			{
+				grid[l][t].widestWidthPix = theWidestWidthPix // copy ref
+				if (grid[l][t].textWidthPix < maxWidth)
+				{
+					grid[l][t].textWidthPix = maxWidth
+				}
+				else
+				{
+					maxWidth = grid[l][t].textWidthPix
+					theWidestWidthPix.v = maxWidth
+				}
+			}
+			else // end column block
+			{
+				theWidestWidthPix = {v:0} // reference
+				maxWidth = 0
+			}
+		}
+	}
+
+	// apply tabstop sizes to the text
+	for (int l = 0; l < lineCount; l++) // for each line
+	{
+		// accumulate tabstop widths
+		int accTabstop = 0
+		for (int t = 0; t < lines[l].numTabs; t++) {
+			accTabstop += grid[l][t].widestWidthPix.v
+			grid[l][t].textWidthPix = accTabstop
+		}
+
+		Element line = section.getElement(l)
+		int lineStart = line.getStartOffset()
+		int lineEnd = line.getEndOffset()
+		setBlocksTabstops(doc, lineStart, lineEnd, grid[l], lines[l].numTabs)
+	}
+}
+
+int calcTabWidth(int textWidthInTab){
+	t ← tab_raster='0'? textWidthInTab :
+		err('tab_raster not implemented') // (((int)(textWidthInTab / tab_raster)) + 1) * tab_raster
+	return Math.max(t + tab_padding, textWidthInTab=0? indent_minimum : tab_minimum)}
+
+void setBlocksTabstops(StyledDocument doc, int start, int length, ETTabstop[] tabstopPositions, int tabstopCount)
+{
+	TabStop[] tabs = new TabStop[tabstopCount]
+
+	for (int j = 0; j < tabstopCount; j++)
+		tabs[j] = new TabStop(tabstopPositions[j].textWidthPix)
+
+	TabSet tabSet = new TabSet(tabs)
+	SimpleAttributeSet attributes = new SimpleAttributeSet()
+	StyleConstants.setTabSet(attributes, tabSet)
+
+	doc.setParagraphAttributes(start, length, attributes, false)
+}
+
+package com.nickgravgaard.elastictabstops;
+
+public class ETLine
+{
+	int startPos = 0;
+	int endPos = 0;
+	int numTabs = 0;
+}
+
+package com.nickgravgaard.elastictabstops;
+
+public class ETTabstop
+{
+	int textWidthPix;
+	MutableInteger widestWidthPix = null; // object so we can use refs
+	int startPos = 0;
+	int endPos = 0;
+	boolean endsInTab = false;
+
+	public ETTabstop()
+	{
+	}
+}
