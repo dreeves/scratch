@@ -1,0 +1,189 @@
+import java.awt.{Robot, Toolkit, Rectangle, Point, MouseInfo, AWTException, image.BufferedImage as JImage}
+import java.awt.datatransfer.{Clipboard, DataFlavor, StringSelection, UnsupportedFlavorException}
+import java.awt.event.KeyEvent.*
+import java.util.Scanner
+import double as real
+
+import runesmith.Main.*
+
+class Image {
+	final priv array<array<int>> dat;
+	final priv int modX, modY;
+	final int X, Y;
+	
+	ctor(String path) {this(getImage(path))}
+	ctor(JImage img) {
+		modX = modY = 0;
+		X = img.getWidth();
+		Y = img.getHeight();
+		dat = new int[X][Y];
+		if img.getRaster().getDataBuffer() isa java.awt.image.DataBufferInt {
+			wr_db_dat := ((#java.awt.image.DataBufferInt)img.getRaster().getDataBuffer()).getData();
+			for y to Y: for x to X: dat[x][y] = as16(wr_db_dat[y * X + x]);//32vs16
+		} else {
+			for x to X: for y to Y: dat[x][y] = as16(img.getRGB(x, y));//32vs16
+		}
+	}
+	ctor(array<array<int>> img) {
+		modX = modY = 0;
+		X = img.length;
+		Y = img[0].length;
+		dat = img;
+	}
+		
+	Image subImg(int x, int y) {return new(this, x, y, x, y)}
+	Image subImg(int x1, int y1, int x2, int y2) {return new(this, x1, y1, x2, y2)}
+	Image subImgSized(int x, int y, int X, int Y) {return new(this, x, y, x+X, y+Y)}
+	priv ctor(Image backingImage, int x1, int y1, int x2, int y2) {
+		nmodX := min(x1, x2);
+		nmodY := min(y1, y2);
+		X = max(x1, x2) - nmodX;
+		Y = max(y1, y2) - nmodY;
+		modX = backingImage.modX + nmodX;
+		modY = backingImage.modY + nmodY;
+		dat = backingImage.dat;
+	}
+	
+	int get(int x, int y) {return dat[x+modX][y+modY]}
+	void s(int x, int y, int rgb) {dat[x+modX][y+modY] = rgb}
+	void drawSq(int x, int y, int rgb, int radi) {
+		for xx=x-radi to x+radi+1:
+		for yy=y-radi to y+radi+1:
+			s(xx, yy, rgb);
+	}
+	//Image sA(int x, int y, int v) {dat[x+offX][y+offY] &= 0x00ffffff; dat[x+offX][y+offY] |= v        << 24; return this}
+	//Image sR(int x, int y, int v) {dat[x+offX][y+offY] &= 0xff00ffff; dat[x+offX][y+offY] |= v & 0xff << 16; return this}
+	//Image sG(int x, int y, int v) {dat[x+offX][y+offY] &= 0xffff00ff; dat[x+offX][y+offY] |= v & 0xff << 8 ; return this}
+	//Image sB(int x, int y, int v) {dat[x+offX][y+offY] &= 0xffffff00; dat[x+offX][y+offY] |= v & 0xff      ; return this}
+	
+	static int getScanlineStride(Object o) {
+		if   o isa java.awt.image. PixelInterleavedSampleModel: return o.getScanlineStride();
+		elif o isa java.awt.image.SinglePixelPackedSampleModel: return o.getScanlineStride();
+		else throw rt(o.getClass());
+	}
+}
+class Pattern {
+	Image img;
+	RelLoc rloc;
+	int checkFirstRGB, checkFirstX, checkFirstY;
+	bool isVague;
+	int currFindX, currFindY;
+	int okayErrors;
+	
+	ctor(String imgStr, give RelLoc rloc, RelLoc cfirst) {
+		img = new Image(imgStr);
+		checkFirstX = cfirst.x(img.X);
+		checkFirstY = cfirst.y(img.Y);
+		checkFirstRGB = img.get(checkFirstX, checkFirstY);
+	}
+	Pattern isVague() {isVague = true; return this}
+	Pattern needs(real v) {
+		int non0xf0fs;
+		for x to img.X: for y to img.Y: if img.get(x, y) != 0xf0f: non0xf0fs++;
+		okayErrors = (#int)((1-v) * non0xf0fs);
+	return this}
+	
+	Point[] findAllIn(Image bigImg) {
+		r := [];
+		currFindX = 0; currFindY = 0;
+		loop {
+			p := _findIn(bigImg);
+			if p == null: break;
+			r.add(p);
+		}
+		return r;
+	}
+	
+	Point findIn(Image bigImg) {currFindX = 0; currFindY = 0; return bigImg == null? null : _findIn(bigImg)}
+	
+	priv Point _findIn(Image bigImg) {
+		for x=currFindX to bigImg.X - img.X + 1:
+		for y           to bigImg.Y - img.Y + 1 {
+			if x == currFindX && y == 0 {y = currFindY; if y >= bigImg.Y - img.Y + 1 {y = 0; x++; if x >= bigImg.X - img.X + 1: return null}} //! =(
+			if compare(checkFirstRGB, bigImg.get(x + checkFirstX, y + checkFirstY)) {//32vs16
+				int errors;
+				for x2 to img.X {
+					for y2 to img.Y {
+						if img.get(x2, y2) != 0xf0f && !compare(img.get(x2, y2), bigImg.get(x + x2, y + y2)) {errors++; if errors > okayErrors: break} //32vs16
+					}
+					if errors > okayErrors: break;
+				}
+				if errors <= okayErrors {currFindX = x; currFindY = y + 1; return point(x + rloc.x(img.X), y + rloc.y(img.Y))}
+			}
+		}
+		return null;
+	}
+	
+	bool compare(int a/*pattern*/, int b/*bigimg*/) {
+		if !isVague: return a == b;
+		ar := a >> 8 & 0xf;
+		ag := a >> 4 & 0xf;
+		ab := a      & 0xf;
+		br := b >> 8 & 0xf;
+		bg := b >> 4 & 0xf;
+		bb := b      & 0xf;
+		if ar > 0: return br <= ar && br > bg && br > bb;
+		if ag > 0: return bg <= ag && bg > br && bg > bb;
+		if ab > 0: return bb <= ab && bb > br && bb > bg;
+		return true;
+	}
+	
+	/*static bool areColorsSimilar(int a, int b) {
+		ar := a >> 16 & 0xff >> 3;
+		ag := a >>  8 & 0xff >> 3;
+		ab := a       & 0xff >> 3;
+		br := b >> 16 & 0xff >> 3;
+		bg := b >>  8 & 0xff >> 3;
+		bb := b       & 0xff >> 3;
+		return ar == br && ag == bg && ab == bb;
+			//ar < br + 8 && ar > br - 8 &&
+			//ag < bg + 8 && ag > bg - 8 &&
+			//ab < bb + 8 && ab > bb - 8;
+	}*/
+}
+class RelLoc {
+	int  xAbs, yAbs;
+	real xRel, yRel;
+	
+	give RelLoc abs(int  xAbs, int  yAbs) {return this}
+	give RelLoc rel(real xRel, real yRel) {return this}
+	
+	int x(int xMom) {return xAbs + (#int)(xMom * xRel)}
+	int y(int yMom) {return yAbs + (#int)(yMom * yRel)}
+}
+
+/*clickLoc := point[2];
+for i to clickLoc.length {
+	println("enter to pick loc", i);
+	new Scanner(System.in).nextLine();
+	clickLoc[i] = getMouseLoc();
+}
+println("got locs");
+
+startingTime := mTime();
+
+for (int cycles;; cycles++) {
+	...
+	clickAt(clickLoc[cycles % clickLoc.length]);
+	sleep(approx(5000));
+}
+
+Point[] pathBack = <Point>[
+		point(1268 - 1365, 104 - 95),
+		point(1269 - 1365, 105 - 95),
+		point(1246 - 1365, 113 - 95),
+		point(1230 - 1365, 136 - 95),
+		point(1219 - 1365, 141 - 95),
+		point(1255 - 1365, 118 - 95),
+	];
+
+for v : pathBack {
+	screen := getAndWriteScreen(startingTime);
+	
+	locNE := upperRight.findIn(screen);
+	if locNE == null {sleep(1000); continue}
+	
+	clickAt(addPoints(v, locNE));
+	
+	sleep(approx(18500));
+}*/

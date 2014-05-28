@@ -1,0 +1,229 @@
+import java.awt.{Robot, Toolkit, Rectangle, Point, MouseInfo, AWTException, image.BufferedImage as JImage}
+import java.awt.datatransfer.{Clipboard, DataFlavor, StringSelection, UnsupportedFlavorException}
+import static java.awt.event.KeyEvent.*
+import java.util.Scanner
+import javax.imageio.ImageIO
+
+//we're single-threaded
+
+Random rand = new Random();
+Robot robot; {try robot = new Robot(); catch AWTException: throw rt(e)}
+{
+	t := new Thread("Thread-InterruptPeriodSetter") {void run() {loop sleepQuietly(Long.MAX_VALUE);}};
+	t.setDaemon(true);
+	t.start();
+}
+
+int session = rand(10, 100);
+Rectangle rsloc;
+Image currScr;
+long startTime;
+int ticks;
+Point me = point(76, 76);
+Pattern
+	upperRight = new Pattern("upperRight", rloc().rel(1, 0), rloc().rel(.25, .5)),
+	redFlag    = new Pattern("flag", rloc(), rloc().abs(4, 6)),
+	ore        = new Pattern("ore", rloc(), rloc().abs(7, 18)),
+	tree       = new Pattern("tree", rloc().rel(.5, .5), rloc().abs(2, 7)).isVague().needs(.9),
+	bankIcon   = new Pattern("bankicon" , rloc().rel(.5, .5), rloc().rel(.5, .5)).needs(.5),
+	bangIcon   = new Pattern("bangicon" , rloc().rel(.5, .5), rloc().rel(.5, .5)).needs(.5),
+	clanIcon   = new Pattern("clanicon" , rloc().rel(.5, .5), rloc().rel(.5, .5)).needs(.5),
+	mineIcon   = new Pattern("mineicon" , rloc().rel(.5, .5), rloc().rel(.5, .5)).needs(.5),
+	musicIcon  = new Pattern("musicicon", rloc().rel(.5, .5), rloc().rel(.5, .5)).needs(.5),
+	treeIcon   = new Pattern("treeicon" , rloc().rel(.5, .5), rloc().rel(.5, .5)).needs(.5);
+	
+void main(String[] args) {
+	startTime = mTime();
+	loop {ticks++;
+		currScr = getRsScr();
+		if rsloc != null {
+			{//do all the time
+				if getClipboardText() == "quit": return;
+				secs := (mTime() - startTime) / 1000;
+				if secs % 10 == 0: writeImage(currScr, (secs/3600)+"_"+((secs/60)%60)+"_"+(secs%60));
+				
+				for _ to 10 {
+					compass := getInRs(square(800-151, -1+22, 16)).subImg(16, 16);
+					if !isReddish(compass.get(-13, 0), 150) :_0: {
+						for i=1 to 6: if isReddish(compass.get(-13, +i), 150) {keyTap(VK_RIGHT, 15); sleep(15); break _0}
+						for i=1 to 6: if isReddish(compass.get(-13, -i), 150) {keyTap(VK_LEFT , 15); sleep(15); break _0}
+						println("tried to tap north but couldn't");
+					} else break;
+				}
+			}
+			
+			map = getInRs(rect(800-10-152, -1+5, 152, 152));
+			task.run();
+		}
+		sleep(approx(400));
+	}
+}
+
+Image map;
+
+//ltree := tree.findAllIn(map);
+//for v : ltree: map.drawSq(v.x, v.y, 0x0ff, 1);
+//writeImage(map, "tree"+ticks);
+
+//if at mining zone
+//	if see ore on ground
+//		grab ore
+//	else
+//		if at mining spot
+//			mine
+//		else
+//			goto mining spot
+//else
+//	goto mining zone
+
+Runnable
+	task_invFull = new Runnable() {void run() {
+			if ore.findIn(getInvSlot(27)) != null {//if inventory full
+				println("inventory is full");
+				(task = task_gotoMineIcon).run();
+			} else {
+				println("inventory not full");
+			}
+		}},
+	task_gotoMineIcon = new Runnable() {void run() {
+			icon := mineIcon.findIn(map);
+			if diff(icon, me) < 15 {
+				println("got to mine icon");
+				clickMap(0, -65);
+				(task = task_moveAfterMI).run();
+			} elif icon != null: clickMap(icon);
+			else println("couldn't find mine icon");
+		}},
+	task_moveAfterMI = new Runnable() {void run() {
+			if redFlag.findIn(map) != null {
+				println("moving after mi");
+			} else {
+				//!this happens instantly; it shouldn't. use sleep?
+				println("got to after mi");
+				(task = task_gotoClanIcon).run();
+			}
+		}},
+	//...
+	task_gotoClanIcon = new Runnable() {void run() {
+			icon := clanIcon.findIn(map);
+			if diff(icon, me) < 15 {
+				println("got to clan icon");
+				clickMap(20, -40);
+				(task = task_moveAfterCI).run();
+			} elif icon != null: clickMap(icon);
+			else println("couldn't find clan icon");
+		}},
+	task_moveAfterCI = new Runnable() {void run() {
+			if redFlag.findIn(map) != null {
+				println("moving after ci");
+			} else {
+				println("got to after ci");
+				(task = task_gotoTreeIcon).run();
+			}
+		}},
+	task_gotoTreeIcon = new Runnable() {void run() {
+			icon := treeIcon.findIn(map);
+			if diff(icon, me) < 15 {
+				println("got to tree icon");
+				clickMap(20, -40);
+				(task = task_gotoBank).run();
+			} elif icon != null: clickMap(icon);
+			else println("couldn't find tree icon");
+		}},
+	//...
+	task_gotoBank = new Runnable() {void run() {
+			icon := bankIcon.findIn(map);
+			if diff(icon, me) < 15 {
+				println("we should bank the ore");
+			} else {
+				println("trying to go to the bank");
+				if icon != null: clickMap(icon);
+			}
+		}}/*,
+	task_ = new Runnable() {void run() {
+		}}*/;
+Runnable task = task_invFull;
+
+Rectangle square(int x, int y, int radius) {return rect(x-radius, y-radius, radius*2+1, radius*2+1)}
+Rectangle rect(int width, int height) {return rect(0, 0, width, height)}
+Rectangle rect(int x, int y, int width, int height) {return new Rectangle(x, y, width, height)}
+Point point(int x, int y) {return new Point(x, y)}
+RelLoc rloc() {return new RelLoc()}
+
+int rand(int a, int b) {return rand.nextInt(b-a)+a}
+void sleep(long ms) {sleepQuietly(ms)}
+Point addPoints(Point a, Point b) {return point(a.x + b.x, a.y + b.y)}
+int diff(Point a, Point b) {return a == null? Integer.MAX_VALUE : (int)Math.sqrt(sq(a.x-b.x) + sq(a.y-b.y))}
+int sq(int v) {return v*v}
+Point getMouseLoc() {return MouseInfo.getPointerInfo().getLocation()}
+
+int as32(int rgb16) {return 0xff000000 bwOR ((rgb16 >>  8 bwAND 0xf) << 20) bwOR ((rgb16 >>  4 bwAND 0xf) << 12) bwOR ((rgb16      bwAND 0xf) << 4)}
+int as16(int rgb32) {return                 ((rgb32 >> 20 bwAND 0xf) <<  8) bwOR ((rgb32 >> 12 bwAND 0xf) <<  4) bwOR ((rgb32 >> 4 bwAND 0xf)     )}
+int r(int rgb) {return (rgb >> 8)          }
+int g(int rgb) {return (rgb >> 4) bwAND 0xf}
+int b(int rgb) {return (rgb     ) bwAND 0xf}
+bool isReddish(int rgb, int amount) {return r(rgb) > g(rgb) * amount/100 && r(rgb) > b(rgb) * amount/100}
+
+Image getInvSlot(int idx) {
+	inv := currScr.subImg(800 - 17 - 42 * 4, 600 - 83 - 36 * 7);
+	x := idx % 4;
+	y := idx / 4;
+	return inv.subImgSized(x * 42, y * 36, 42, 36);
+}
+
+void clickMap(int x, int y) {clickAt(800-10-152 + 152/2 + x, -1+5 + 152/2 + y)}
+void clickMap(Point p) {clickAt(800-10-152 + p.x, -1+5 + p.y)}
+void clickAt(Point p) {clickAt(p.x, p.y)}
+void clickAt(int x, int y) {
+	mouseLoc := getMouseLoc();
+	mouseMove(rsloc.x + x, rsloc.y + y);
+	click();
+	mouseMove(mouseLoc);
+}
+void click() {robot.mousePress(16); robot.mouseRelease(16)}
+void keyTap(int key, int ms) {robot.keyPress(key); if ms != 0: sleep(ms); robot.keyRelease(key)}
+
+void mouseMove(Point p) {mouseMove(p.x, p.y)}
+void mouseMove(int x, int y) {robot.mouseMove(x, y)}
+
+Image getRsScr() {
+	scr := getScreen(rsloc);
+	if upperRight.findIn(scr) == point(800, 0): return scr;
+	else {
+		scr = getScreen();
+		ur := upperRight.findIn(scr);
+		if ur == null {rsloc = null; return null}
+		rsloc = rect(ur.x - 800, ur.y, 800, 600);
+		println("finding rs loc...", rsloc);
+		return getRsScr();
+	}
+}
+Image getInRs(Rectangle rect) {return getScreen(rect(rect.x + rsloc.x, rect.y + rsloc.y, rect.width, rect.height))}
+Image getScreen(Rectangle rect = rect(0, 0, 1366+1280, 1142)) {return rect == null? null : new Image(robot.createScreenCapture(rect))}
+
+void writeImage(Image img, String path) {
+	bi := new JImage(img.X, img.Y, JImage.TYPE_INT_ARGB);
+	for x to img.X:
+	for y to img.Y:
+		bi.setRGB(x, y, as32(img.get(x, y)));//32vs16
+	writeImage(bi, path);
+}
+void writeImage(JImage img, String path) {
+	try ImageIO.write(img, "png", new File("pics/"+session+"S "+path+".png"));
+	catch IOException: throw rt(e);
+}
+JImage getImage(String path) {try return ImageIO.read(new File("res/"+path+".png")); catch IOException: throw rt(e)}
+
+int approx(int i) {return (int)approx((real)i)}
+real approx(real d) {
+	diff := rand.nextGaussian() * d * .1;
+	diff = max(diff, -abs(d) * .2);
+	diff = min(diff,  abs(d) * .2);
+	return d + diff;
+}
+
+Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+String getClipboardText() {
+	try return clipboard.getContents(null).getTransferData(DataFlavor.stringFlavor).toString();
+	catch IllegalStateException | UnsupportedFlavorException | IOException: return "";
+}

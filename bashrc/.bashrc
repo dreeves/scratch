@@ -3,15 +3,17 @@ export PATH="$PATH:$HOME/.rvm/bin"; [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOM
 
 pause() { read -p 'Press [Enter] to continue . . .'; }; export -f pause
 export mydir='cd $(dirname "${BASH_SOURCE[0]}")'
-#slash_fwd()  { echo $(echo "$1" | sed 's/\\/\//g'); }; export -f slash_fwd
-#slash_back() { echo $(echo "$1" | sed 's/\//\\/g'); }; export -f slash_back
 date_i() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }; export -f date_i
+
 f() { open .; }
 x() { exit; }
 sb() { "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" $@; }
 ex() { chmod -R 755 "$1" &>/dev/null; }
 
 export PS1='$(pwd)>'
+
+shopt -s globstar
+
 command_not_found_handle() {
 	if [ -f "$1.sh" ]; then "$1.sh" ${@:2}
 	elif [ -d "$1" ]; then local t=`pwd`; cd "$1"; "run" ${@:2}; cd "$t"

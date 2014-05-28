@@ -5,6 +5,7 @@ contents:
 	artificer            [not yet fully combed for useful ideas / code]
 	asplode
 	befunge              [not yet fully combed for useful ideas / code]
+	bullet
 	classviewer
 	clrs
 	council
@@ -27,7 +28,7 @@ contents:
 	misc
 	rhinnen
 	rugged
-	runesmith            [not yet fully combed for useful ideas / code]
+	runesmith
 	sammy
 	simple profiler
 	speeling
@@ -40,9 +41,14 @@ contents:
 	weather_text_scraper
 	win_batch
 	workspace
+	zilch
+	zin
 	zutil
 
-notes on the tidy-code goal:
-	figure out where *all* the files that need to be backed up are
-	if there's a nice api to time machine's current list-of-things-to-be-backed-up that would be excellent
-	it's tmutil
+notes:
+
+figure out where *all* the files that need to be backed up are
+if there's a nice api to time machine's current list-of-things-to-be-backed-up that would be excellent
+it's tmutil
+
+maybe add ARCHIVE READMEs to all of these? or something like that? and update the old ones, maybe? maybe just make them all READMEs?

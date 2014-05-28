@@ -1,0 +1,2 @@
+cd pics
+del *.png
