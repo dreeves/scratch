@@ -4,41 +4,17 @@
 	improve run command
 	lots of these command exclusively use either right-modifiers or left-modifiers. you maybe should write down which ones.
 
-navigate : delete
-	back char: ⌫
-	back word: R⌥⌫
-	back line: R⌘⌫
-	forward char: Fn⌫
-	forward word: FnR⌥⌫
-	forward line: FnR⌘⌫
-navigate : text cursor
-	back all: R⌘↑
-	back char: ←
-	back graphical line: R⌘←
-	back vertical: ↑
-	back word: R⌥←
-	forward all: R⌘↓
-	forward char: →
-	forward graphical line: R⌘→
-	forward vertical: ↓
-	forward word: R⌥→
-navigate : selection
-	all: L⌘a
-	back all: R⌘R⇧↑
-	back char: R⇧←
-	back graphical line: R⌘R⇧←
-	back logical line: R⇧R⌥↑
-	back vertical: R⇧↑
-	back word: R⇧R⌥←
-	forward all: R⌘R⇧↓
-	forward char: R⇧→
-	forward graphical line: R⌘R⇧→
-	forward logical line: R⇧R⌥↓
-	forward vertical: R⇧↓
-	forward word: R⇧R⌥→
+navigate : text
+	base[delete ← →]: ⌫ Fn⌫
+	base[move ← ↑ ↓ →]: ← ↑ ↓ →
+	base[select ←↑↓→]: ⇧← ⇧↑ ⇧↓ ⇧→
+	mod[unit space ← ↑ ↓ →]:
+	mod[graphical space ← ↑ ↓ →]: ⌘
+	mod[word ← →]: ⌥
+	mod[logical space ↑ ↓]: ⌥
 navigate : files
 	cd ..: R⌘↑
-	open/run: R⌘↓
+X	open/run: R⌘↓
 navigate : fields
 	next: ⇥
 	previous: ⇧⇥
@@ -56,15 +32,15 @@ navigate : volume
 	decrease: F11
 	increase: F12
 navigate : windows
-	previous alt-tab: ⌘⇧⇥
-	next alt-tab: ⌘⇥
-	previous tab/group: ^⇧⇥, ⌘⇧[, ⌘⌥←
-	next tab/group: ^⇥, ⌘⇧], ⌘⌥→
-	hide window: ⌘h
+X	previous alt-tab: ⌘⇧⇥
+X	next alt-tab: ⌘⇥
+	previous tab/group: ^L⇧⇥, R⌘R⇧[, R⌘R⌥←
+	next tab/group: ^⇥, R⌘R⇧], R⌘R⌥→
+X	hide window: ⌘h
 	new tab: ⌘t
-	new window: middle-click dock, ⌘n, ⌘⇧n
+	new window: ⌘n, R⌘R⇧n
 	up/down/left/right Space: 3-swipe up/down/left/right
-	open last file: ⌘⇧t
+	open last file: L⌘L⇧t
 navigate : escape
 	⎋
 	⌘w
@@ -72,28 +48,28 @@ navigate : escape
 navigate : menus (alt-style)
 	^FnF2
 navigate : history
-	back: ⌘[
-	forward: ⌘]
+X	back: ⌘[
+X	forward: ⌘]
 navigate : tabulation level
 	increase: selection + ⇥
 	decrease: selection + ⇧⇥
 
 gmail : navigate : chat or compose
-	previous: ⌘,
-	next: ⌘.
+X	previous: ⌘,
+X	next: ⌘.
 gmail : navigate : jump
-	inbox: g i
-	sent: g t
-	drafts: g d
-	all mail: g a
-	add cc: ⌘⇧c
-	add bcc: ⌘⇧b
-	alter from: ⌘⇧f
+X	inbox: g i
+x	sent: g t
+X	drafts: g d
+X	all mail: g a
+X	add cc: ⌘⇧c
+X	add bcc: ⌘⇧b
+X	alter from: ⌘⇧f
 gmail : navigate : conversations
 	previous: j
 	next: k
-	up: u
-	down: o, ↩
+	out: u
+	in: ↩
 gmail : navigate : messages
 	previous: p
 	next: n
@@ -102,11 +78,9 @@ sublime : navigate : selection
 	expand to scope: ⌘⇧␣
 sublime : navigate : to brackets
 	^m
-sublime : navigate : to line
-	^g
 sublime : navigate : selection history
-	back: ^-
-	forward: ^⇧-
+X	back: ^-
+X	forward: ^⇧-
 sublime : navigate : find results
 	prev: ⌘⇧g, ⇧↩ if on panel
 	next: ⌘g, ↩ if on panel
@@ -117,7 +91,10 @@ sublime : navigate : find results
 	next in files: FnF4
 sublime : navigate : tabs
 	go to nth tab: ⌘[1-9]
-	go to named tab: ⌘p
+sublime : navigate : magic
+	⌘p
+sublime : navigate : to line
+	⌘p @, ^g
 
 format text
 	bold: ⌘b
@@ -129,14 +106,16 @@ tab completion
 
 toggle app
 	Mission Control: F3
-	Launchpad: thumb+3 pinch, F4
-	Quick Look: ␣, ⌘y
+	Launchpad: thumb+3 pinch
+X	Launchpad: F4
+	Quick Look: ␣
+X	Quick Look: ⌘y
 	Dictionary: ⌘^d
 	Desktop: thumb+3 unpinch
-	Dashboard: FnF12
-	SpeedCrunch: <want>
+	Calculator: <want>
 	current music player: <want>
 	Terminal: <want, incl current-directory function>
+		in Path Finder: ⌘;, ⌘⌥⇧n
 	developer console for current app
 		chrome: ⌘⌥i
 		sublime: ^`
@@ -161,13 +140,13 @@ hard power off
 	hold down ⌽ for 5s
 
 shutdown dialog
-	hold down ⌽ for 1.5s
+X	hold down ⌽ for 1.5s
 
 screenshot
 	all: ⌘⇧3
 	selected: ⌘⇧4
 	window: ⌘⇧4 ␣
-	default is: to file on desktop
+X	default is: to file on desktop
 	adding ^ is: to clipboard
 clipboard
 	copy: ⌘c
@@ -182,13 +161,11 @@ new object
 	spotify = new playlist
 	githubmac = new repo
 new folder
-	finder, spotify: ⌘⇧n
+	finder, path finder, spotify: ⌘⇧n
 new folder from selection
-	finder: ⌘^n
+X	path finder: ⌘^n
 new file
-	finder: ⌘⌥n
-open terminal in this folder
-	finder: ⌘⌥⇧n
+X	path finder: ⌘⌥n
 
 undo/redo
 	undo: ⌘z
@@ -210,7 +187,7 @@ fullscreen
 	sublime: ⌘^f
 
 answer dialog or form
-	don't save: ⌘⌫, ⌘d
+	don't save: ⌘⌫
 	default action: ↩
 	selected button: ␣
 	cancel: ⎋
@@ -225,7 +202,7 @@ open
 	⌘o
 
 print
-	⌘p
+X	⌘p
 
 settings
 	⌘,
@@ -239,11 +216,11 @@ reload
 	⌘r
 
 toggle dock hiding
-	⌘⌥d
+X	⌘⌥d
 
 search computer
 	toggle spotlight: ⌘␣
-	spotlight window: ⌥⌘␣
+X	spotlight window: ⌥⌘␣
 
 gmail : action
 	send: ⌘↩
@@ -264,6 +241,8 @@ gmail : action
 		next: {
 	undo action: z
 	mark unread from message: _
+
+//===--===// as far as we've gotten marking if we use things or not //===--===//
 
 sublime : toggle record macro
 	^q
