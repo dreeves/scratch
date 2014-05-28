@@ -15,6 +15,7 @@ sync(err_print(function(){
 
 // http://gizmodo.com/you-can-download-any-spotify-song-as-an-mp3-with-this-c-494493386 ?
 // we need to be able to query things other than our tracks. like artists and such.
+// http://www.node-spotify.com/api.html
 
 var print = console.log.bind(console)
 var seq = function(v){return typeof v === 'string'? v.split('') : v instanceof Array? v : Object.keys(v).map(function(k){return [k,v[k]]})}
@@ -34,14 +35,14 @@ var login = function(){
 	spotify.login(auth.username, auth.password, false, false)
 	spotify.ready.sync()
 	print('spotify ready!',timer()); login = C() }
-var tags = function(){
+var playlists = function(){
 	login()
 	var r = spotify.playlistContainer.getPlaylists().filter(function(v){return !v.type})
 	poll.sync(null,function(){return r.every(function(v){return v.isLoaded})})
-	var t; if (t=seq(_.groupBy(r,'name')).map(function(v){return v[1].length===1? undefined : v[1][0].name}).filter(function(v){return v})[0]) err('oh no! duplicate tag! '+t)
-	print('tags loaded!',timer()); return (tags = C(r))()}
+	var t; if (t=seq(_.groupBy(r,'name')).map(function(v){return v[1].length===1? undefined : v[1][0].name}).filter(function(v){return v})[0]) err('oh no! duplicate playlist! '+t)
+	print('playlists loaded!',timer()); return (playlists = C(r))()}
 var tracks = function(){
-	var r = tags().map(function(v){return v.getTracks()}).m_concat()
+	var r = playlists().map(function(v){return v.getTracks()}).m_concat()
 	poll.sync(null,function(){return r.every(function(v){return v.isLoaded})})
 	r = _.values(_.indexBy(r,'link'))
 	print('tracks loaded!',timer())
@@ -49,10 +50,10 @@ var tracks = function(){
 	// clone
 	r = r.map(function(v){var r = JSON.parse(JSON.stringify(v)); r.original = v; return r})
 
-	// .tags
-	r.map(function(v){v.tags=v.tags||[]})
+	// .playlists
+	r.map(function(v){v.playlists=v.playlists||[]})
 	var t = _.indexBy(r,'link')
-	tags().map(function(tag){tag.getTracks().map(function(v){if (_.indexOf(t[v.link].tags,tag.name) === -1) t[v.link].tags.push(tag.name)})})
+	playlists().map(function(playlist){playlist.getTracks().map(function(v){if (_.indexOf(t[v.link].playlists,playlist.name) === -1) t[v.link].playlists.push(playlist.name)})})
 
 	// .unique_name
 	seq(_.groupBy(r,function(v){return v.artists[0].name===''? v.name : v.artists[0].name+' → '+v.name})).map(function(v){
@@ -73,42 +74,41 @@ var tracks = function(){
 
 var main = function(){
 	var tr = tracks()
-	var tgs = _.indexBy(tags(),'name')
-	// next: remove all tracks from starred that don't match this filter OR make a playlist with just the tracks in this filter OR add the tracks in this filter to a chosen playlist
-	//print(tr.filter(function(v){return v.tags.length===1 && v.tags[0]==='starred'}).map(function(v){return v.unique_name}))
-	//print(tgs.tmp.getTracks())
-	//print(tgs.tmp.addTracks(tr.filter(function(v){return v.tags.length===1 && v.tags[0]==='starred'}).map(function(v){return v.original}),0))
-	print(tgs.tmp,tgs.temp)
-	// gah. why can't i edit anything?
+	var tgs = _.indexBy(playlists(),'name')
+	var t = tr.filter(function(v){return v.playlists.length===1 && v.playlists[0]==='pile'}).map(function(v){return v.original})
+	print(t.map(function(v){return v.name}))
+	print(tgs.tmp)
+	tgs.tmp.addTracks(t,0)
 	}
-var save_history = function(){
+var backup = function(){
 	fs.writeFileSync(F('~/ali/history/auto/spotify/'+m().toISOString()+'.json'),JSON.stringify(tracks().map(function(v){delete(v.original); return v}),null,'\t'))
-	print('history saved!',timer()) }
+	print('backup saved!',timer()) }
+
+/*
+track: ?name? [
+	α:<artist>
+	ρ:<album>
+	τ:<track>
+	λ:<length>
+	μ:local
+	[playlist]
+	]
+*/
 
 //===----------------===// call function based on args //===---------------===//
 
 if (module.parent) print("oh my goodness, so sorry, but, spotiman isn't built to be require()'d!")
-else switch (args._[0]) {
-case undefined     : main(); break
-case 'save-history': save_history(); break
-case 'e'           : print(eval(process.argv.slice(3).join(' '))); break
-default            : print('usage: $ <etc>'); break
+
+switch (args._[0]) {
+case undefined: main(); break
+case 'backup' : backup(); break
+case 'e'      : print(eval(process.argv.slice(3).join(' '))); break
+default       : print('usage: $ <etc>'); break
 }
 
+//spotify.logout.sync(spotify)
+//process.exit()
+
 //===---------------------------===// <end> //===--------------------------===//
-
-process.exit()
-
-/*
-track: name [tag]
-tag:
-α:artist
-ρ:album
-τ:track
-λ:length
-μ // mp3 . is a local file
-[π:playlist]
-[tag]
-*/
 
 }))
