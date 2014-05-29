@@ -4,20 +4,22 @@
 	improve run command
 	lots of these command exclusively use either right-modifiers or left-modifiers. you maybe should write down which ones.
 
+NEXT: go through the universe and find all the things we use again. and then maybe delete the X's
+
 navigate : text
 	base[delete ← →]: ⌫ Fn⌫
 	base[move ← ↑ ↓ →]: ← ↑ ↓ →
-	base[select ←↑↓→]: ⇧← ⇧↑ ⇧↓ ⇧→
+	base[select ←↑↓→]: ?⇧← ?⇧↑ ?⇧↓ ?⇧→
 	mod[unit space ← ↑ ↓ →]:
-	mod[graphical space ← ↑ ↓ →]: ⌘
-	mod[word ← →]: ⌥
-	mod[logical space ↑ ↓]: ⌥
+	mod[graphical space ← ↑ ↓ →]: R⌘
+	mod[word ← →]: R⌥
+	mod[logical space ↑ ↓]: R⌥
 navigate : files
 	cd ..: R⌘↑
 X	open/run: R⌘↓
 navigate : fields
 	next: ⇥
-	previous: ⇧⇥
+	previous: ?⇧⇥
 navigate : brightness
 	decrease: F1
 	increase: F2
@@ -32,39 +34,39 @@ navigate : volume
 	decrease: F11
 	increase: F12
 navigate : windows
-X	previous alt-tab: ⌘⇧⇥
-X	next alt-tab: ⌘⇥
+X	previous alt-tab: X⌘X⇧⇥
+X	next alt-tab: X⌘⇥
 	previous tab/group: ^L⇧⇥, R⌘R⇧[, R⌘R⌥←
 	next tab/group: ^⇥, R⌘R⇧], R⌘R⌥→
-X	hide window: ⌘h
-	new tab: ⌘t
-	new window: ⌘n, R⌘R⇧n
+X	hide window: X⌘h
+	new tab: L⌘t
+	new window: R⌘n, R⌘R⇧n
 	up/down/left/right Space: 3-swipe up/down/left/right
 	open last file: L⌘L⇧t
 navigate : escape
 	⎋
-	⌘w
-	⌘q
+	L⌘w
+	L⌘q
 navigate : menus (alt-style)
 	^FnF2
 navigate : history
-X	back: ⌘[
-X	forward: ⌘]
+X	back: X⌘[
+X	forward: X⌘]
 navigate : tabulation level
 	increase: selection + ⇥
-	decrease: selection + ⇧⇥
+	decrease: selection + ?⇧⇥
 
 gmail : navigate : chat or compose
-X	previous: ⌘,
-X	next: ⌘.
+X	previous: X⌘,
+X	next: X⌘.
 gmail : navigate : jump
 X	inbox: g i
 x	sent: g t
 X	drafts: g d
 X	all mail: g a
-X	add cc: ⌘⇧c
-X	add bcc: ⌘⇧b
-X	alter from: ⌘⇧f
+X	add cc: X⌘X⇧c
+X	add bcc: X⌘X⇧b
+X	alter from: X⌘X⇧f
 gmail : navigate : conversations
 	previous: j
 	next: k
@@ -75,31 +77,35 @@ gmail : navigate : messages
 	next: n
 
 sublime : navigate : selection
-	expand to scope: ⌘⇧␣
+	expand to scope: ?⌘?⇧␣
 sublime : navigate : to brackets
 	^m
 sublime : navigate : selection history
 X	back: ^-
-X	forward: ^⇧-
+X	forward: ^X⇧-
 sublime : navigate : find results
-	prev: ⌘⇧g, ⇧↩ if on panel
-	next: ⌘g, ↩ if on panel
-	select all: ⌥↩
-	replace next: ⌘⌥e
-	replace all: ^⌥↩ if on panel
-	prev in files: ⇧FnF4
+X	prev: X⌘X⇧g
+X	next: X⌘g, ↩ if on panel
+	prev: R⇧↩ if on panel
+	next: ↩ if on panel
+	select all: R⌥↩
+X	replace next: X⌘X⌥e
+	replace next: L⌘L⌥r
+X	replace all: ^X⌥↩ if on panel
+	replace all: L⌘L⌥a
+	prev in files: L⇧FnF4
 	next in files: FnF4
 sublime : navigate : tabs
-	go to nth tab: ⌘[1-9]
+	go to 1-9th tab: L⌘1 L⌘2 L⌘3 L⌘4 ?⌘5 ?⌘6 ?⌘7 ?⌘8 ?⌘9
 sublime : navigate : magic
-	⌘p
+	R⌘p
 sublime : navigate : to line
-	⌘p @, ^g
+	R⌘p @
 
 format text
-	bold: ⌘b
-	italic: ⌘i
-	underline: ⌘u
+	bold: ?⌘b
+	italic: ?⌘i
+	underline: ?⌘u
 
 tab completion
 	⇥
@@ -109,15 +115,15 @@ toggle app
 	Launchpad: thumb+3 pinch
 X	Launchpad: F4
 	Quick Look: ␣
-X	Quick Look: ⌘y
-	Dictionary: ⌘^d
+X	Quick Look: X⌘y
+	Dictionary: ?⌘^d
 	Desktop: thumb+3 unpinch
 	Calculator: <want>
 	current music player: <want>
 	Terminal: <want, incl current-directory function>
-		in Path Finder: ⌘;, ⌘⌥⇧n
+		in Path Finder: R⌘;
 	developer console for current app
-		chrome: ⌘⌥i
+		chrome: R⌘R⌥i
 		sublime: ^`
 
 go to app
@@ -125,13 +131,13 @@ go to app
 	google search: <want>
 
 chrome : add to bookmarks
-	⌘d
+	L⌘d
 
 chrome : go to app : bookmark manager
-	⌘⌥b
+	?⌘?⌥b
 
 "get info" "get details" "properties"
-	⌘i
+	R⌘i
 
 TOGGLE CAPSLOCK
 	<none>
@@ -143,87 +149,87 @@ shutdown dialog
 X	hold down ⌽ for 1.5s
 
 screenshot
-	all: ⌘⇧3
-	selected: ⌘⇧4
-	window: ⌘⇧4 ␣
+	all: L⌘L⇧3
+	selected: L⌘L⇧4
+	window: L⌘L⇧4 ␣
 X	default is: to file on desktop
 	adding ^ is: to clipboard
 clipboard
-	copy: ⌘c
-	cut: ⌘x
-	paste: ⌘v
-	paste as plain text: ⌘⇧v
-	paste style: ⌘⌥v
+	copy: L⌘c
+	cut: L⌘x
+	paste: L⌘v
+	paste as plain text: L⌘L⇧v
+	paste style: L⌘L⌥v
 
 new object
-	⌘n
+	?⌘n
 	<most> = new window
 	spotify = new playlist
 	githubmac = new repo
 new folder
-	finder, path finder, spotify: ⌘⇧n
+	finder, path finder, spotify: R⌘R⇧n
 new folder from selection
-X	path finder: ⌘^n
+X	path finder: X⌘^n
 new file
-X	path finder: ⌘⌥n
+X	path finder: X⌘X⌥n
 
 undo/redo
-	undo: ⌘z
-	redo: ⌘⇧z
+	undo: L⌘z
+	redo: L⌘L⇧z, L⌘y
 
 focus address bar
-	⌘l
+	R⌘l
 
 find
-	⌘f
+	L⌘f
 
 zoom
-	in: ⌘+, trackpad pinch
-	out: ⌘-, trackpad unpinch
-	100%: ⌘0
+	in: R⌘+, trackpad pinch
+	out: R⌘-, trackpad unpinch
+	100%: R⌘0
 
 fullscreen
-	chrome: ⌘⇧f
-	sublime: ⌘^f
+	chrome: L⌘L⇧f
+	sublime: L⌘^f
 
 answer dialog or form
-	don't save: ⌘⌫
+	don't save: R⌘⌫
 	default action: ↩
 	selected button: ␣
 	cancel: ⎋
 
 file-move
-	copy: ⌥ & drag, drag to other volume
-	move: ⌘ & drag, drag to same volume
-	make alias: ⌘⌥ & drag
-	delete:	⌘⌫
+	copy: R⌥ & drag, drag to other volume
+	move: R⌘ & drag, drag to same volume
+	make alias: R⌘R⌥ & drag
+	delete:	R⌘⌫
 
 open
-	⌘o
+	R⌘o
 
 print
-X	⌘p
+X	X⌘p
 
 settings
-	⌘,
+	R⌘,
 
 save
-	vanilla: ⌘s
-	save as: ⌘⇧s
-	save all: ⌘⌥s
+	vanilla: L⌘s
+	save as: L⌘L⇧s
+	save all: L⌘L⌥s
 
 reload
-	⌘r
+	L⌘r
 
 toggle dock hiding
-X	⌘⌥d
+X	X⌘X⌥d
 
 search computer
-	toggle spotlight: ⌘␣
-X	spotlight window: ⌥⌘␣
+	toggle spotlight: R⌘␣
+X	spotlight window: X⌥X⌘␣
 
 gmail : action
-	send: ⌘↩
+	send: R⌘↩
 	compose: c
 	search: /
 	more actions: .
@@ -242,39 +248,37 @@ gmail : action
 	undo action: z
 	mark unread from message: _
 
-//===--===// as far as we've gotten marking if we use things or not //===--===//
-
 sublime : toggle record macro
-	^q
+X	^q
 sublime : run macro
-	^⇧q
+X	^X⇧q
 sublime : insert line
-	before: ⌘⇧↩
-	after: ⌘↩
+	before: R⌘R⇧↩
+	after: R⌘↩
 sublime : execute command
-	⌘⇧p
-find
-	⌘f
+	R⌘R⇧p
 sublime : find in files
-	⌘⇧f
+	L⌘L⇧f
 sublime : move line
-	up: ⌘⌥↑
-	down: ⌘⌥↓
+	up: R⌘R⌥↑
+	down: R⌘R⌥↓
 sublime : toggle comment
-	line: ⌘/
-	block: ⌘⌥/
+	line: R⌘/
+	block: R⌘R⌥/
 sublime : duplicate
-	⌘d
+	L⌘d
 sublime : build
-	FnF7, ⌘b
-	run: ⌘⇧b
+X	FnF7, X⌘b
+X	run: X⌘X⇧b
 sublime : change text case
-	upper: ⌘k ⌘u
-	lower: ⌘k ⌘l
+	upper: R⌘k R⌘u
+	lower: R⌘k R⌘l
 sublime : delete line
-	^⇧k
+	R⌘k R⌘k
+X	^X⇧k
 sublime : fold
-	none: ⌘k ⌘0, ⌘k ⌘j
-	level [1-9]: ⌘k ⌘[1-9]
+	none: R⌘k R⌘0
+X	none: R⌘k R⌘j
+	level [1-9]: ?⌘k ?⌘[1-9]
 sublime : toggle mode : overwrite
-	⌘⌥o
+	R⌘R⌥o
