@@ -9,6 +9,7 @@ f() { open .; }
 x() { exit; }
 sb() { "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" $@; }
 ex() { chmod -R 755 "$1" &>/dev/null; }
+ar() { tar -cf "$1.tar" "$1"; xz "$1.tar"; }
 
 export PS1='$(pwd)>'
 

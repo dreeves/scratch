@@ -2,6 +2,8 @@
 source ~/.bashrc
 #eval $mydir
 
+rm ~/ali/**/.DS_STORE
+
 #chrome="$USERPROFILE/AppData/Local/Google/Chrome/User Data" #windows
 chrome=~/"Library/Application Support/Google/Chrome" #osx
 cp "$chrome/Default/Bookmarks" ~/ali/history/auto/bookmarks/$(date_i).json
