@@ -88,7 +88,10 @@ function make_xml(lackey){
 	function keycode(v){return lackey.osx_keycode[v]}
 	function KeyCode(v){return v.match(/\d/)? 'KEY_'+v : v.match(/[a-z]/)? v.toUpperCase() : 'RawValue::0x'+keycode(v).toString(16)}
 	function kc_hex(v){return seq(v).map(function(v){return hex(v.charCodeAt(0),4).split('').map(function(v){return 'KeyCode::'+KeyCode(v)+',ModifierFlag::OPTION_L,'}).join('')}).join('')}
-	var autogens = []
+	var autogens = [
+	    '__KeyToKey__ KeyCode::PC_APPLICATION, VK_CONTROL, KeyCode::TAB,ModifierFlag::CONTROL_L|ModifierFlag::SHIFT_L',
+	    '__KeyToKey__ KeyCode::PC_APPLICATION, ModifierFlag::NONE, KeyCode::RawValue::0x82',
+	    ]
 	var shells = [['dummy','echo dummy']]
 	function shell(v){var id = (Math.random()*Math.pow(2,50)).toString(36); shells.push([id,v]); return id}
 	lackey.chords.map(function(v){
@@ -96,7 +99,7 @@ function make_xml(lackey){
 		var out = v[1]
 		if (hots.length===3) return
 		var left =
-			hots[0]==='⌥'? '__KeyToKey__ KeyCode::'+KeyCode(hots[1])+', VK_OPTION | ModifierFlag::NONE,' :
+			hots[0]==='⌥'? '__KeyToKey__ KeyCode::'+KeyCode(hots[1])+', VK_OPTION|ModifierFlag::NONE,' :
 			//hots[0]==='R⌘'? '__KeyToKey__ KeyCode::'+KeyCode(keys[1])+', ModifierFlag::COMMAND_R,' :
 				'__SimultaneousKeyPresses__ KeyCode::'+KeyCode(hots[0])+', KeyCode::'+KeyCode(hots[1])+','
 		var right = typeof(out)==='string'? kc_hex(out) : 'KeyCode::VK_OPEN_URL_'+shell(out[0])+','

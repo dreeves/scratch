@@ -4,7 +4,22 @@
 	improve run command
 	lots of these command exclusively use either right-modifiers or left-modifiers. you maybe should write down which ones.
 
-NEXT: go through the universe and find all the things we use again. and then maybe delete the X's
+------------ next ------------
+so, what are the things that we use?
+path finder
+chrome
+spotify
+sublime
+githubmac
+terminal
+acorn
+preview
+dashboard
+misc system apps
+------------------------------
+
+NEXT: go through the universe and find all the things we use again. and then maybe delete the X's.
+which Fkeys *don't* we use? F4 F5 F6.
 
 navigate : text
 	base[delete ← →]: ⌫ Fn⌫
@@ -36,7 +51,7 @@ navigate : volume
 navigate : windows
 X	previous alt-tab: X⌘X⇧⇥
 X	next alt-tab: X⌘⇥
-	previous tab/group: ^L⇧⇥, R⌘R⇧[, R⌘R⌥←
+	previous tab/group: ^⇪, ^L⇧⇥, R⌘R⇧[, R⌘R⌥←
 	next tab/group: ^⇥, R⌘R⇧], R⌘R⌥→
 X	hide window: X⌘h
 	new tab: L⌘t
