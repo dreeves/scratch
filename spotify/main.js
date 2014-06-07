@@ -16,6 +16,10 @@ sync(err_print(function(){
 // http://gizmodo.com/you-can-download-any-spotify-song-as-an-mp3-with-this-c-494493386 ?
 // we need to be able to query things other than our tracks. like artists and such.
 // http://www.node-spotify.com/api.html
+// rename to spotiman
+
+// next:
+// scan all playlists for duplicates, and maybe delete them
 
 var print = console.log.bind(console)
 var seq = function(v){return typeof v === 'string'? v.split('') : v instanceof Array? v : Object.keys(v).map(function(k){return [k,v[k]]})}
@@ -73,12 +77,15 @@ var tracks = function(){
 	print('tracks niceified!',timer()); return (tracks = C(r))()}
 
 var main = function(){
-	var tr = tracks()
-	var tgs = _.indexBy(playlists(),'name')
-	var t = tr.filter(function(v){return v.playlists.length===1 && v.playlists[0]==='pile'}).map(function(v){return v.original})
-	print(t.map(function(v){return v.name}))
-	print(tgs.tmp)
-	tgs.tmp.addTracks(t,0)
+	var add_tracks = function(p,ts){
+		print('adding',Math.min(ts.length,500),'tracks out of',ts.length,'tracks')
+		p.addTracks(ts.slice(0,500).map(function(v){return v.original}),0)
+		}
+	var pl = _.indexBy(playlists(),'name')
+	var tr = _.indexBy(tracks(),'link')
+	var get_tracks = function(p){return p.getTracks().map(function(v){return tr[v.link]})}
+	print(get_tracks(pl['don\'t want to hear again']))
+	//add_tracks(pl['meh pile'],tracks().filter(function(v){return v.playlists.length===1 && v.playlists[0]==='mehp'}))
 	}
 var backup = function(){
 	fs.writeFileSync(F('~/ali/history/auto/spotify/'+m().toISOString()+'.json'),JSON.stringify(tracks().map(function(v){delete(v.original); return v}),null,'\t'))
