@@ -15,11 +15,6 @@ sync(err_print(function(){
 
 // http://gizmodo.com/you-can-download-any-spotify-song-as-an-mp3-with-this-c-494493386 ?
 // we need to be able to query things other than our tracks. like artists and such.
-// http://www.node-spotify.com/api.html
-// rename to spotiman
-
-// next:
-// scan all playlists for duplicates, and maybe delete them
 
 var print = console.log.bind(console)
 var seq = function(v){return typeof v === 'string'? v.split('') : v instanceof Array? v : Object.keys(v).map(function(k){return [k,v[k]]})}
@@ -27,6 +22,7 @@ Array.prototype.m_concat = function(){return Array.prototype.concat.apply([],thi
 var object = function(v){return v.reduce(function(r,v){r[v[0]] = v[1]; return r},{})}
 var C = function(v){return function(){return v}}
 var err = function(v){throw(Error(v))}
+var is = function(v){return v !== undefined}
 
 var args = minimist(process.argv.slice(2))
 
@@ -55,9 +51,15 @@ var tracks = function(){
 	r = r.map(function(v){var r = JSON.parse(JSON.stringify(v)); r.original = v; return r})
 
 	// .playlists
-	r.map(function(v){v.playlists=v.playlists||[]})
+	r.map(function(v){v.playlists = {}})
 	var t = _.indexBy(r,'link')
-	playlists().map(function(playlist){playlist.getTracks().map(function(v){if (_.indexOf(t[v.link].playlists,playlist.name) === -1) t[v.link].playlists.push(playlist.name)})})
+	var dup
+	playlists().map(function(playlist){playlist.getTracks().map(function(v,i){
+		var l = t[v.link].playlists
+		if (is(l[playlist.name])) {dup = true; print('dupl track:',playlist.name,'::',v.name,'@',l[playlist.name],'&',i)}
+		else l[playlist.name] = i
+	})})
+	if (dup) err('there was a duplicate track :(')
 
 	// .unique_name
 	seq(_.groupBy(r,function(v){return v.artists[0].name===''? v.name : v.artists[0].name+' → '+v.name})).map(function(v){
@@ -84,11 +86,21 @@ var main = function(){
 	var pl = _.indexBy(playlists(),'name')
 	var tr = _.indexBy(tracks(),'link')
 	var get_tracks = function(p){return p.getTracks().map(function(v){return tr[v.link]})}
-	print(get_tracks(pl['don\'t want to hear again']))
+
+	var t = tracks().filter(function(v){return is(v.playlists['clbuttic']) && is(v.playlists['special'])})
+	
+	t = _.sortBy(t.map(function(v){return v.playlists['clbuttic']}))
+	print(pl.clbuttic.removeTracks(t))
+	//print(get_tracks(pl['don\'t want to hear again']))
 	//add_tracks(pl['meh pile'],tracks().filter(function(v){return v.playlists.length===1 && v.playlists[0]==='mehp'}))
 	}
 var backup = function(){
-	fs.writeFileSync(F('~/ali/history/auto/spotify/'+m().toISOString()+'.json'),JSON.stringify(tracks().map(function(v){delete(v.original); return v}),null,'\t'))
+	var tr = tracks()
+	tr.map(function(v){
+		delete(v.original)
+		//v.tracks = Object.keys(v.tracks)
+	})
+	fs.writeFileSync(F('~/ali/history/auto/spotify/'+m().toISOString()+'.json'),JSON.stringify(tr,null,'\t'))
 	print('backup saved!',timer()) }
 
 /*
