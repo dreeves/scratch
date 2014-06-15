@@ -1,4 +1,5 @@
 [
+	"aa HEY! THIS MIGHT NOT BE THE RIGHT FILE",
 	{ "keys": ["super+k", "super+k"], "command": "run_macro_file", "args": {"file": "res://Packages/Default/Delete Line.sublime-macro"} },
 
 	{ "keys": ["super+left"], "command": "move_to", "args": {"to": "hardbol"} },
@@ -13,17 +14,20 @@
     { "keys": ["ctrl+tab"], "command": "next_view" },
     { "keys": ["ctrl+shift+tab"], "command": "prev_view" },
 
-	{ "keys": ["alt+a"], "command": "replace_all", "args": {"close_panel": true}, "context": [{"key": "panel", "operand": "replace"}, {"key": "panel_has_focus"}]},
+	{ "keys": ["super+alt+a"], "command": "replace_all", "args": {"close_panel": true}, "context": [{"key": "panel", "operand": "replace"}, {"key": "panel_has_focus"}]},
     // overwrites { "keys": ["alt+a"], "command": "toggle_preserve_case", "context": [{ "key": "setting.is_widget", "operator": "equal", "operand": true }]},
-    { "keys": ["alt+r"], "command": "replace_next" },
+    { "keys": ["super+alt+r"], "command": "replace_next" },
     // overwrites { "keys": ["alt+r"], "command": "toggle_regex", "context": [{ "key": "setting.is_widget", "operator": "equal", "operand": true }]},
 
 	{ "keys": ["super+alt+up"], "command": "swap_line_up" },
 	{ "keys": ["super+alt+down"], "command": "swap_line_down" },
 
-	{ "keys": ["super+shift+minus"], "command": "divider" },
+	{ "keys": ["super+shift+minus"], "command": "divider", "args": {"style": "small", "length": 30}},
+	{ "keys": ["super+shift+equals"], "command": "divider", "args": {"style": "big", "length": 80}},
 
 	{ "keys": ["super+f"], "command": "show_panel", "args": {"panel": "replace", "reverse": false} },
+
+	{ "keys": ["super+9"], "command": "goto_tab", "args": {"tab":"last"} },
 
 	null
 ]

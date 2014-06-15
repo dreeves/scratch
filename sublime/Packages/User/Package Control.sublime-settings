@@ -2,6 +2,8 @@
 	"auto_upgrade_last_run": null,
 	"installed_packages":
 	[
+		"GitHub Flavored Markdown Preview",
+		"GotoTab",
 		"Package Control"
 	]
 }

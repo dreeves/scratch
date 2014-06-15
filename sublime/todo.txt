@@ -1,0 +1,2 @@
+snippets → more appropriate directory
+divider.py → make_divider.py

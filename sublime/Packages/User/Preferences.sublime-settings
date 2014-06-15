@@ -1,4 +1,5 @@
 {
+	"aa HEY! THIS MIGHT NOT BE THE RIGHT FILE": "",
 	"auto_complete": false,
 	"auto_complete_commit_on_tab": true,
 	"caret_extra_bottom": 0,
@@ -10,7 +11,8 @@
 	"default_line_ending": "unix",
 	"enable_tab_scrolling": false,
 	"fade_fold_buttons": false,
-	"font_size": 14,
+	"find_selected_text": true,
+	"font_size": 13,
 	"highlight_line": true,
 	"ignored_packages":
 	[
@@ -27,7 +29,6 @@
 	"scroll_speed": 2.0,
 	"show_full_path": true,
 	"show_tab_close_buttons": true,
-	"find_selected_text": true,
-	"word_separators": "./\\()\"'-:,.;<>~!@#$%^&*|+=[]{}‹›`~?≤≥≠←¬₀₁₂₃₄₅₆₇₈₉₋ᵥₖₘᵢ",
+	"word_separators": "./\\()\"'-:,.;<>~!@#$%^&*|+=[]{}‹›`~?≤≥≠←¬₀⁰₁¹₂²₃³₄⁴₅⁵₆⁶₇⁷₈⁸₉⁹₊⁺₋⁻₌⁼₍⁽₎⁾ₐᵃᵇᶜᵈₑᵉᶠᵍₕʰᵢⁱⱼʲₖᵏₗˡₘᵐₙⁿₒᵒₚᵖᵣʳₛˢₜᵗᵤᵘᵥᵛʷₓˣʸᶻᴬᴮᴰᴱᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᴿᵀᵁⱽᵂ",
 	"word_wrap": true
 }
