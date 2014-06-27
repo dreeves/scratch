@@ -10,7 +10,7 @@ cp "$chrome/Default/Bookmarks" ~/ali/history/auto/bookmarks/$(date_i).json
 
 cp ~/Library/Spelling/LocalDictionary ~/ali/history/auto/dictionary/$(date_i).txt
 
-cd ~/ali/github/scratch/spotiman; main.js backup
+cd ~/ali/github/scratch/spotiman; main.sh backup
 
 ls -Alo  /Applications > ~/"ali/history/auto/ls/$(date_i) :Applications.txt"
 ls -AloR ~/ali         > ~/"ali/history/auto/ls/$(date_i) ~:ali.txt"

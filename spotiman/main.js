@@ -87,10 +87,12 @@ var main = function(){
 	var tr = _.indexBy(tracks(),'link')
 	var get_tracks = function(p){return p.getTracks().map(function(v){return tr[v.link]})}
 
-	var t = tracks().filter(function(v){return is(v.playlists['clbuttic']) && is(v.playlists['special'])})
+	var t = tracks().filter(function(v){return is(v.playlists['meh pile']) && Object.keys(v.playlists).length>=2})
 	
-	t = _.sortBy(t.map(function(v){return v.playlists['clbuttic']}))
-	print(pl.clbuttic.removeTracks(t))
+	//t = _.sortBy(t.map(function(v){return Object.keys(v.playlists).length>=2}))
+	//print(pl.clbuttic.removeTracks(t))
+	//t = t.filter(function(v){return Object.keys(v.playlists).length>=2})
+	t.map(function(v,i){print(i,v.unique_name)})
 	//print(get_tracks(pl['don\'t want to hear again']))
 	//add_tracks(pl['meh pile'],tracks().filter(function(v){return v.playlists.length===1 && v.playlists[0]==='mehp'}))
 	}
@@ -120,7 +122,7 @@ if (module.parent) print("oh my goodness, so sorry, but, spotiman isn't built to
 
 switch (args._[0]) {
 case undefined: main(); break
-case 'backup' : backup(); break
+case 'backup' : backup(); process.exit(); break //! wtf
 case 'e'      : print(eval(process.argv.slice(3).join(' '))); break
 default       : print('usage: $ <etc>'); break
 }
