@@ -33,7 +33,7 @@ contents:
 	simple profiler
 	speeling
 	stopwatch            [not yet fully combed for useful ideas / code]
-	such-zalgo           [not yet fully combed for useful ideas / code]
+	such-zalgo
 	sure                 [not yet fully combed for useful ideas / code]
 	takns                [not yet fully combed for useful ideas / code]
 	teacher
