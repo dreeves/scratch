@@ -1,2 +1,3 @@
 snippets → more appropriate directory
 divider.py → make_divider.py
+in divider, the command should remove a divider if it wouldn't change its length
