@@ -12,7 +12,6 @@ sync(err_print(function(){
 // we need to be able to query things other than our tracks. like artists and such.
 
 var seq = function(v){return typeof v === 'string'? v.split('') : v instanceof Array? v : Object.keys(v).map(function(k){return [k,v[k]]})}
-Array.prototype.m_concat = function(){return Array.prototype.concat.apply([],this)}
 var object = function(v){return v.reduce(function(r,v){r[v[0]] = v[1]; return r},{})}
 var C = function(v){return function(){return v}}
 var err = function(v){throw(Error(v))}
@@ -36,7 +35,7 @@ var playlists = function(){
 	var t; if (t=seq(_.groupBy(r,'name')).map(function(v){return v[1].length===1? undefined : v[1][0].name}).filter(function(v){return v})[0]) err('oh no! duplicate playlist! '+t)
 	print('playlists loaded!',timer()); return (playlists = C(r))()}
 var tracks = function(){
-	var r = playlists().map(function(v){return v.getTracks()}).m_concat()
+	var r = playlists().map(function(v){return v.getTracks()}).ζ0_concat()
 	poll.sync(null,function(){return r.every(function(v){return v.isLoaded})})
 	r = _.values(_.indexBy(r,'link'))
 	print('tracks loaded!',timer())
