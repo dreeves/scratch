@@ -13,7 +13,8 @@ global.pad = function(v,s){return v+s.slice(v.length)}
 global.argv = {_:process.argv.slice(4)}
 
 function File(file){this.path = file}
-Object.defineProperty(File.prototype,'$',{set:function(v){if (v instanceof File) fs.createReadStream(v.path).pipe(fs.createWriteStream(this.path)); else fs.writeFileSync(this.path,v)}})
+Object.defineProperty(File.prototype,'$',{get:function(){return this},set:function(v){if (v instanceof File) fs.createReadStream(v.path).pipe(fs.createWriteStream(this.path)); else fs.writeFileSync(this.path,v)}})
+File.prototype.toString = function(){return fs.readFileSync(this.path)+''}
 var t = function(file){return new File(file)}; t.__proto__ = fs; global.fs = t
 
 // ------------------------------ //
