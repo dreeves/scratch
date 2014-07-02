@@ -1,4 +1,4 @@
-#!/usr/bin/env ζ core
+#!/usr/bin/env ζ₀ core
 
 chokidar.watch(argv._[0],{persistent:true, ignoreInitial:true}).on('all', function(ev,fl){if ({add:1,change:1,unlink:1}[ev] && !fl.match(/\/\.history\//)) {
 	var now = moment.utc().toISOString(); var base = path.basename(fl)

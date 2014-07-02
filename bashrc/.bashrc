@@ -1,4 +1,4 @@
-export PATH="/usr/local/bin:$PATH:."
+export PATH="/usr/local/bin:$PATH:$HOME/ali/github/scratch/ζ₀:."
 export PATH="$PATH:$HOME/.rvm/bin"; [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # load RVM
 
 pause() { read -p 'Press [Enter] to continue . . .'; }; export -f pause
