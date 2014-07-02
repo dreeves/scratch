@@ -12,10 +12,10 @@ global.pad = function(v,s){return v+s.slice(v.length)}
 //var minimist = require('minimist')
 global.argv = {_:process.argv.slice(4)}
 
-function File(file){this.path = file}
-Object.defineProperty(File.prototype,'$',{get:function(){return this},set:function(v){if (v instanceof File) fs.createReadStream(v.path).pipe(fs.createWriteStream(this.path)); else fs.writeFileSync(this.path,v)}})
-File.prototype.toString = function(){return fs.readFileSync(this.path)+''}
-var t = function(file){return new File(file)}; t.__proto__ = fs; global.fs = t
+function Path(file){this.path = file.replace(/^~\//,process.env.HOME+'/')}; var t = function(file){return new Path(file)}; t.__proto__ = fs; global.fs = t
+Object.defineProperty(Path.prototype,'$',{get:function(){return this},set:function(v){if (v instanceof Path) fs.createReadStream(v.path).pipe(fs.createWriteStream(this.path)); else fs.writeFileSync(this.path,v)}})
+Path.prototype.toString = function(){return fs.readFileSync(this.path)+''}
+Path.prototype.split = function(v){return (this+'').split(v)}
 
 // ------------------------------ //
 
