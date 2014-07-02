@@ -1,22 +1,22 @@
 #!/usr/bin/env node
 
-var fs = require('fs')
-var path = require('path')
-var chokidar = require('chokidar')
-var moment = require('moment')
+global.fs = require('fs')
+global.path = require('path')
+global.chokidar = require('chokidar')
+global.moment = require('moment')
 
-var print = console.log.bind(console)
+global.print = console.log.bind(console)
 String.prototype.repeat = function(v){return new Array(v+1).join(this)}
-var pad = function(v,s){return v+s.slice(v.length)}
+global.pad = function(v,s){return v+s.slice(v.length)}
 
 //var minimist = require('minimist')
-var argv = {_:process.argv.slice(4)}
+global.argv = {_:process.argv.slice(4)}
 
 function File(file){this.path = file}
 Object.defineProperty(File.prototype,'$',{set:function(v){if (v instanceof File) fs.createReadStream(v.path).pipe(fs.createWriteStream(this.path)); else fs.writeFileSync(this.path,v)}})
-var t = function(file){return new File(file)}; t.__proto__ = fs; fs = t
+var t = function(file){return new File(file)}; t.__proto__ = fs; global.fs = t
 
 // ------------------------------ //
 
 if (process.argv[2]!=='core') print('oh dear, explosions!')
-eval((fs.readFileSync(process.argv[3])+'').replace(/^#!.*/,''))
+require(process.cwd()+'/'+process.argv[3].replace(/\.js$/,''))

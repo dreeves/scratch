@@ -1,0 +1,10 @@
+{
+	"name": "zeta0",
+	"author": "Comely Naiad <comely.naiad@gmail.com>",
+	"version": "0.0.6",
+	"dependencies": {
+		"chokidar": "*",
+		"minimist": "*",
+		"moment": "*"
+	}
+}
