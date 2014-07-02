@@ -1,11 +1,9 @@
-#!/usr/bin/env node
+#!/usr/bin/env ζ₀ core
 
 //===----------------===// shared with make_keylayout //===----------------===//
 
 var builder = require('xmlbuilder')
-var fs = require('fs')
 
-var print = console.log.bind(console)
 var range = function(l){var r = []; for (var i=0;i<l;i++) r.push(i); return r}
 var seq = function(v){return typeof v === 'string'? v.split('') : v instanceof Array? v : Object.keys(v).map(function(k){return [k,v[k]]})}
 var hex = function(v,l){var r = v.toString(16); while (r.length < l) r = '0'+r; return r}
@@ -17,7 +15,7 @@ var _ = require('underscore')
 //! right command is maybe problematic
 
 Array.prototype.m_concat = function(){return Array.prototype.concat.apply([],this)}
-var read_lines = function(fl){return (fs.readFileSync(fl)+'').split('\n')}
+var read_lines = function(fl){return (fs(fl)+'').split('\n')}
 var object = function(v){return v.reduce(function(r,v){r[v[0]] = v[1]; return r},{})}
 
 /*var shells = []
@@ -111,8 +109,5 @@ function make_xml(lackey){
 
 //===---------------------===// choose from argv //===---------------------===//
 
-if (!module.parent) {
-	var v = process.argv.slice(2)
-	if (v.length===1) print(make_xml(read_lines(v[0])))
-	else print('usage:',process.argv[1],'<.lackey file>')
-	}
+if (argv._.length===1) print(make_xml(read_lines(argv._[0])))
+else print('usage: make_krmb.js <.lackey file>')

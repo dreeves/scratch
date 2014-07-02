@@ -1,12 +1,7 @@
-#!/usr/bin/env node
+#!/usr/bin/env ζ₀ core
 
-var F = function(v){return v.replace(/^~\//,process.env.HOME+'/')}
-
-var fs = require('fs')
-
-var spotify = require('node-spotify')({appkeyFile: F('~/.spotiman/spotify_appkey.key')})
+var spotify = require('node-spotify')({appkeyFile: fs('~/.spotiman/spotify_appkey.key').path})
 var _ = require('underscore')
-var m = require('moment')
 var minimist = require('minimist')
 var sync = require('sync')
 
@@ -16,7 +11,6 @@ sync(err_print(function(){
 // http://gizmodo.com/you-can-download-any-spotify-song-as-an-mp3-with-this-c-494493386 ?
 // we need to be able to query things other than our tracks. like artists and such.
 
-var print = console.log.bind(console)
 var seq = function(v){return typeof v === 'string'? v.split('') : v instanceof Array? v : Object.keys(v).map(function(k){return [k,v[k]]})}
 Array.prototype.m_concat = function(){return Array.prototype.concat.apply([],this)}
 var object = function(v){return v.reduce(function(r,v){r[v[0]] = v[1]; return r},{})}
@@ -24,9 +18,9 @@ var C = function(v){return function(){return v}}
 var err = function(v){throw(Error(v))}
 var is = function(v){return v !== undefined}
 
-var args = minimist(process.argv.slice(2))
+var args = minimist(argv._)
 
-var auth = JSON.parse(fs.readFileSync(F('~/.spotiman/auth.json')))
+var auth = JSON.parse(fs('~/.spotiman/auth.json'))
 
 var timer = function λ(){var t = Date.now()/1000; var r = t - λ.now; λ.now = t; return Math.round(r*100)/100+'s'}; timer()
 var poll = function(f,cb){(function λ(){if (f()) cb(); else setTimeout(λ,50)})()}
@@ -102,7 +96,7 @@ var backup = function(){
 		delete(v.original)
 		//v.tracks = Object.keys(v.tracks)
 	})
-	fs.writeFileSync(F('~/ali/history/auto/spotify/'+m().toISOString()+'.json'),JSON.stringify(tr,null,'\t'))
+	fs('~/ali/history/auto/spotify/'+moment().toISOString()+'.json').$ = JSON.stringify(tr,null,'\t')
 	print('backup saved!',timer()) }
 
 /*
@@ -118,12 +112,10 @@ track: ?name? [
 
 //===----------------===// call function based on args //===---------------===//
 
-if (module.parent) print("oh my goodness, so sorry, but, spotiman isn't built to be require()'d!")
-
 switch (args._[0]) {
 case undefined: main(); break
 case 'backup' : backup(); process.exit(); break //! wtf
-case 'e'      : print(eval(process.argv.slice(3).join(' '))); break
+case 'e'      : print(eval(argv._.slice(1).join(' '))); break
 default       : print('usage: $ <etc>'); break
 }
 

@@ -2,7 +2,6 @@
 	"dependencies": {
 		"node-gyp": "*",
 		"node-spotify": "*",
-		"moment": "*",
 		"minimist": "*",
 		"sync": "*",
 		"underscore": "*"
