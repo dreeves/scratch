@@ -7,12 +7,18 @@ date_i() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }; export -f date_i
 ex() { chmod -R 755 "$1" &>/dev/null; }; export -f ex
 exr() { ex "$1"; "$@"; }; export -f exr
 
+short_pwd() { if [ "$HOME" == "$PWD" ]; then echo "~"; elif [ "$HOME" == "${PWD:0:${#HOME}}" ]; then echo "~${PWD:${#HOME}}"; else echo "$PWD"; fi }; export -f short_pwd; export PS1='$(short_pwd)>'
+
 f() { open .; }
 x() { exit; }
 sb() { "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" $@; }
 ar() { tar -cf "$1.tar" "$1"; xz "$1.tar"; }
-
-export PS1='$(pwd)>'
+alias b_m="cd data; mongod --dbpath mongo --logpath mongo.log"
+alias b_q="VERBOSE=1 QUEUE=* bundle exec rake environment resque:work"
+alias b_r="redis-server"
+alias b_s="bundle exec rails server"
+alias b_c="bundle exec rails console"
+alias b_t="bundle exec rake test:all"
 
 shopt -s globstar
 
