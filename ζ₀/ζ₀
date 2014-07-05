@@ -4,21 +4,26 @@ global.fs = require('fs')
 global.path = require('path')
 global.chokidar = require('chokidar')
 global.moment = require('moment')
+var mkdirp = require('mkdirp')
+//var minimist = require('minimist')
 
 global.print = console.log.bind(console)
 String.prototype.repeat = function(v){return new Array(v+1).join(this)}
 global.pad = function(v,s){return v+s.slice(v.length)}
-
-//var minimist = require('minimist')
 global.argv = {_:process.argv.slice(4)}
 
 function Path(file){this.path = file.replace(/^~\//,process.env.HOME+'/')}; var t = function(file){return new Path(file)}; t.__proto__ = fs; global.fs = t
-Object.defineProperty(Path.prototype,'$',{get:function(){return this},set:function(v){if (v instanceof Path) fs.createReadStream(v.path).pipe(fs.createWriteStream(this.path)); else fs.writeFileSync(this.path,v)}})
+Object.defineProperty(Path.prototype,'$',{
+	get:function(){return this},
+	set:function(v){
+		mkdirp.sync(path.dirname(this.path))
+		if (v instanceof Path) fs.createReadStream(v.path).pipe(fs.createWriteStream(this.path)); else fs.writeFileSync(this.path,v,{mode:493})},
+	})
 Path.prototype.toString = function(){return fs.readFileSync(this.path)+''}
 Path.prototype.split = function(v){return (this+'').split(v)}
 
-fs.ζ0_SUB_BYs = function(b){return this.split(b)}
-global.ζ0_SUB_Fs = function(s,f){return s.slice(f).slice(1).join(f)}
+Path.prototype.ζ0_SUB_BYs = function(b){return this.split(b)}
+global.ζ0_SUB_Fs = function(s,f){return s.split(f).slice(1).join(f)}
 global.ζ0_SUB_Ts = function(s,t){return s.slice(t)[0]}
 global.ζ0_memb_Emod_obj = function(o,m,f){o[m] = f(o[m]); return o}
 Array.prototype.ζ0_concat = function(){return Array.prototype.concat.apply([],this)}
