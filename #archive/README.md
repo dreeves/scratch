@@ -15,6 +15,7 @@ contents:
 	fimfiction scraper   [not yet fully combed for useful ideas / code]
 	fishermen
 	fnarpg               [not yet fully combed for useful ideas / code]
+	gitminder
 	HATETRIS OMEGA
 	hydrocarboner        [not yet fully combed for useful ideas / code]
 	image merge
