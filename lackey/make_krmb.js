@@ -15,7 +15,7 @@ var _ = require('underscore')
 //! right command is maybe problematic
 
 Array.prototype.m_concat = function(){return Array.prototype.concat.apply([],this)}
-var read_lines = function(fl){return (fs(fl)+'').split('\n')}
+var read_lines = function(fl){return fs(fl).$.split('\n')}
 var object = function(v){return v.reduce(function(r,v){r[v[0]] = v[1]; return r},{})}
 
 /*var shells = []

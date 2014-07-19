@@ -8,7 +8,7 @@ var hex = function(v,l){var r = v.toString(16); while (r.length < l) r = '0'+r; 
 
 var id = -18674//(-10000 + -Math.floor(Math.random()*10000))
 
-var old_id; try {old_id = fs('~/Library/Keyboard Layouts/lackey.keylayout').split('\n')[2].match(/id="(-\d+)"/)[1]} catch (e) {}
+var old_id; try {old_id = fs('~/Library/Keyboard Layouts/lackey.keylayout').$.split('\n')[2].match(/id="(-\d+)"/)[1]} catch (e) {}
 if (old_id===id+'') process.exit(0)
 
 print('!! generating new layout !!')

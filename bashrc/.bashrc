@@ -1,5 +1,5 @@
-export PATH="/usr/local/bin:$PATH:."
 export PATH="$PATH:$HOME/.rvm/bin"; [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # load RVM
+export PATH="$PATH:."
 
 pause() { read -p 'Press [Enter] to continue . . .'; }; export -f pause
 export mydir='cd $(dirname "${BASH_SOURCE[0]}")'
@@ -11,14 +11,9 @@ short_pwd() { if [ "$HOME" == "$PWD" ]; then echo "~"; elif [ "$HOME" == "${PWD:
 
 f() { open .; }
 x() { exit; }
+b() { say -v Zarvox "beep"; }
 sb() { "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" $@; }
 ar() { tar -cf "$1.tar" "$1"; xz "$1.tar"; }
-alias b_m="cd data; mongod --dbpath mongo --logpath mongo.log"
-alias b_q="VERBOSE=1 QUEUE=* bundle exec rake environment resque:work"
-alias b_r="redis-server"
-alias b_s="bundle exec rails server"
-alias b_c="bundle exec rails console"
-alias b_t="bundle exec rake test:all"
 
 shopt -s globstar
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env ζ₀ core
 
-var spotify = require('node-spotify')({appkeyFile: fs('~/.spotiman/spotify_appkey.key').path})
+var spotify = require('node-spotify')({appkeyFile: fs('~/.spotiman/spotify_appkey.key').realpath()})
 var _ = require('underscore')
 var minimist = require('minimist')
 var sync = require('sync')
@@ -19,7 +19,7 @@ var is = function(v){return v !== undefined}
 
 var args = minimist(argv._)
 
-var auth = JSON.parse(fs('~/.spotiman/auth.json'))
+var auth = JSON.parse(fs('~/.spotiman/auth.json').$)
 
 var timer = function λ(){var t = Date.now()/1000; var r = t - λ.now; λ.now = t; return Math.round(r*100)/100+'s'}; timer()
 var poll = function(f,cb){(function λ(){if (f()) cb(); else setTimeout(λ,50)})()}

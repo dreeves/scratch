@@ -38,6 +38,7 @@ contents:
 	takns                [not yet fully combed for useful ideas / code]
 	teacher
 	trance               [not yet fully combed for useful ideas / code]
+	userscripts
 	weather_text_scraper
 	win_batch
 	workspace
