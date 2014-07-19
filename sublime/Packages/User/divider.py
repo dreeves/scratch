@@ -10,6 +10,7 @@ def make_divider(head,mid,s,length):
 
 class DividerCommand(sublime_plugin.TextCommand):
 	def run(self,edit,style,length):
+		# ext = re.sub("^.*\.([^.]+)$","\\1",self.view.file_name())
 		for region in reversed([s for s in self.view.sel()]):
 			line = self.view.line(region)
 			s = self.view.substr(line)
