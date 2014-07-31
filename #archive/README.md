@@ -13,6 +13,7 @@ contents:
 	dict
 	elastic
 	fimfiction scraper   [not yet fully combed for useful ideas / code]
+	fimfic-wordcount     [not yet fully combed for useful ideas / code]
 	fishermen
 	fnarpg               [not yet fully combed for useful ideas / code]
 	gitminder
