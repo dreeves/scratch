@@ -5,10 +5,12 @@ var exec = require('child_process').exec
 var sync = require('sync')
 var async = require('async')
 
-var session = 'Or7h8xEvn1Pc2ASGi5S_3W7no8_-szyU'
+var session = '242uG9Ai_rZsZ9PcS-4CZqeEdUhMFoag'
 
 var err_print = function(f){return function(){try{f()} catch (e) {console.log('ERROR:',e,e.stack)}}}
 sync(err_print(function(){var t
+
+var M = function(v){return pad(Math.round(v/1000)/1000+'','0'.repeat(6))+'M'}
 
 //===----------------------===// valid story ids //===---------------------===//
 
@@ -27,27 +29,26 @@ var extend_stories = function(len,cb){async.parallel(_.range(stories_len,stories
 
 //===------------------------===// words_read //===------------------------===//
 
-var words_read = function λ(story_id,cb){
-	if (λ.memo[story_id]) cb(null,λ.memo[story_id])
-	else jsdom.env({
-		html: exec.sync(null,'curl --cookie "session_token='+session+';view_mature=true" http://www.fimfiction.net/story/'+story_id,{maxBuffer:64*1024*1024})[0],
-		scripts: ['http://code.jquery.com/jquery.js'],
-		done: function(e,window){var t
-			var $ = window.$
-			cb(null,λ.memo[story_id] = (t=$('.chapter_container')).length===0? 0 : t.filter(function(_,v){return $(v).find('.chapter-read').length > 0}).map(function(_,v){return $(v).find('.word_count').text()}).get().map(function(v){return parseInt(v.replace(/\D/g,''))}).reduce(function(a,b){return a+b},0))
-		}
+var wc = fs('wc.txt').exists()? JSON.parse(fs('wc.txt').$) : {}
+
+stories = _.values(stories).filter(function(v){return !(v in wc)})
+var total = _.max(_.values(stories))
+
+;(function advance_wc(){
+	async.parallel(_.range(0,10).map(function(i){return function(cb){
+		if (stories[i]) exec('jsdom_usage.js '+stories[i],function(e,v){cb(e,[i,parseInt(v.trim())])})
+	}}),function(e,vs){
+		var latest
+		vs.forEach(function(iv){var i = iv[0]; var v = iv[1]
+			wc[stories[i]] = v
+			latest = stories[i]
+		})
+		process.stdout.write('\rcumulative words read @ '+latest+'/'+total+': '+M(_.values(wc).reduce(function(a,b){return a+b},0)))
+		stories = stories.slice(10)
+		fs('wc.txt.bak').$ = fs('wc.txt').$+''
+		fs('wc.txt').$ = JSON.stringify(wc,null,'\t')
+		advance_wc()
 	})
-}
-
-words_read.memo = fs('wc.txt').exists()? JSON.parse(fs('wc.txt').$) : {}
-
-//===---------------------------===// main //===---------------------------===//
-
-stories = _.values(stories)
-var j=0; stories.some(function(v,i){
-	if (words_read.memo[v]===undefined) {print('words read in',v,'@',i+':',words_read.sync(null,v)); j++}
-	if (j%10===0) fs('wc.txt').$ = JSON.stringify(words_read.memo,null,'\t')
-})
-fs('wc.txt').$ = JSON.stringify(words_read.memo,null,'\t')
+})()
 
 }))
