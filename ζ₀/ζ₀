@@ -10,28 +10,35 @@ var mkdirp = require('mkdirp')
 
 //! todo: aw crap, relative paths and readdir
 //! problem: pipe is non-blocking
+//! todo: For example, npm has this:
+	// { "bin" : { "npm" : "./cli.js" } }
+	// So, when you install npm, it'll create a symlink from the cli.js script to /usr/local/bin/npm.
 
 // ------------ utils ----------- //
+
+Function.prototype.def = function(m,get,set){Object.defineProperty(this.prototype,m,{configurable:true, enumerable:false, get:get, set:set}); return this}
 
 global.print = function(){console.log.apply(console,arguments); return arguments[arguments.length-1]}
 String.prototype.repeat = function(v){return new Array(v+1).join(this)}
 global.pad = function(v,s){return v+s.slice(v.length)}
+_.range(0,5).forEach(function(i){Array.def('-'+i,function(){return this.length<i? undefined : this[this.length-i]},function(v){return this.length<i? v : this[this.length-i] = v})})
+
 global.argv = {_:process.argv.slice(4)}
 
 // ------------ Path ------------ //
 
 // a file is a key-value pair in a sort of fuzzy-keyed dictionary with many types, but primarily "key array" and "byte array, usually interpreted as string"
 // it should have properties 0/key/path and 1/value/$
-function Path(path){this._path = path.replace(/^~\//,process.env.HOME+'/')}; var t = function(path){return new Path(path)}; t.__proto__ = fs; global.fs = t
+var Path = function Path(path){this._path = path.replace(/^~\//,process.env.HOME+'/')}
+	.def('$',function(){return new PathValue(this._path)},
+		function(v){
+			mkdirp.sync(path.dirname(this._path))
+			if (v instanceof PathValue) fs.createReadStream(v._path).pipe(fs.createWriteStream(this._path))
+			else fs.writeFileSync(this._path,v,{mode:493})
+			})
+	.def('path',function(){return this._path.slice(0,(process.env.HOME+'/').length)===process.env.HOME+'/'? '~'+this._path.slice(process.env.HOME.length) : this._path})
+var t = function(path){return new Path(path)}; t.__proto__ = fs; global.fs = t
 function PathValue(path){this._path = path}
-Object.defineProperty(Path.prototype,'$',{
-	get:function(){return new PathValue(this._path)},
-	set:function(v){
-		mkdirp.sync(path.dirname(this._path))
-		if (v instanceof PathValue) fs.createReadStream(v._path).pipe(fs.createWriteStream(this._path))
-		else fs.writeFileSync(this._path,v,{mode:493})
-		} })
-Object.defineProperty(Path.prototype,'path',{get:function(){return this._path.slice(0,(process.env.HOME+'/').length)===process.env.HOME+'/'? '~'+this._path.slice(process.env.HOME.length) : this._path}})
 Path.prototype.realpath = function(){return fs.realpathSync(this._path)}
 Path.prototype.exists = function(){return fs.existsSync(this._path)}
 Path.prototype.append = function(v){fs.appendFileSync(this._path,v)}

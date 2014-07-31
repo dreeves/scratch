@@ -1,5 +1,6 @@
 function scroll_to(v) {
 	// this may be rather hacky and bad, unsure
+	// pretty sure it's hacky and bad 2014-07-30/11:16Z
 	var t = location.href
 	location.replace(typeof v === 'string'? v.replace(/^#?/,'#') : '#'+v.id)
 	window.history.replaceState(null,null,t)
@@ -20,3 +21,11 @@ if (this_goal()==='/alice0meta/goals/team') {
 		msg.text('alice-'+(s(new Date(),'.setDate(.getDate()-1)').getDate() === day? 'yesterday' : day)+' asks:\n'+data)
 		run.tomorrow(t)})()
 }
+
+String.prototype.b64 = function(){return typeof(Buffer)==='undefined'? window.btoa(unescape(encodeURIComponent(this+''))) : new Buffer(this+'').toString('base64')}
+String.prototype.unb64 = function(){return typeof(Buffer)==='undefined'? decodeURIComponent(escape(window.atob(this+''))) : new Buffer(this+'','base64').toString('utf-8')}
+
+var read_line_stdin = function(){return (function(cb){process.stdin.on('readable', function(){var t; if ((t=process.stdin.read())!==null) cb(undefined,t+'')})}).sync()}
+
+var escape_regex = function(v){return v.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1')}
+String.prototype.replace_all = function(find,replace){return this.replace(new RegExp(escape_regex(find),'g'),replace)}

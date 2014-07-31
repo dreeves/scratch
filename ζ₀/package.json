@@ -1,13 +1,13 @@
 {
-	"name": "zeta0",
-	"author": "Comely Naiad <comely.naiad@gmail.com>",
-	"version": "0.0.31",
-	"dependencies": {
-		"chokidar": "*",
-		"minimist": "*",
-		"mkdirp": "*",
-		"moment": "*",
-		"sync": "*",
-		"underscore": "^1.6.0"
-	}
+  "name": "zeta0",
+  "author": "Comely Naiad <comely.naiad@gmail.com>",
+  "version": "0.0.32",
+  "dependencies": {
+    "chokidar": "*",
+    "minimist": "*",
+    "mkdirp": "*",
+    "moment": "*",
+    "sync": "*",
+    "underscore": "^1.6.0"
+  }
 }
