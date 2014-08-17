@@ -16,6 +16,7 @@ var mkdirp = require('mkdirp')
 
 // ------------ utils ----------- //
 
+global.ζ0_def = function(o,m,get,set){Object.defineProperty(o,m,{configurable:true, enumerable:false, get:get, set:set}); return o}
 Function.prototype.def = function(m,get,set){Object.defineProperty(this.prototype,m,{configurable:true, enumerable:false, get:get, set:set}); return this}
 
 global.print = function(){console.log.apply(console,arguments); return arguments[arguments.length-1]}

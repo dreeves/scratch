@@ -1,6 +1,11 @@
 {
   "name": "cmp-version",
   "author": "Comely Naiad <comely.naiad@gmail.com>",
-  "version": "0.0.3",
+  "description": "tiny util to compare versions of a local package.json and its counterpart online",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alice0meta/scratch.git"
+  },
+  "version": "0.0.4",
   "bin": "./main.js"
 }

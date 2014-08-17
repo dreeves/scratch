@@ -7,15 +7,16 @@ date_i() { date -u +"%Y-%m-%dT%H:%M:%SZ"; }; export -f date_i
 ex() { chmod -R 755 "$1" &>/dev/null; }; export -f ex
 exr() { ex "$1"; "$@"; }; export -f exr
 mk() { cat >"$1"; chmod -R 755 "$1" &>/dev/null; }; export -f mk
+npmi() { mkdir npm_inc_tmp; mv package.json npm_inc_tmp; cd npm_inc_tmp; npm version patch; mv package.json ..; cd ..; rmdir npm_inc_tmp; }; export -f npmi
 
 short_pwd() { if [ "$HOME" == "$PWD" ]; then echo "~"; elif [ "$HOME" == "${PWD:0:${#HOME}}" ]; then echo "~${PWD:${#HOME}}"; else echo "$PWD"; fi }; export -f short_pwd; export PS1='$(short_pwd)>'
 
 f() { open .; }
 x() { exit; }
 b() { say -v Zarvox "beep"; }
-sb() { "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" $@; }
+sb() { "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" "$@"; }
 ar() { tar -cf "$1.tar" "$1"; xz "$1.tar"; }
-npmi() { mkdir npm_inc_tmp; mv package.json npm_inc_tmp; cd npm_inc_tmp; npm version patch; mv package.json ..; cd ..; rmdir npm_inc_tmp; }
+T() { tagtime "$@"; }
 
 shopt -s globstar
 
