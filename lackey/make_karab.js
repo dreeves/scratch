@@ -110,4 +110,4 @@ function make_xml(lackey){
 //===---------------------===// choose from argv //===---------------------===//
 
 if (argv._.length===1) print(make_xml(read_lines(argv._[0])))
-else print('usage: make_krmb.js <.lackey file>')
+else print('usage: make_karab.js <.lackey file>')
