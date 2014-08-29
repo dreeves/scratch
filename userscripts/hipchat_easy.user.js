@@ -14,6 +14,8 @@ $.prototype.on_key = function(key,cb0){
 
 //===---------------------------===// main //===---------------------------===//
 
-var tab = function(name){return $('#tabs > li').filter(function(i,v){return $(v).text().indexOf(name) !== -1}).first()}
-
-$(window).on_key('⇥',function(e){e.preventDefault(); (tab('Beeminder').hasClass('selected')? tab('dreev') : tab('Beeminder')).find('a.open').click()})
+$(window).on_key('⇥',function(e){var t; e.preventDefault()
+	;((t=$('#tabs > .alert').first()).length? t :
+		(t=$('#tabs > .selected').next()).length? t :
+		$('#tabs > :eq(1)')
+	).find('.open').click()})
