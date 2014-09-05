@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        padm tweaks
 // @namespace   comely-naiad
-// @version     1.0.1
+// @version     1.0.2
 // @downloadURL https://github.com/alice0meta/scratch/raw/master/userscripts/padm_tweaks.user.js
 // @match       http://*.padm.us/*
 // @require     https://code.jquery.com/jquery-latest.js
@@ -18,7 +18,7 @@ if (location.href.match(/expost.padm.us/)) {
 } else {
 	if (!location.href.match(/useMonospaceFont/)) window.location = location.href+'?useMonospaceFont=true'
 	else {
-		$.on_view(function(){if ($('#connectionbox').length) location.reload()})
+		$.on_view(function(){if ($('#connectionbox').is(":visible")) location.reload()})
 		$('body').append('<a class="floaty_button" style="left:30%;" href="'+location.href.replace('padm.us','expost.padm.us').replace('?useMonospaceFont=true','')+'">expost</a>')
 	}
 }
