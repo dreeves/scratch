@@ -19,6 +19,6 @@ if (location.href.match(/expost.padm.us/)) {
 	if (!location.href.match(/useMonospaceFont/)) window.location = location.href+'?useMonospaceFont=true'
 	else {
 		$.on_view(function(){if ($('#connectionbox').is(":visible")) location.reload()})
-		$('body').append('<a class="floaty_button" style="left:30%;" href="'+location.href.replace('padm.us','expost.padm.us').replace('?useMonospaceFont=true','')+'">expost</a>')
+		$('body').append('<a class="floaty_button" style="left:50%;" href="'+location.href.replace('padm.us','expost.padm.us').replace('?useMonospaceFont=true','')+'">expost</a>')
 	}
 }
